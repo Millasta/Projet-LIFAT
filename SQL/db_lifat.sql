@@ -71,10 +71,9 @@ CREATE TABLE IF NOT EXISTS transports (
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS missions_transports (
-	id	INTEGER NOT NULL AUTO_INCREMENT,
 	mission_id	INTEGER,
 	transport_id	INTEGER,
-	PRIMARY KEY(id),
+	ADD PRIMARY KEY(mission_id, transport_id),
   	FOREIGN KEY(mission_id) REFERENCES missions(id),
     	FOREIGN KEY(transport_id) REFERENCES transports(id)
 ) ENGINE=InnoDB;
