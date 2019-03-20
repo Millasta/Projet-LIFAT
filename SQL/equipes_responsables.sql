@@ -7,6 +7,7 @@ CREATE TABLE equipes_responsables (
 -- Index
 --
 ALTER TABLE equipes_responsables
+	ADD PRIMARY KEY(equipe_id, responsable_id),
 	ADD KEY equipe_id (equipe_id),
 	ADD KEY responsable_id (responsable_id);
 
