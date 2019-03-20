@@ -1,4 +1,5 @@
 CREATE TABLE encadrants_theses (
+	id int NOT NULL AUTO_INCREMENT,
 	encadrant_id int NOT NULL,
 	these_id int NOT NULL
 );
@@ -7,7 +8,7 @@ CREATE TABLE encadrants_theses (
 -- Index
 --
 ALTER TABLE encadrants_theses
-	ADD PRIMARY KEY(encadrant_id, these_id),
+	ADD PRIMARY KEY(id),
 	ADD KEY encadrant_id (encadrant_id),
 	ADD KEY these_id (these_id);
 
