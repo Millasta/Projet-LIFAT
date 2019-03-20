@@ -1,4 +1,5 @@
 CREATE TABLE equipes_projets (
+	id int NOT NULL AUTO_INCREMENT,
 	equipe_id int NOT NULL,
 	projet_id int NOT NULL
 );
@@ -7,7 +8,7 @@ CREATE TABLE equipes_projets (
 -- Index
 --
 ALTER TABLE equipes_projets
-	ADD PRIMARY KEY(equipe_id, projet_id),
+	ADD PRIMARY KEY(id),
 	ADD KEY equipe_id (equipe_id),
 	ADD KEY projet_id (projet_id);
 
