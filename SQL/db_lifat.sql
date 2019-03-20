@@ -1,13 +1,4 @@
 
-
-DROP TABLE IF EXISTS missions_transports;
-DROP TABLE IF EXISTS transports;
-DROP TABLE IF EXISTS missions;
-DROP TABLE IF EXISTS lieus;
-DROP TABLE IF EXISTS motifs;
-DROP TABLE IF EXISTS projets;
-DROP TABLE IF EXISTS financements;
-
 CREATE TABLE IF NOT EXISTS financements (
 	id INTEGER NOT NULL AUTO_INCREMENT,
     	international	BOOLEAN,
