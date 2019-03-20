@@ -7,6 +7,7 @@ CREATE TABLE dirigeants_theses (
 -- Index
 --
 ALTER TABLE dirigeants_theses
+	ADD PRIMARY KEY (dirigeant_id, these_id),
 	ADD KEY dirigeant_id (dirigeant_id),
 	ADD KEY these_id (these_id);
 
