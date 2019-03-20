@@ -1,5 +1,5 @@
 
-DROP DATABASE IF NOT EXISTS lifat_db;
+DROP DATABASE IF EXISTS lifat_db;
 CREATE DATABASE IF NOT EXISTS lifat_db;
 
 USE lifat_db;
