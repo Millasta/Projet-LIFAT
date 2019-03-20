@@ -7,6 +7,7 @@ CREATE TABLE encadrants_theses (
 -- Index
 --
 ALTER TABLE encadrants_theses
+	ADD PRIMARY KEY(encadrant_id, these_id),
 	ADD KEY encadrant_id (encadrant_id),
 	ADD KEY these_id (these_id);
 
