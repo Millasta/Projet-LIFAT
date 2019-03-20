@@ -1,4 +1,5 @@
 CREATE TABLE dirigeants_theses (
+	id int NOT NULL AUTO_INCREMENT,
 	dirigeant_id int NOT NULL,
 	these_id int NOT NULL
 );
@@ -7,7 +8,7 @@ CREATE TABLE dirigeants_theses (
 -- Index
 --
 ALTER TABLE dirigeants_theses
-	ADD PRIMARY KEY (dirigeant_id, these_id),
+	ADD PRIMARY KEY (id),
 	ADD KEY dirigeant_id (dirigeant_id),
 	ADD KEY these_id (these_id);
 
