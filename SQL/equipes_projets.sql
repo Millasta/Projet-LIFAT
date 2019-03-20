@@ -7,6 +7,7 @@ CREATE TABLE equipes_projets (
 -- Index
 --
 ALTER TABLE equipes_projets
+	ADD PRIMARY KEY(equipe_id, projet_id),
 	ADD KEY equipe_id (equipe_id),
 	ADD KEY projet_id (projet_id);
 
