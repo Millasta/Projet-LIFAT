@@ -13,14 +13,14 @@
 
 	echo $this->Html->tag('h2','Inscription et connexion'); 
 	echo '<p>Si vous n\'avez jamais utilisé le site, il faut vous inscrire en ';
-	echo $this->Html->link('cliquant ici', array('controller' => 'users', 'action' => 'register'));
+	echo $this->Html->link('cliquant ici', array('controller' => 'membres', 'action' => 'register'));
 	echo '.</p>';
 	echo '<p>Si vous possédez déjà un compte, deux connexions sont possibles :<br>- Par ';
 
-	echo $this->Html->link('l\'ENT/CAS', array('controller' => 'users', 'action' => 'loginCas'));
+	echo $this->Html->link('l\'ENT/CAS', array('controller' => 'membres', 'action' => 'loginCas'));
 	echo ', si vous avez associé votre compte lors de votre inscription ou dans votre profil.<br>
 	- Par la "';
-	echo $this->Html->link('Connexion par mot de passe', array('controller' => 'users', 'action' => 'login'));
+	echo $this->Html->link('Connexion par mot de passe', array('controller' => 'membres', 'action' => 'login'));
 	echo '".</p>';
 
 ?>
