@@ -35,12 +35,14 @@ class DirigeantsTable extends Table
         parent::initialize($config);
 
         $this->setTable('dirigeants');
+		
+		$this->primaryKey('dirigeant_id');
 
-        $this->belongsTo('Dirigeants', [
+        $this->belongsTo('Membres', [
             'foreignKey' => 'dirigeant_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Dirigeants', [
+        $this->hasMany('Membres', [
             'foreignKey' => 'dirigeant_id'
         ]);
         $this->belongsToMany('Theses', [

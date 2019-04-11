@@ -35,12 +35,14 @@ class EncadrantsTable extends Table
         parent::initialize($config);
 
         $this->setTable('encadrants');
+		
+		$this->primaryKey('encadrant_id');
 
-        $this->belongsTo('Encadrants', [
+        $this->belongsTo('Membres', [
             'foreignKey' => 'encadrant_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Encadrants', [
+        $this->hasMany('Membres', [
             'foreignKey' => 'encadrant_id'
         ]);
         $this->belongsToMany('Theses', [

@@ -8,7 +8,7 @@ use App\Controller\AppController;
  *
  * @property \App\Model\Table\DirigeantsThesesTable $DirigeantsTheses
  *
- * @method \App\Model\Entity\DirigeantsThesis[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\DirigeantsTheses[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class DirigeantsThesesController extends AppController
 {
@@ -30,17 +30,17 @@ class DirigeantsThesesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Dirigeants Thesis id.
+     * @param string|null $id Dirigeants Theses id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $dirigeantsThesis = $this->DirigeantsTheses->get($id, [
+        $dirigeantsTheses = $this->DirigeantsTheses->get($id, [
             'contain' => ['Dirigeants', 'Theses']
         ]);
 
-        $this->set('dirigeantsThesis', $dirigeantsThesis);
+        $this->set('dirigeantsTheses', $dirigeantsTheses);
     }
 
     /**
@@ -50,62 +50,62 @@ class DirigeantsThesesController extends AppController
      */
     public function add()
     {
-        $dirigeantsThesis = $this->DirigeantsTheses->newEntity();
+        $dirigeantsTheses = $this->DirigeantsTheses->newEntity();
         if ($this->request->is('post')) {
-            $dirigeantsThesis = $this->DirigeantsTheses->patchEntity($dirigeantsThesis, $this->request->getData());
-            if ($this->DirigeantsTheses->save($dirigeantsThesis)) {
-                $this->Flash->success(__('The dirigeants thesis has been saved.'));
+            $dirigeantsTheses = $this->DirigeantsTheses->patchEntity($dirigeantsTheses, $this->request->getData());
+            if ($this->DirigeantsTheses->save($dirigeantsTheses)) {
+                $this->Flash->success(__('The dirigeants theses has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeants thesis could not be saved. Please, try again.'));
+            $this->Flash->error(__('The dirigeants theses could not be saved. Please, try again.'));
         }
         $dirigeants = $this->DirigeantsTheses->Dirigeants->find('list', ['limit' => 200]);
         $theses = $this->DirigeantsTheses->Theses->find('list', ['limit' => 200]);
-        $this->set(compact('dirigeantsThesis', 'dirigeants', 'theses'));
+        $this->set(compact('dirigeantsTheses', 'dirigeants', 'theses'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Dirigeants Thesis id.
+     * @param string|null $id Dirigeants Theses id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $dirigeantsThesis = $this->DirigeantsTheses->get($id, [
+        $dirigeantsTheses = $this->DirigeantsTheses->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $dirigeantsThesis = $this->DirigeantsTheses->patchEntity($dirigeantsThesis, $this->request->getData());
-            if ($this->DirigeantsTheses->save($dirigeantsThesis)) {
-                $this->Flash->success(__('The dirigeants thesis has been saved.'));
+            $dirigeantsTheses = $this->DirigeantsTheses->patchEntity($dirigeantsTheses, $this->request->getData());
+            if ($this->DirigeantsTheses->save($dirigeantsTheses)) {
+                $this->Flash->success(__('The dirigeants theses has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeants thesis could not be saved. Please, try again.'));
+            $this->Flash->error(__('The dirigeants theses could not be saved. Please, try again.'));
         }
         $dirigeants = $this->DirigeantsTheses->Dirigeants->find('list', ['limit' => 200]);
         $theses = $this->DirigeantsTheses->Theses->find('list', ['limit' => 200]);
-        $this->set(compact('dirigeantsThesis', 'dirigeants', 'theses'));
+        $this->set(compact('dirigeantsTheses', 'dirigeants', 'theses'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Dirigeants Thesis id.
+     * @param string|null $id Dirigeants Theses id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $dirigeantsThesis = $this->DirigeantsTheses->get($id);
-        if ($this->DirigeantsTheses->delete($dirigeantsThesis)) {
-            $this->Flash->success(__('The dirigeants thesis has been deleted.'));
+        $dirigeantsTheses = $this->DirigeantsTheses->get($id);
+        if ($this->DirigeantsTheses->delete($dirigeantsTheses)) {
+            $this->Flash->success(__('The dirigeants theses has been deleted.'));
         } else {
-            $this->Flash->error(__('The dirigeants thesis could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The dirigeants theses could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
