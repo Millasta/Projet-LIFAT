@@ -1,57 +1,144 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @since         0.10.0
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<?= $this->Html->charset() ?>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>
+			
+			<?= $this->fetch('title') ?>
+		</title>
+		
+		<?= $this->Html->meta('icon') ?>
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
-    <?= $this->Html->meta('icon') ?>
+		<?= $this->Html->css('base.css') ?>
+		<?= $this->Html->css('style_lifat.css') ?>
 
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('style.css') ?>
+		<?= $this->fetch('meta') ?>
+		<?= $this->fetch('css') ?>
+		<?= $this->fetch('script') ?>
+	</head>
+	<body>
+		<div id="main">
+			<!-- Header -->
+			<?php
+				// titre du site (banniere)
+				echo $this->Html->div('',null, array('id' => 'header'));
+				echo $this->Html->tag('h1','LIFAT Manager');
+				echo '</div>'; 
+			?>
+			<div id="menu">
+				<?php
+					// Définition des liens à afficher
+					$accueil = $this->Html->link('Accueil',array('controller' => 'pages', 'action' => 'index'));
+					$profil = $this->Html->link('Mon Profil', array('controller' => 'users', 'action' => 'profil'));	// TODO
+					$missions = $this->Html->link('Mes Missions', array('controller' => 'missions', 'action' => 'getAllMissions')); // TODO
+					$missionsAValider = $this->Html->link('Mission à Valider', array('controller' => 'missions', 'action' => 'needValidation')); // TODO
+					$missionsValides = $this->Html->link('Missions Validées', array('controller' => 'missions', 'action' => 'listAllMissions')); // TODO
+					$administration = $this->Html->link('Administration', array('controller' => 'administration', 'action' => 'index')); // TODO
+					$deconnexion = $this->Html->link('Deconnexion', array('controller' => 'users', 'action' => 'logout')); // TODO
+					$connexion = $this->Html->link('Connexion',array('controller' => 'users', 'action' => 'login')); // TODO
+					$inscription = $this->Html->link('Inscription',array('controller' => 'users', 'action' => 'register')); // TODO
+					$deconnexionCas = $this->Html->link('Déconnexion du service CAS',array('controller' => 'users', 'action' => 'logoutCas')); // TODO
+					$inscription = $this->Html->link('Inscription', array('controller' => 'users', 'action' => 'register')); // TODO
 
-    <?= $this->fetch('meta') ?>
-    <?= $this->fetch('css') ?>
-    <?= $this->fetch('script') ?>
-</head>
-<body>
-    <nav class="top-bar expanded" data-topbar role="navigation">
-        <ul class="title-area large-3 medium-4 columns">
-            <li class="name">
-                <h1><a href=""><?= $this->fetch('title') ?></a></h1>
-            </li>
-        </ul>
-        <div class="top-bar-section">
-            <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
-            </ul>
-        </div>
-    </nav>
-    <?= $this->Flash->render() ?>
-    <div class="container clearfix">
-        <?= $this->fetch('content') ?>
-    </div>
-    <footer>
-    </footer>
-</body>
+					// Liens de l'administration
+					$projets = $this->Html->link('Projets', array('controller' => 'projets', 'action' => 'index')); // TODO
+					$equipes = $this->Html->link('Equipes', array('controller' => 'equipes', 'action' => 'index')); // TODO
+					$motifs = $this->Html->link('Motifs', array('controller' => 'motifs', 'action' => 'index')); // TODO
+					$matricules = $this->Html->link('Matricules', array('controller' => 'users', 'action' => 'editMatricule')); // TODO
+					$loginCas = $this->Html->link('Identifiant CAS/ENT', array('controller' => 'users', 'action' => 'editLoginCas')); // TODO
+					$lieux = $this->Html->link('Lieux', array('controller' => 'lieux', 'action' => 'index')); // TODO
+					$mail = $this->Html->link('Configuration Mail', array('controller' => 'administration', 'action' => 'mail')); // TODO
+					$utilisateurs = $this->Html->link('Utilisateurs', array('controller' => 'users', 'action' => 'administration')); // TODO
+
+					// Mise en place des menus en fonction du rôle
+					$menuDeconnecte = array(
+						$accueil,
+						$connexion,
+						$inscription
+						);
+
+					$menuDeconnecteCas = array(
+						$accueil,
+						$connexion,
+						$inscription,
+						$deconnexionCas
+						);
+
+					$menuConnecte = array(
+						$accueil,
+						$profil,
+						$missions,
+						$deconnexion
+						);
+
+					$menuAdmin = array(
+						$accueil,
+						$profil,
+						$missions,
+						$missionsAValider,
+						$missionsValides,
+						$administration => array(
+							$utilisateurs,
+							$mail
+							),
+						$deconnexion
+						);
+
+					$menuSecretary = array(
+						$accueil,
+						$profil,
+						$missions,
+						$missionsValides,
+						$administration => array(
+							$projets,
+							$equipes,
+							$motifs,
+							$lieux,
+							$utilisateurs,
+							$matricules,
+							$loginCas,
+							$mail
+							),
+						$deconnexion
+						);
+					
+					$session = $this->request->session();
+					if ($session->read('Auth.User.id') != null) {
+						if ( $session->read('Auth.User.role') == 'admin') {
+							echo $this->Html->nestedList($menuAdmin);
+						} else if ( $session->read('Auth.User.role') == 'secretary') {
+							echo $this->Html->nestedList($menuSecretary);
+						} else {
+							echo $this->Html->nestedList($menuConnecte);
+						}
+					} 
+					else {
+						# TODO : login CAS
+						#if ($this->cas->isAuthenticated()){
+						#	echo $this->Html->nestedList($menuDeconnecteCas);
+						#} else {
+							echo $this->Html->nestedList($menuDeconnecte);
+						#}
+					}
+				?>
+			</div>
+				
+			<!-- Contenu -->
+			<div id="content">
+				<div class="container clearfix">
+					<?= $this->fetch('content') ?>
+				</div>
+			</div>
+		 
+			<!-- Pied de page -->
+			<?php 
+				echo $this->Html->div('',null, array('id' => 'footer'));
+				echo $this->Html->para('','Site réalisé à l\'initiative du Laboratoire d\'Informatique de l\'université François Rabelais');
+				echo '</div>';
+			?>
+		</div>
+	</body>
 </html>
