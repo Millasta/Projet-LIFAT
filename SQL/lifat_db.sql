@@ -189,8 +189,8 @@ CREATE TABLE `membres` (
 CREATE TABLE `missions` (
   `id` int(11) NOT NULL,
   `complement_motif` varchar(40) DEFAULT NULL,
-  `date_depart` date DEFAULT NULL,
-  `date_retour` date DEFAULT NULL,
+  `date_depart` datetime DEFAULT NULL,
+  `date_retour` datetime DEFAULT NULL,
   `sans_frais` tinyint(1) DEFAULT NULL,
   `etat` enum('soumis','vaide') DEFAULT NULL,
   `nb_nuites` int(11) DEFAULT NULL,
