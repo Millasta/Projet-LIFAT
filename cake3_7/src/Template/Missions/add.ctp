@@ -102,6 +102,6 @@
     </fieldset>
 
     <?= $this->Form->hidden('etat', ['id' => 'etat', 'value' => 'soumis']) ?>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button('Enregistrer la missions', ['type' => 'submit']) ?>
     <?= $this->Form->end() ?>
 </div>
