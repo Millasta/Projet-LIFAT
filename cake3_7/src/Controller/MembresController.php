@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Log\Log;
 
 /**
  * Membres Controller
@@ -12,6 +13,12 @@ use App\Controller\AppController;
  */
 class MembresController extends AppController
 {
+
+    public function initialize(){
+        parent::initialize();
+        $this->Auth->allow(['logout','add','delete']);
+    }
+
     /**
      * Index method
      *
@@ -54,9 +61,25 @@ class MembresController extends AppController
         if ($this->request->is('post')) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
             if ($this->Membres->save($membre)) {
-                $this->Flash->success(__('The membre has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+				// Récupération du Membre.id créé
+				$query = $this->Membres->find('all')
+									->where(['Membres.email =' => $this->request->getData()['email']])
+									->limit(1);			
+				$membreId = $query->first();
+						
+				// INSERT dans Dirigeants en Encadrants
+				$this->loadModel('Encadrants');
+				$this->loadModel('Dirigeants');
+				
+				$query = $this->Dirigeants->query();
+				$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+				
+				$query = $this->Encadrants->query();
+				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				
+				$this->Flash->success(__('The membre has been saved.'));
+				
+				return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The membre could not be saved. Please, try again.'));
         }
@@ -107,5 +130,24 @@ class MembresController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            $membre = $this->Auth->identify();
+            if ($membre) {
+                $this->Auth->setUser($membre);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
+        }
+    }
+
+
+    public function logout()
+    {
+        $this->Flash->success('Vous avez été déconnecté.');
+        return $this->redirect($this->Auth->logout());
     }
 }

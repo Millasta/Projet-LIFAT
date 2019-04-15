@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Membre Entity
@@ -91,4 +92,18 @@ class Membre extends Entity
     protected $_hidden = [
         'passwd'
     ];
+
+    /**
+     * Function that hashes the user password.
+     * @param $value
+     * @return mixed
+     */
+    protected function _setPasswd($value)
+    {
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
+
+            return $hasher->hash($value);
+        }
+    }
 }
