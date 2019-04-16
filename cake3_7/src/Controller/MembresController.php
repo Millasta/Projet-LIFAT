@@ -21,7 +21,7 @@ class MembresController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['LieuTravails']
+            'contain' => ['LieuTravails', 'Equipes']
         ];
         $membres = $this->paginate($this->Membres);
 
@@ -38,7 +38,7 @@ class MembresController extends AppController
     public function view($id = null)
     {
         $membre = $this->Membres->get($id, [
-            'contain' => ['LieuTravails']
+            'contain' => ['LieuTravails', 'Equipes']
         ]);
 
         $this->set('membre', $membre);
@@ -78,7 +78,8 @@ class MembresController extends AppController
             $this->Flash->error(__('The membre could not be saved. Please, try again.'));
         }
         $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
-        $this->set(compact('membre', 'lieuTravails'));
+        $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+        $this->set(compact('membre', 'lieuTravails', 'equipes'));
     }
 
     /**
