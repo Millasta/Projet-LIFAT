@@ -39,6 +39,7 @@
                 <th scope="col"><?= $this->Paginator->sort('date_naissance') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('actif') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('lieu_travail_id') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('equipe_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('nationalite') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('est_francais') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('genre') ?></th>
@@ -75,6 +76,7 @@
                 <td><?= h($membre->date_naissance) ?></td>
                 <td><?= h($membre->actif) ?></td>
                 <td><?= $membre->has('lieu_travail') ? $this->Html->link($membre->lieu_travail->id, ['controller' => 'LieuTravails', 'action' => 'view', $membre->lieu_travail->id]) : '' ?></td>
+                <td><?= $membre->has('equipe') ? $this->Html->link($membre->equipe->id, ['controller' => 'Equipes', 'action' => 'view', $membre->equipe->id]) : '' ?></td>
                 <td><?= h($membre->nationalite) ?></td>
                 <td><?= h($membre->est_francais) ?></td>
                 <td><?= h($membre->genre) ?></td>

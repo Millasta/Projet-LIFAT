@@ -167,9 +167,10 @@ CREATE TABLE `membres` (
   `login_cas` varchar(60) DEFAULT NULL,
   `carte_sncf` varchar(40) DEFAULT NULL,
   `matricule` int(11) DEFAULT NULL,
-  `date_naissance` datetime DEFAULT NULL,
+  `date_naissance` date DEFAULT NULL,
   `actif` tinyint(1) DEFAULT '1',
   `lieu_travail_id` int(11) DEFAULT NULL,
+  `equipe_id` int(11) DEFAULT NULL,
   `nationalite` varchar(20) DEFAULT NULL,
   `est_francais` tinyint(1) DEFAULT '1',
   `genre` char(1) DEFAULT NULL,
@@ -353,7 +354,8 @@ ALTER TABLE `membres`
   ADD UNIQUE KEY `signature_name` (`signature_name`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `login_cas` (`login_cas`),
-  ADD KEY `lieu_travail_id` (`lieu_travail_id`);
+  ADD KEY `lieu_travail_id` (`lieu_travail_id`),
+  ADD KEY `equipe_id` (`equipe_id`);
 
 --
 -- Index pour la table `missions`
@@ -505,7 +507,8 @@ ALTER TABLE `equipes_responsables`
 -- Contraintes pour la table `membres`
 --
 ALTER TABLE `membres`
-  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`);
+  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`),
+  ADD CONSTRAINT `fk_membre_2` FOREIGN KEY (`equipe_id`) REFERENCES `equipes` (`id`);
 
 --
 -- Contraintes pour la table `missions`

@@ -29,6 +29,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property \Cake\I18n\FrozenTime|null $date_naissance
  * @property bool|null $actif
  * @property int|null $lieu_travail_id
+ * @property int|null $equipe_id
  * @property string|null $nationalite
  * @property bool|null $est_francais
  * @property string|null $genre
@@ -39,6 +40,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property \Cake\I18n\FrozenTime|null $date_sortie
  *
  * @property \App\Model\Entity\LieuTravail $lieu_travail
+ * @property \App\Model\Entity\Equipe $equipe
  */
 class Membre extends Entity
 {
@@ -73,6 +75,7 @@ class Membre extends Entity
         'date_naissance' => true,
         'actif' => true,
         'lieu_travail_id' => true,
+        'equipe_id' => true,
         'nationalite' => true,
         'est_francais' => true,
         'genre' => true,

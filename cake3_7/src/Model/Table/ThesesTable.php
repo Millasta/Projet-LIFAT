@@ -13,14 +13,14 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\DirigeantsTable|\Cake\ORM\Association\BelongsToMany $Dirigeants
  * @property \App\Model\Table\EncadrantsTable|\Cake\ORM\Association\BelongsToMany $Encadrants
  *
- * @method \App\Model\Entity\Thesis get($primaryKey, $options = [])
- * @method \App\Model\Entity\Thesis newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Thesis[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Thesis|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Thesis saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Thesis patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Thesis[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Thesis findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\Theses get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Theses newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Theses[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Theses|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Theses saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Theses patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Theses[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Theses findOrCreate($search, callable $callback = null, $options = [])
  */
 class ThesesTable extends Table
 {
@@ -42,12 +42,12 @@ class ThesesTable extends Table
             'foreignKey' => 'auteur_id'
         ]);
         $this->belongsToMany('Dirigeants', [
-            'foreignKey' => 'thesis_id',
+            'foreignKey' => 'these_id',
             'targetForeignKey' => 'dirigeant_id',
             'joinTable' => 'dirigeants_theses'
         ]);
         $this->belongsToMany('Encadrants', [
-            'foreignKey' => 'thesis_id',
+            'foreignKey' => 'these_id',
             'targetForeignKey' => 'encadrant_id',
             'joinTable' => 'encadrants_theses'
         ]);
