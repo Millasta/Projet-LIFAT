@@ -110,7 +110,8 @@ class MembresController extends AppController
             $this->Flash->error(__('The membre could not be saved. Please, try again.'));
         }
         $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
-        $this->set(compact('membre', 'lieuTravails'));
+        $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+        $this->set(compact('membre', 'lieuTravails', 'equipes'));
     }
 
     /**
