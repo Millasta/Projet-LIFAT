@@ -153,7 +153,7 @@ CREATE TABLE `membres` (
   `nom` varchar(25) DEFAULT NULL,
   `prenom` varchar(25) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
-  `passwd` varchar(40) DEFAULT NULL,
+  `passwd` varchar(100) DEFAULT NULL,
   `adresse_agent_1` varchar(80) DEFAULT NULL,
   `adresse_agent_2` varchar(60) DEFAULT NULL,
   `residence_admin_1` varchar(80) DEFAULT NULL,
@@ -170,6 +170,7 @@ CREATE TABLE `membres` (
   `date_naissance` date DEFAULT NULL,
   `actif` tinyint(1) DEFAULT '1',
   `lieu_travail_id` int(11) DEFAULT NULL,
+  `equipe_id` int(11) DEFAULT NULL,
   `nationalite` varchar(20) DEFAULT NULL,
   `est_francais` tinyint(1) DEFAULT '1',
   `genre` char(1) DEFAULT NULL,
@@ -189,8 +190,8 @@ CREATE TABLE `membres` (
 CREATE TABLE `missions` (
   `id` int(11) NOT NULL,
   `complement_motif` varchar(40) DEFAULT NULL,
-  `date_depart` date DEFAULT NULL,
-  `date_retour` date DEFAULT NULL,
+  `date_depart` datetime DEFAULT NULL,
+  `date_retour` datetime DEFAULT NULL,
   `sans_frais` tinyint(1) DEFAULT NULL,
   `etat` enum('soumis','vaide') DEFAULT NULL,
   `nb_nuites` int(11) DEFAULT NULL,
@@ -353,7 +354,8 @@ ALTER TABLE `membres`
   ADD UNIQUE KEY `signature_name` (`signature_name`),
   ADD UNIQUE KEY `email` (`email`),
   ADD UNIQUE KEY `login_cas` (`login_cas`),
-  ADD KEY `lieu_travail_id` (`lieu_travail_id`);
+  ADD KEY `lieu_travail_id` (`lieu_travail_id`),
+  ADD KEY `equipe_id` (`equipe_id`);
 
 --
 -- Index pour la table `missions`
@@ -505,7 +507,8 @@ ALTER TABLE `equipes_responsables`
 -- Contraintes pour la table `membres`
 --
 ALTER TABLE `membres`
-  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`);
+  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`),
+  ADD CONSTRAINT `fk_membre_2` FOREIGN KEY (`equipe_id`) REFERENCES `equipes` (`id`);
 
 --
 -- Contraintes pour la table `missions`

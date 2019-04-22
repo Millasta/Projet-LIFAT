@@ -49,6 +49,8 @@ class ProjetsTable extends Table
             'targetForeignKey' => 'equipe_id',
             'joinTable' => 'equipes_projets'
         ]);
+
+        $this->displayField('titre');
     }
 
     /**

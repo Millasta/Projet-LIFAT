@@ -33,6 +33,7 @@ class LieusTable extends Table
         $this->setTable('lieus');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
+        $this->displayField('nom_lieu');
     }
 
     /**
