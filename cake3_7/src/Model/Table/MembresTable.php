@@ -75,7 +75,7 @@ class MembresTable extends Table
 
         $validator
             ->scalar('passwd')
-            ->maxLength('passwd', 40)
+            ->maxLength('passwd', 60)
             ->allowEmptyString('passwd');
 
         $validator

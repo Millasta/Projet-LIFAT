@@ -67,13 +67,13 @@ class ThesesTable extends Table
 
         $validator
             ->scalar('sujet')
-            ->maxLength('sujet', 20)
+            ->maxLength('sujet', 160)
             ->requirePresence('sujet', 'create')
             ->allowEmptyString('sujet', false);
 
         $validator
             ->scalar('type')
-            ->maxLength('type', 20)
+            ->maxLength('type', 80)
             ->allowEmptyString('type');
 
         $validator
@@ -85,9 +85,9 @@ class ThesesTable extends Table
             ->allowEmptyDate('date_fin');
 
         $validator
-            ->scalar('signature')
-            ->maxLength('signature', 20)
-            ->allowEmptyString('signature');
+            ->scalar('autre_info')
+            ->maxLength('autre_info', 160)
+            ->allowEmptyString('autre_info');
 
         return $validator;
     }

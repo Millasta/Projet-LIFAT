@@ -20,7 +20,20 @@ SET time_zone = "+00:00";
 -- Base de données :  `lifat_db`
 --
 
+CREATE DATABASE lifat_db;
+USE lifat_db;
+
 -- --------------------------------------------------------
+
+--
+-- Structure de la table `budgets_annuels`
+--
+
+CREATE TABLE `budgets_annuels` (
+  `projet_id` int(11) NOT NULL,
+  `annee` int(11) NOT NULL,
+  `budget` int(9) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Structure de la table `dirigeants`
@@ -38,7 +51,8 @@ CREATE TABLE `dirigeants` (
 
 CREATE TABLE `dirigeants_theses` (
   `dirigeant_id` int(11) NOT NULL,
-  `these_id` int(11) NOT NULL
+  `these_id` int(11) NOT NULL,
+  `taux` int(3) DEFAULT 100
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -59,7 +73,8 @@ CREATE TABLE `encadrants` (
 
 CREATE TABLE `encadrants_theses` (
   `encadrant_id` int(11) NOT NULL,
-  `these_id` int(11) NOT NULL
+  `these_id` int(11) NOT NULL,
+  `taux` int(3) DEFAULT 100
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -153,7 +168,7 @@ CREATE TABLE `membres` (
   `nom` varchar(25) DEFAULT NULL,
   `prenom` varchar(25) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
-  `passwd` varchar(40) DEFAULT NULL,
+  `passwd` binary(60) DEFAULT NULL,
   `adresse_agent_1` varchar(80) DEFAULT NULL,
   `adresse_agent_2` varchar(60) DEFAULT NULL,
   `residence_admin_1` varchar(80) DEFAULT NULL,
@@ -250,11 +265,11 @@ CREATE TABLE `projets` (
 
 CREATE TABLE `theses` (
   `id` int(11) NOT NULL,
-  `sujet` varchar(20) NOT NULL,
-  `type` varchar(20) DEFAULT NULL,
+  `sujet` varchar(160) NOT NULL,
+  `type` varchar(80) DEFAULT NULL,
   `date_debut` date DEFAULT NULL,
   `date_fin` date DEFAULT NULL,
-  `signature` varchar(20) DEFAULT NULL,
+  `autre_info` varchar(160) DEFAULT NULL,
   `auteur_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -274,6 +289,13 @@ CREATE TABLE `transports` (
 --
 -- Index pour les tables exportées
 --
+
+--
+-- Index pour la table `budgets_annuels`
+--
+ALTER TABLE `budgets_annuels`
+  ADD PRIMARY KEY (`projet_id`,`annee`),
+  ADD KEY `projet_id` (`projet_id`);
 
 --
 -- Index pour la table `dirigeants`
@@ -454,6 +476,13 @@ ALTER TABLE `transports`
 --
 -- Contraintes pour les tables exportées
 --
+
+--
+-- Contraintes pour la table `dirigeants`
+--
+ALTER TABLE `budgets_annuels`
+  ADD CONSTRAINT `fk_budgets_annuels_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`);
+
 
 --
 -- Contraintes pour la table `dirigeants`
