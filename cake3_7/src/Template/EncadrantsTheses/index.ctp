@@ -3,6 +3,8 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\EncadrantsThesis[]|\Cake\Collection\CollectionInterface $encadrantsTheses
  */
+
+echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">

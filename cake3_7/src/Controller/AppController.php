@@ -50,6 +50,7 @@ class AppController extends Controller
         /*
         //charge le composant d'authentification de cakephp
         $this->loadComponent('Auth', [
+			'authorize' => 'Controller',
             'authenticate' => [
                 'Form' => [
                     'fields' => ['username' => 'email','password' => 'passwd'],
@@ -63,14 +64,41 @@ class AppController extends Controller
             // Si pas autorisé, on renvoit sur la page précédente
             'unauthorizedRedirect' => $this->referer()
         ]);
-        // Permet à l'action "display" de notre PagesController de continuer
-        // à fonctionner. Autorise également les actions "read-only".
-        $this->Auth->allow(['display', 'view', 'index', 'add', 'delete', 'edit']);
-        */
+
+        //	la page de garde est accessible publiquement (mais que cette page)
+		$this->Auth->allow(array('controller' => 'pages', 'action' => 'display'));
+        //	cf. fonctions "isAuthorized" pour les autres permissions
+
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
     }
+
+	/**
+	 * Before filter : makes some user data accessible in the views
+	 * (example : $user['nom'])
+	 * @param Event $event
+	 * @return \Cake\Http\Response|null
+	 */
+    public function beforeFilter(Event $event)
+	{
+		$session = $this->request->getSession();
+		$user = $session->read('Auth.User');
+		$this->set('user', $user);
+		return parent::beforeFilter($event);
+	}
+
+	public function isAuthorized($user)
+	{
+		//	Par défaut : l'admin a tous les droits, mais les autres utilisateurs n'ont rien
+		//	Il faudra, pour les utilisateurs authentifiés (chefs d'équipe, membres permanents, autres utilisateurs...) remettre les droits manuellement dans le controlleur
+
+		if (isset($user['role']) && $user['role'] === 'admin') {
+			return true;
+		}
+
+		return false;
+	}
 }

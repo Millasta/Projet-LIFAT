@@ -1,7 +1,10 @@
+<?php
+	echo $this->element('navbar');
+?>
+
 <div class="note">Rappel : L'ordre de mission doit parvenir au secrétariat <span class="bold">5 jours ouvrés</span> avant le départ.</div>
 
 <?php
-
 	$this->assign('title', 'ODM');
 
 	echo $this->Html->tag('h2','Présentation du site');
