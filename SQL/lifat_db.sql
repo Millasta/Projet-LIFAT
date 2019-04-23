@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.6deb4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Client :  localhost:3306
--- Généré le :  Mer 27 Mars 2019 à 09:38
--- Version du serveur :  10.1.37-MariaDB-0+deb9u1
--- Version de PHP :  7.0.33-0+deb9u2
+-- Hôte : 127.0.0.1
+-- Généré le :  mar. 23 avr. 2019 à 17:35
+-- Version du serveur :  10.1.38-MariaDB
+-- Version de PHP :  7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -30,6 +32,14 @@ CREATE TABLE `dirigeants` (
   `dirigeant_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `dirigeants`
+--
+
+INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
+(2),
+(3);
+
 -- --------------------------------------------------------
 
 --
@@ -50,6 +60,14 @@ CREATE TABLE `dirigeants_theses` (
 CREATE TABLE `encadrants` (
   `encadrant_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `encadrants`
+--
+
+INSERT INTO `encadrants` (`encadrant_id`) VALUES
+(2),
+(3);
 
 -- --------------------------------------------------------
 
@@ -135,7 +153,7 @@ CREATE TABLE `lieu_travails` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Contenu de la table `lieu_travails`
+-- Déchargement des données de la table `lieu_travails`
 --
 
 INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
@@ -149,7 +167,7 @@ INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
 
 CREATE TABLE `membres` (
   `id` int(11) NOT NULL,
-  `role` enum('admin','user','secretary') NOT NULL DEFAULT 'user',
+  `role` enum('admin','membre') NOT NULL DEFAULT 'membre',
   `nom` varchar(25) DEFAULT NULL,
   `prenom` varchar(25) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
@@ -180,6 +198,13 @@ CREATE TABLE `membres` (
   `date_creation` datetime DEFAULT NULL,
   `date_sortie` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `membres`
+--
+
+INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
+(3, 'admin', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$PksbXyiUFxHocqxYr4HmlOJfGGOJqfeWmYwieXQroCL3ChQQr1zEC', '', '', '', '', '', '', '', '0', 5, 'admin', '', '', NULL, NULL, 1, NULL, NULL, '', 1, '', 0, 1, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -273,7 +298,7 @@ CREATE TABLE `transports` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Index pour les tables exportées
+-- Index pour les tables déchargées
 --
 
 --
@@ -400,7 +425,7 @@ ALTER TABLE `transports`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT pour les tables exportées
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
@@ -408,53 +433,63 @@ ALTER TABLE `transports`
 --
 ALTER TABLE `equipes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `financements`
 --
 ALTER TABLE `financements`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `lieus`
 --
 ALTER TABLE `lieus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `lieu_travails`
 --
 ALTER TABLE `lieu_travails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
 --
 -- AUTO_INCREMENT pour la table `membres`
 --
 ALTER TABLE `membres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
 --
 -- AUTO_INCREMENT pour la table `missions`
 --
 ALTER TABLE `missions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `motifs`
 --
 ALTER TABLE `motifs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `projets`
 --
 ALTER TABLE `projets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `theses`
 --
 ALTER TABLE `theses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT pour la table `transports`
 --
 ALTER TABLE `transports`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
--- Contraintes pour les tables exportées
+-- Contraintes pour les tables déchargées
 --
 
 --
@@ -536,6 +571,7 @@ ALTER TABLE `projets`
 --
 ALTER TABLE `theses`
   ADD CONSTRAINT `fk_theses_1` FOREIGN KEY (`auteur_id`) REFERENCES `membres` (`id`) ON DELETE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
