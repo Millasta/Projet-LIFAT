@@ -18,7 +18,7 @@ use Cake\ORM\Entity;
  * @property \App\Model\Entity\Dirigeant[] $dirigeants
  * @property \App\Model\Entity\Encadrant[] $encadrants
  */
-class Thesis extends Entity
+class These extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -34,7 +34,7 @@ class Thesis extends Entity
         'type' => true,
         'date_debut' => true,
         'date_fin' => true,
-        'signature' => true,
+        'autre_info' => true,
         'auteur_id' => true,
         'membre' => true,
         'dirigeants' => true,

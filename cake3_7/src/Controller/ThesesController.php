@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
 
 /**
  * Theses Controller
@@ -111,5 +113,16 @@ class ThesesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function nombreDeSoutenances($dateEntree = null, $dateFin = null){
+        $query = $this->Theses->find();
+        if ($dateEntree&& $dateFin) {
+            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_fin', $dateEntree, $dateFin);
+            });
+        }
+        $count = $query->count();
+        $this->set(compact('query', 'count'));
     }
 }

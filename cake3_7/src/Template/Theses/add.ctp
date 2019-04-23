@@ -27,7 +27,7 @@ echo $this->element('navbar');
             echo $this->Form->control('type');
             echo $this->Form->control('date_debut', ['empty' => true]);
             echo $this->Form->control('date_fin', ['empty' => true]);
-            echo $this->Form->control('signature');
+            echo $this->Form->control('autre_info');
             echo $this->Form->control('auteur_id', ['options' => $membres, 'empty' => true]);
 			
             echo $this->Form->control('dirigeants._ids', ['type' => 'select', 'multiple' => true, 'options' => $dirigeants]);

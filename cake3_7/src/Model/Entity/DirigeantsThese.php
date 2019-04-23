@@ -4,15 +4,16 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * EncadrantsThesis Entity
+ * DirigeantsTheses Entity
  *
- * @property int $encadrant_id
+ * @property int $dirigeant_id
  * @property int $these_id
+ * @property int $taux
  *
- * @property \App\Model\Entity\Encadrant $encadrant
- * @property \App\Model\Entity\Thesis $thesis
+ * @property \App\Model\Entity\Dirigeant $dirigeant
+ * @property \App\Model\Entity\Theses $theses
  */
-class EncadrantsThesis extends Entity
+class DirigeantsTheses extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -24,7 +25,8 @@ class EncadrantsThesis extends Entity
      * @var array
      */
     protected $_accessible = [
-        'encadrant' => true,
-        'thesis' => true
+        'dirigeant' => true,
+        'theses' => true,
+		'taux' => true
     ];
 }

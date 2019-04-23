@@ -47,6 +47,7 @@ class AppController extends Controller
         //charge le composant flash de cake php
         $this->loadComponent('Flash');
 
+        /*
         //charge le composant d'authentification de cakephp
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -64,8 +65,8 @@ class AppController extends Controller
         ]);
         // Permet à l'action "display" de notre PagesController de continuer
         // à fonctionner. Autorise également les actions "read-only".
-        $this->Auth->allow(['display', 'view', 'index']);
-
+        $this->Auth->allow(['display', 'view', 'index', 'add', 'delete', 'edit']);
+        */
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
