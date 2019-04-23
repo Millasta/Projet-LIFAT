@@ -2,6 +2,9 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
+use PhpParser\Node\Expr\Array_;
 
 /**
  * EncadrantsTheses Controller
@@ -109,5 +112,62 @@ class EncadrantsThesesController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+
+    public function nombreDeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
+        $result = $this->EncadrantsTheses->find('all', [
+            'conditions' => ['encadrant_id' => $id],
+        ]);
+
+        if ($dateEntree && $dateFin) {
+
+            $tmp = 0;
+            foreach($result as $row){
+                $this->loadModel('Theses');
+                $query = $this->Theses->find('all');
+                $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('theses.date_fin', $dateEntree, $dateFin);
+                })
+                    ->where(['id' => $row->these_id]);
+                if($query->first()){
+                    $tmp++;
+                }
+            }
+            $count = $query->count();
+            die(strval($tmp));
+            $this->set(compact('tmp', 'count'));
+        }else{
+            $count = $result->count();
+            die(strval($count));
+            $this->set(compact('count', 'count'));
+        }
+    }
+
+    public function listeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $query = $this->EncadrantsTheses->find('all');
+            $query->contain(['Theses']);
+            $query->where(['encadrant_id' => $id]);
+            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('theses.date_fin', $dateEntree, $dateFin);
+            });
+
+            $resultset=array();
+            foreach ($query as $row){
+                $resultset[]=$row["thesis"];
+            }
+            $this->set('Theses', $resultset);
+        }else{
+            $result = $this->EncadrantsTheses->find('all', [
+                'conditions' => ['encadrant_id' => $id],
+                'contain' => ['Theses']
+            ]);
+            $resultset=array();
+            foreach ($result as $row){
+                $resultset[]=$row["thesis"];
+            }
+            $this->set('Theses', $resultset);
+        }
     }
 }
