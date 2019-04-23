@@ -39,6 +39,10 @@ class MembresTable extends Table
         $this->belongsTo('LieuTravails', [
             'foreignKey' => 'lieu_travail_id'
         ]);
+
+        $this->belongsTo('Equipes', [
+            'foreignKey' => 'equipe_id'
+        ]);
     }
 
     /**
@@ -146,7 +150,7 @@ class MembresTable extends Table
             ->allowEmptyString('matricule');
 
         $validator
-            ->dateTime('date_naissance')
+            ->date('date_naissance')
             ->allowEmptyDateTime('date_naissance');
 
         $validator
@@ -203,6 +207,7 @@ class MembresTable extends Table
         $rules->add($rules->isUnique(['signature_name']));
         $rules->add($rules->isUnique(['login_cas']));
         $rules->add($rules->existsIn(['lieu_travail_id'], 'LieuTravails'));
+        $rules->add($rules->existsIn(['equipe_id'], 'Equipes'));
 
         return $rules;
     }

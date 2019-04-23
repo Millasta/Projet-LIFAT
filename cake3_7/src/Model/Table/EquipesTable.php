@@ -35,7 +35,7 @@ class EquipesTable extends Table
         parent::initialize($config);
 
         $this->setTable('equipes');
-        $this->setDisplayField('id');
+        $this->setDisplayField('nom_equipe');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Membres', [

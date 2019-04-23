@@ -41,6 +41,8 @@ class TransportsTable extends Table
             'targetForeignKey' => 'mission_id',
             'joinTable' => 'missions_transports'
         ]);
+
+        $this->displayField('type_transport');
     }
 
     /**

@@ -39,6 +39,8 @@ class MotifsTable extends Table
         $this->hasMany('Missions', [
             'foreignKey' => 'motif_id'
         ]);
+
+        $this->displayField('nom_motif');
     }
 
     /**
