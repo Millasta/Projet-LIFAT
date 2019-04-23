@@ -3,19 +3,17 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Membre[]|\Cake\Collection\CollectionInterface $membres
  */
-
-echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Membre'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Lieu Travails'), ['controller' => 'LieuTravails', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Lieu Travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Nouveau membre'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Liste des lieux de travail'), ['controller' => 'LieuTravails', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nouveau lieu de travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="membres index large-9 medium-8 columns content">
-    <h3><?= __('Membres') ?></h3>
+    <h3><?= __('Membres du laboratoire') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
