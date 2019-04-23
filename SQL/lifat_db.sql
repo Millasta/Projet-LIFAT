@@ -153,7 +153,7 @@ CREATE TABLE `membres` (
   `nom` varchar(25) DEFAULT NULL,
   `prenom` varchar(25) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
-  `passwd` varchar(40) DEFAULT NULL,
+  `passwd` varchar(100) DEFAULT NULL,
   `adresse_agent_1` varchar(80) DEFAULT NULL,
   `adresse_agent_2` varchar(60) DEFAULT NULL,
   `residence_admin_1` varchar(80) DEFAULT NULL,

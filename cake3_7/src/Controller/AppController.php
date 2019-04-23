@@ -72,4 +72,11 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
     }
+
+	public function isAuthorized($user)
+	{
+		//	Par défaut : refuser l'acces
+		//	Il faudra "ré-activer" chacune des actions possibles dans leurs controllers respectifs
+		return false;
+	}
 }
