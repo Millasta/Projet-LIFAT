@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\theses $theses
  */
-
-echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
@@ -65,9 +63,9 @@ echo $this->element('navbar');
             <tr>
                 <td><?= h($dirigeants->dirigeant_id) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Dirigeants', 'action' => 'view', $dirigeants->]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Dirigeants', 'action' => 'edit', $dirigeants->]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Dirigeants', 'action' => 'delete', $dirigeants->], ['confirm' => __('Are you sure you want to delete # {0}?', $dirigeants->)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Dirigeants', 'action' => 'view', $dirigeants->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Dirigeants', 'action' => 'edit', $dirigeants->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Dirigeants', 'action' => 'delete', $dirigeants->id], ['confirm' => __('Are you sure you want to delete # {0}?', $dirigeants->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -86,9 +84,9 @@ echo $this->element('navbar');
             <tr>
                 <td><?= h($encadrants->encadrant_id) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Encadrants', 'action' => 'view', $encadrants->]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Encadrants', 'action' => 'edit', $encadrants->]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Encadrants', 'action' => 'delete', $encadrants->], ['confirm' => __('Are you sure you want to delete # {0}?', $encadrants->)]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Encadrants', 'action' => 'view', $encadrants->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Encadrants', 'action' => 'edit', $encadrants->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Encadrants', 'action' => 'delete', $encadrants->id], ['confirm' => __('Are you sure you want to delete # {0}?', $encadrants->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

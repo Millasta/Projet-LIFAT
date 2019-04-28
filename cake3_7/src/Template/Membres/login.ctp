@@ -1,7 +1,3 @@
-<?php
-	echo $this->element('navbar');
-?>
-
 <h1>Connexion par mot de passe</h1>
 <?= $this->Form->create('Membre') ?>
 <?= $this->Form->control('email') ?>

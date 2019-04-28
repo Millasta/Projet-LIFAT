@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\EncadrantsThesis $encadrantsThesis
  */
-
-echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
@@ -24,7 +22,7 @@ echo $this->element('navbar');
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Encadrant') ?></th>
-            <td><?= $encadrantsThesis->has('encadrant') ? $this->Html->link($encadrantsThesis->encadrant->, ['controller' => 'Encadrants', 'action' => 'view', $encadrantsThesis->encadrant->]) : '' ?></td>
+            <td><?= $encadrantsThesis->has('encadrant') ? $this->Html->link($encadrantsThesis->encadrant->id, ['controller' => 'Encadrants', 'action' => 'view', $encadrantsThesis->encadrant->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Thesis') ?></th>
