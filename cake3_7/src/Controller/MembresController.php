@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Table\EquipesResponsablesTable;
 use Cake\Log\Log;
 
 /**
@@ -145,4 +146,61 @@ class MembresController extends AppController
         $this->Flash->success('Vous avez été déconnecté.');
         return $this->redirect($this->Auth->logout());
     }
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+    public function isAuthorized($user)
+	{
+		if(parent::isAuthorized($user) === true)
+		{
+			return true;
+		}
+		else
+		{
+			$action = $this->request->getParam('action');
+			$this->loadModel('Equipes');
+			$equipesRespo = $this->Equipes->findByResponsableId($user['id']);
+
+			if (in_array($action, ['edit', 'delete']))
+			{
+				//	edit de delete doivent être faits sur un utilisateur existant...
+				$membre_slug = $this->request->getParam('pass.0');
+				if (!$membre_slug)
+				{
+					return false;
+				}
+				else
+				{
+					$membre = $this->Membres->findById($membre_slug)->first();
+					$equipe_id = $membre->equipe_id;
+
+					//	Un membre peut s'auto edit / delete
+					if ($membre->id === $user['id'])
+					{
+						return true;
+					}
+					else if ($equipe_id != null)
+					{
+						//	Un chef d'équipe peut faire de même pour les membres de son équipe
+						foreach ($equipesRespo as $equipeRespo){
+							if($equipeRespo->id === $equipe_id)
+							{
+								return true;
+							}
+						}
+					}
+				}
+			}
+			else if($action === 'add')
+			{
+				//	Un chef d'équipe peut ajouter un membre à une de ses équipes
+				return $equipesRespo->count() > 0;
+				//	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
+			}
+		}
+		return false;
+	}
 }

@@ -19,6 +19,7 @@
 		<?= $this->fetch('script') ?>
 	</head>
 	<body>
+		<?= $this->Flash->render() ?>
 		<div id="main">
 			<!-- Header -->
 			<?php
