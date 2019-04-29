@@ -125,4 +125,26 @@ class ThesesController extends AppController
         $count = $query->count();
         $this->set(compact('query', 'count'));
     }
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		if(parent::isAuthorized($user) === true)
+		{
+			return true;
+		}
+		else
+		{
+			//	Tous les membres permanents ont tous les droits sur les theses
+			if($user['permanent'] === true)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

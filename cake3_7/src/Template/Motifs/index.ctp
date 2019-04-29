@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Motif[]|\Cake\Collection\CollectionInterface $motifs
  */
-
-echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">

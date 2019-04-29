@@ -19,13 +19,19 @@
 		<?= $this->fetch('script') ?>
 	</head>
 	<body>
+		<?= $this->Flash->render() ?>
 		<div id="main">
 			<!-- Header -->
 			<?php
 				// titre du site (banniere)
 				echo $this->Html->div('',null, array('id' => 'header'));
 				echo $this->Html->tag('h1','Gestion des Ordres de Mission');
-				echo '</div>'; 
+				echo '</div>';
+			?>
+
+			<!-- Navbar -->
+			<?php
+				echo $this->element('navbar');
 			?>
 
 			<!-- Contenu -->

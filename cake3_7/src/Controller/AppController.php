@@ -47,7 +47,6 @@ class AppController extends Controller
         //charge le composant flash de cake php
         $this->loadComponent('Flash');
 
-        /*
         //charge le composant d'authentification de cakephp
         $this->loadComponent('Auth', [
 			'authorize' => 'Controller',
@@ -61,7 +60,7 @@ class AppController extends Controller
                 'controller' => 'Membres',
                 'action' => 'login'
             ],
-            // Si pas autorisé, on renvoit sur la page précédente
+            // Si pas autorisé, on renvoie sur la page précédente
             'unauthorizedRedirect' => $this->referer()
         ]);
 
@@ -77,8 +76,8 @@ class AppController extends Controller
     }
 
 	/**
-	 * Before filter : makes some user data accessible in the views
-	 * (example : $user['nom'])
+	 * Before filter : makes some user data accessible in the views.
+	 * (example : $user['nom']).
 	 * @param Event $event
 	 * @return \Cake\Http\Response|null
 	 */
@@ -90,15 +89,37 @@ class AppController extends Controller
 		return parent::beforeFilter($event);
 	}
 
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
 	public function isAuthorized($user)
 	{
-		//	Par défaut : l'admin a tous les droits, mais les autres utilisateurs n'ont rien
-		//	Il faudra, pour les utilisateurs authentifiés (chefs d'équipe, membres permanents, autres utilisateurs...) remettre les droits manuellement dans le controlleur
-
+		//	Quoi qu'il arrive, l'admin a tous les droits
 		if (isset($user['role']) && $user['role'] === 'admin') {
 			return true;
 		}
 
+		//	Quoi qu'il arrive, n'importe quel membre connecté peut avoir accès aux fontions 'index', 'view' et 'logout'
+		$action = $this->request->getParam('action');
+		if (in_array($action, ['index', 'view', 'logout'])) {
+			return true;
+		}
+
+		//	Rien d'autre par défaut (À ce point-là les droits + spécifiques sont vus dans les autres controllers)
 		return false;
+		//	Donc, toutes les autres méthodes "isAuthorized" devront ressembler à ça :
+		/*
+			if(parent::isAuthorized($user) === true)
+			{
+				return true;
+			}
+			else
+			{
+				...
+			}
+			return false;
+		 */
 	}
 }

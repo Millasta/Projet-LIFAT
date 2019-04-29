@@ -3,8 +3,6 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\EncadrantsThesis[]|\Cake\Collection\CollectionInterface $encadrantsTheses
  */
-
-echo $this->element('navbar');
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
@@ -29,7 +27,7 @@ echo $this->element('navbar');
         <tbody>
             <?php foreach ($encadrantsTheses as $encadrantsThesis): ?>
             <tr>
-                <td><?= $encadrantsThesis->has('encadrant') ? $this->Html->link($encadrantsThesis->encadrant->, ['controller' => 'Encadrants', 'action' => 'view', $encadrantsThesis->encadrant->]) : '' ?></td>
+                <td><?= $encadrantsThesis->has('encadrant') ? $this->Html->link($encadrantsThesis->encadrant->id, ['controller' => 'Encadrants', 'action' => 'view', $encadrantsThesis->encadrant->id]) : '' ?></td>
                 <td><?= $encadrantsThesis->has('thesis') ? $this->Html->link($encadrantsThesis->thesis->id, ['controller' => 'Theses', 'action' => 'view', $encadrantsThesis->thesis->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $encadrantsThesis->encadrant_id]) ?>
