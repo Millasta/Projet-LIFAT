@@ -4,20 +4,31 @@
  * @var \App\Model\Entity\Membre $membre
  */
 ?>
+<?php
+$optionsMembres = [
+    'CHEFEQUIPE' => 'Chef d\'équipe',
+    'SECRETARIAT' => 'Secretariat',
+    'MEMBRE' => 'Membre'
+];
+$optionsSexe = [
+    'H' => 'Homme',
+    'F' => 'Femme'
+];
+?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Membres'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Lieu Travails'), ['controller' => 'LieuTravails', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Lieu Travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Liste des membres'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des lieux de travail'), ['controller' => 'LieuTravails', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nouveau lieu de travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="membres form large-9 medium-8 columns content">
     <?= $this->Form->create($membre) ?>
     <fieldset>
-        <legend><?= __('Add Membre') ?></legend>
+        <legend><?= __('Ajout d\'un Membre') ?></legend>
         <?php
-            echo $this->Form->control('role');
+            echo $this->Form->select('role', $optionsMembres);
             echo $this->Form->control('nom');
             echo $this->Form->control('prenom');
             echo $this->Form->control('email');
@@ -41,12 +52,10 @@
             echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
             echo $this->Form->control('nationalite');
             echo $this->Form->control('est_francais');
-            echo $this->Form->control('genre');
+            echo $this->Form->select('genre', $optionsSexe);
             echo $this->Form->control('hdr');
             echo $this->Form->control('permanent');
             echo $this->Form->control('est_porteur');
-            echo $this->Form->control('date_creation', ['empty' => true]);
-            echo $this->Form->control('date_sortie', ['empty' => true]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
