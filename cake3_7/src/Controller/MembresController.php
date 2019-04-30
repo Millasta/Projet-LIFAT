@@ -225,4 +225,49 @@ class MembresController extends AppController
         array_multisort($result[22],SORT_NUMERIC, SORT_DESC);
         return $result;
     }
+
+
+    public function effectifParType($dateEntree = null, $dateFin = null){
+        if ($dateEntree && $dateFin) {
+            $do=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO']);
+
+            $pe=$this->Membres->find('all')
+                ->where(['type_personnel' => 'PE']);
+
+            $pu=$this->Membres->find('all')
+                ->where(['type_personnel' => 'PE']);
+
+            $do = $do->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+            $pe = $pe->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+
+            $pu = $pu->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+        } else{
+            $do=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+            ->count();
+
+            $pe=$this->Membres->find('all')
+                ->where(['type_personnel' => 'PE'])
+            ->count();
+
+            $pu=$this->Membres->find('all')
+                ->where(['type_personnel' => 'PE'])
+            ->count();
+        }
+
+        $resultset=["Do"=>$do,
+            "PE" => $pe,
+            "PU" => $pu
+        ];
+        die(strval($resultset['PE']));
+        array_multisort($result[22],SORT_NUMERIC, SORT_DESC);
+        return $result;
+    }
 }
