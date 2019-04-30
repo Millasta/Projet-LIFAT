@@ -185,7 +185,7 @@ class MembresController extends AppController
             $equipesRespo = $this->Equipes->findByResponsableId($user['id']);
 
             if (in_array($action, ['edit', 'delete'])) {
-                //	edit de delete doivent être faits sur un utilisateur existant...
+                //	edit et delete doivent être faits sur un utilisateur existant...
                 $membre_slug = $this->request->getParam('pass.0');
                 if (!$membre_slug) {
                     return false;
@@ -208,7 +208,7 @@ class MembresController extends AppController
             } else if ($action === 'add') {
                 //	Un chef d'équipe peut ajouter un membre à une de ses équipes
                 return $equipesRespo->count() > 0;
-                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
+                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle le membre est mise correspond à une des équipes gérées par le user !!!!!
             }
         }
         return false;
