@@ -1,4 +1,4 @@
-<table align="right">
+<table id="menu">
 	<tr>
 		<td>
 			<?=$this->Html->link(__('Membres'), ['controller' => 'membres', 'action' => 'index'])?>
@@ -31,12 +31,13 @@
    			<td>
 				<?php
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['permanent'] === true)
+					if ($user['role'] != 'admin' && $user['permanent'] === true)
 					{
 						echo " permanent";
 					}
-					echo ")";
+					echo ") ";
 				?>
+				<?=$this->Html->link(__('Mon Profil'), ['controller' => 'membres', 'action' => 'view', $user['id']])?>
 			</td>
 			<td>
 				<?= $this->Html->link(__('Déconnexion'), ['controller' => 'membres', 'action' => 'logout']) ?>
@@ -48,4 +49,3 @@
 		<?php endif; ?>
 	</tr>
 </table>
-<!-- TODO : bouger des trucs selon droits	-->
