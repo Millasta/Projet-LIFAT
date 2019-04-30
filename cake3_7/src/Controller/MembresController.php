@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Model\Table\EquipesResponsablesTable;
 use Cake\Log\Log;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
 
 /**
  * Membres Controller
@@ -203,4 +205,20 @@ class MembresController extends AppController
 		}
 		return false;
 	}
+
+    public function listeDoctorant($dateEntree = null, $dateFin = null){
+        //$dateEntree='2010-03-03';
+        //$dateFin='2020-02-02';
+        $result = $this->Membres->find('all')
+            ->where(['type_personnel'=> 'DO']);
+
+        if ($dateEntree && $dateFin) {
+            $result=$result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })
+            ->toArray();
+        }
+
+        return $result;
+    }
 }

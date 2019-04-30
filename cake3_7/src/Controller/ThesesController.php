@@ -115,6 +115,13 @@ class ThesesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+
+    /**
+     * Retourne le nombre de soutenance en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de soutenances
+     */
     public function nombreDeSoutenances($dateEntree = null, $dateFin = null){
         $query = $this->Theses->find();
         if ($dateEntree&& $dateFin) {
