@@ -41,8 +41,18 @@ class ThesesController extends AppController
         $theses = $this->Theses->get($id, [
             'contain' => ['Membres', 'Dirigeants', 'Encadrants']
         ]);
-
-        $this->set('theses', $theses);
+		
+		$this->loadModel('Membres');
+		
+		foreach ($theses->dirigeants as &$dirigeants) {
+			$dirigeants = $this->Membres->get($dirigeants->dirigeant_id);
+		}
+		
+		foreach ($theses->encadrants as &$encadrants) {
+			$encadrants = $this->Membres->get($encadrants->encadrant_id);
+		}
+		
+		$this->set('theses', $theses);
     }
 
     /**
@@ -50,7 +60,8 @@ class ThesesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    /* GENERATED
+	public function add()
     {
         $theses = $this->Theses->newEntity();
         if ($this->request->is('post')) {
@@ -66,7 +77,7 @@ class ThesesController extends AppController
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
         $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
-    }
+    }*/
 
     /**
      * Edit method
@@ -77,9 +88,13 @@ class ThesesController extends AppController
      */
     public function edit($id = null)
     {
-        $theses = $this->Theses->get($id, [
-            'contain' => ['Dirigeants', 'Encadrants']
-        ]);
+		if($id == null)
+			$theses = $this->Theses->newEntity();
+		else
+			$theses = $this->Theses->get($id, [
+				'contain' => ['Dirigeants', 'Encadrants']
+			]);
+		
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {

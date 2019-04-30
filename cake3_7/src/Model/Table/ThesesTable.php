@@ -35,7 +35,7 @@ class ThesesTable extends Table
         parent::initialize($config);
 
         $this->setTable('theses');
-        $this->setDisplayField('id');
+        $this->setDisplayField('sujet');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('Membres', [
