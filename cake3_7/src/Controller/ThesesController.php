@@ -2,13 +2,15 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
 
 /**
  * Theses Controller
  *
  * @property \App\Model\Table\ThesesTable $Theses
  *
- * @method \App\Model\Entity\Thesis[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method \App\Model\Entity\Theses[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
  */
 class ThesesController extends AppController
 {
@@ -30,17 +32,17 @@ class ThesesController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Thesis id.
+     * @param string|null $id Theses id.
      * @return \Cake\Http\Response|void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $thesis = $this->Theses->get($id, [
+        $theses = $this->Theses->get($id, [
             'contain' => ['Membres', 'Dirigeants', 'Encadrants']
         ]);
 
-        $this->set('thesis', $thesis);
+        $this->set('theses', $theses);
     }
 
     /**
@@ -50,66 +52,77 @@ class ThesesController extends AppController
      */
     public function add()
     {
-        $thesis = $this->Theses->newEntity();
+        $theses = $this->Theses->newEntity();
         if ($this->request->is('post')) {
-            $thesis = $this->Theses->patchEntity($thesis, $this->request->getData());
-            if ($this->Theses->save($thesis)) {
-                $this->Flash->success(__('The thesis has been saved.'));
+            $theses = $this->Theses->patchEntity($theses, $this->request->getData(), ['associated' => ['Encadrants', 'Dirigeants']]);
+            if ($this->Theses->save($theses)) {
+                $this->Flash->success(__('The theses has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The thesis could not be saved. Please, try again.'));
+            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('thesis', 'membres', 'dirigeants', 'encadrants'));
+        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
     }
 
     /**
      * Edit method
      *
-     * @param string|null $id Thesis id.
+     * @param string|null $id Theses id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $thesis = $this->Theses->get($id, [
+        $theses = $this->Theses->get($id, [
             'contain' => ['Dirigeants', 'Encadrants']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $thesis = $this->Theses->patchEntity($thesis, $this->request->getData());
-            if ($this->Theses->save($thesis)) {
-                $this->Flash->success(__('The thesis has been saved.'));
+            $theses = $this->Theses->patchEntity($theses, $this->request->getData());
+            if ($this->Theses->save($theses)) {
+                $this->Flash->success(__('The theses has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The thesis could not be saved. Please, try again.'));
+            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('thesis', 'membres', 'dirigeants', 'encadrants'));
+        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Thesis id.
+     * @param string|null $id Theses id.
      * @return \Cake\Http\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
-        $thesis = $this->Theses->get($id);
-        if ($this->Theses->delete($thesis)) {
-            $this->Flash->success(__('The thesis has been deleted.'));
+        $theses = $this->Theses->get($id);
+        if ($this->Theses->delete($theses)) {
+            $this->Flash->success(__('The theses has been deleted.'));
         } else {
-            $this->Flash->error(__('The thesis could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The theses could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function nombreDeSoutenances($dateEntree = null, $dateFin = null){
+        $query = $this->Theses->find();
+        if ($dateEntree&& $dateFin) {
+            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_fin', $dateEntree, $dateFin);
+            });
+        }
+        $count = $query->count();
+        $this->set(compact('query', 'count'));
     }
 }

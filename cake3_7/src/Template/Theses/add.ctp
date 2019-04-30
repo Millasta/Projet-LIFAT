@@ -1,7 +1,7 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var \App\Model\Entity\Thesis $thesis
+ * @var \App\Model\Entity\Theses $theses
  */
 ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
@@ -17,9 +17,9 @@
     </ul>
 </nav>
 <div class="theses form large-9 medium-8 columns content">
-    <?= $this->Form->create($thesis) ?>
+    <?= $this->Form->create($theses) ?>
     <fieldset>
-        <legend><?= __('Add Thesis') ?></legend>
+        <legend><?= __('Add Theses') ?></legend>
         <?php
             echo $this->Form->control('sujet');
             echo $this->Form->control('type');
@@ -27,8 +27,9 @@
             echo $this->Form->control('date_fin', ['empty' => true]);
             echo $this->Form->control('signature');
             echo $this->Form->control('auteur_id', ['options' => $membres, 'empty' => true]);
-            echo $this->Form->control('dirigeants._ids', ['options' => $dirigeants]);
-            echo $this->Form->control('encadrants._ids', ['options' => $encadrants]);
+			
+            echo $this->Form->control('dirigeants._ids', ['type' => 'select', 'multiple' => true, 'options' => $dirigeants]);
+            echo $this->Form->control('encadrants._ids', ['type' => 'select', 'multiple' => true, 'options' => $encadrants]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

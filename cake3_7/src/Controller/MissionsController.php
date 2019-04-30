@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Log\Log;
 
 /**
  * Missions Controller
@@ -44,30 +45,6 @@ class MissionsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $mission = $this->Missions->newEntity();
-        if ($this->request->is('post')) {
-            $mission = $this->Missions->patchEntity($mission, $this->request->getData());
-            if ($this->Missions->save($mission)) {
-                $this->Flash->success(__('The mission has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The mission could not be saved. Please, try again.'));
-        }
-        $projets = $this->Missions->Projets->find('list', ['limit' => 200]);
-        $lieus = $this->Missions->Lieus->find('list', ['limit' => 200]);
-        $motifs = $this->Missions->Motifs->find('list', ['limit' => 200]);
-        $transports = $this->Missions->Transports->find('list', ['limit' => 200]);
-        $this->set(compact('mission', 'projets', 'lieus', 'motifs', 'transports'));
-    }
-
-    /**
      * Edit method
      *
      * @param string|null $id Mission id.
@@ -76,9 +53,12 @@ class MissionsController extends AppController
      */
     public function edit($id = null)
     {
-        $mission = $this->Missions->get($id, [
-            'contain' => ['Transports']
-        ]);
+        if($id == null)
+            $mission = $this->Missions->newEntity();
+        else
+            $mission = $this->Missions->get($id, [
+                'contain' => ['Transports']
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $mission = $this->Missions->patchEntity($mission, $this->request->getData());
             if ($this->Missions->save($mission)) {

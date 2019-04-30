@@ -7,9 +7,9 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Mission'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Mission'), ['action' => 'edit']) ?></li>
         <li><?= $this->Html->link(__('List Projets'), ['controller' => 'Projets', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Projet'), ['controller' => 'Projets', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('New Projet'), ['controller' => 'Projets', 'action' => 'edit']) ?></li>
         <li><?= $this->Html->link(__('List Lieus'), ['controller' => 'Lieus', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Lieus'), ['controller' => 'Lieus', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Motifs'), ['controller' => 'Motifs', 'action' => 'index']) ?></li>

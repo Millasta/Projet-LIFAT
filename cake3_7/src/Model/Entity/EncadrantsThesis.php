@@ -27,4 +27,6 @@ class EncadrantsThesis extends Entity
         'encadrant' => true,
         'thesis' => true
     ];
+
+
 }

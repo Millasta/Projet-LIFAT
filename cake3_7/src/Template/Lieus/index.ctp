@@ -11,6 +11,7 @@
     </ul>
 </nav>
 <div class="lieus index large-9 medium-8 columns content">
+    <img src="Graph/graph.php" />
     <h3><?= __('Lieus') ?></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>

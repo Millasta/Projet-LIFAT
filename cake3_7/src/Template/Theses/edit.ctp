@@ -23,7 +23,7 @@
     </ul>
 </nav>
 <div class="theses form large-9 medium-8 columns content">
-    <?= $this->Form->create($thesis) ?>
+    <?= $this->Form->create($theses) ?>
     <fieldset>
         <legend><?= __('Edit Thesis') ?></legend>
         <?php

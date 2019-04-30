@@ -44,8 +44,29 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
+        //charge le composant flash de cake php
         $this->loadComponent('Flash');
 
+        /*
+        //charge le composant d'authentification de cakephp
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'Form' => [
+                    'fields' => ['username' => 'email','password' => 'passwd'],
+                    'userModel' => 'Membres'
+                ]
+            ],
+            'loginAction' => [
+                'controller' => 'Membres',
+                'action' => 'login'
+            ],
+            // Si pas autorisé, on renvoit sur la page précédente
+            'unauthorizedRedirect' => $this->referer()
+        ]);
+        // Permet à l'action "display" de notre PagesController de continuer
+        // à fonctionner. Autorise également les actions "read-only".
+        $this->Auth->allow(['display', 'view', 'index', 'add', 'delete', 'edit']);
+        */
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
