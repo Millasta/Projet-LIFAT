@@ -33,7 +33,7 @@ class MembresTable extends Table
         parent::initialize($config);
 
         $this->setTable('membres');
-        $this->setDisplayField('id');
+        $this->setDisplayField('nom');
         $this->setPrimaryKey('id');
 
         $this->belongsTo('LieuTravails', [
