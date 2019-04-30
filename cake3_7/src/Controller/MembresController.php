@@ -52,7 +52,7 @@ class MembresController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    /*public function add()
     {
         $membre = $this->Membres->newEntity();
         if ($this->request->is('post')) {
@@ -83,7 +83,7 @@ class MembresController extends AppController
         $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
         $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
         $this->set(compact('membre', 'lieuTravails', 'equipes'));
-    }
+    }*/
 
     /**
      * Edit method
@@ -94,12 +94,33 @@ class MembresController extends AppController
      */
     public function edit($id = null)
     {
-        $membre = $this->Membres->get($id, [
-            'contain' => []
-        ]);
+		if($id == null)
+			$membre = $this->Membres->newEntity();
+		else
+			$membre = $this->Membres->get($id, [
+				'contain' => []
+			]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
             if ($this->Membres->save($membre)) {
+				if($id == null) {
+					$this->Flash->success(__('Nouveau membre'));
+					// Récupération du Membre.id créé
+					$query = $this->Membres->find('all')
+										->where(['Membres.email =' => $this->request->getData()['email']])
+										->limit(1);			
+					$membreId = $query->first();
+							
+					// INSERT dans Dirigeants en Encadrants
+					$this->loadModel('Encadrants');
+					$this->loadModel('Dirigeants');
+					
+					$query = $this->Dirigeants->query();
+					$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+					
+					$query = $this->Encadrants->query();
+					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				}
                 $this->Flash->success(__('The membre has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -164,7 +185,7 @@ class MembresController extends AppController
             $equipesRespo = $this->Equipes->findByResponsableId($user['id']);
 
             if (in_array($action, ['edit', 'delete'])) {
-                //	edit de delete doivent être faits sur un utilisateur existant...
+                //	edit et delete doivent être faits sur un utilisateur existant...
                 $membre_slug = $this->request->getParam('pass.0');
                 if (!$membre_slug) {
                     return false;
@@ -187,7 +208,7 @@ class MembresController extends AppController
             } else if ($action === 'add') {
                 //	Un chef d'équipe peut ajouter un membre à une de ses équipes
                 return $equipesRespo->count() > 0;
-                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
+                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle le membre est mise correspond à une des équipes gérées par le user !!!!!
             }
         }
         return false;

@@ -49,10 +49,6 @@ CREATE TABLE `dirigeants` (
 -- Déchargement des données de la table `dirigeants`
 --
 
-INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
-(2),
-(3);
-
 -- --------------------------------------------------------
 
 --
@@ -78,10 +74,6 @@ CREATE TABLE `encadrants` (
 --
 -- Déchargement des données de la table `encadrants`
 --
-
-INSERT INTO `encadrants` (`encadrant_id`) VALUES
-(2),
-(3);
 
 -- --------------------------------------------------------
 
