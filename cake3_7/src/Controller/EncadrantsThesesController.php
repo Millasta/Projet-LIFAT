@@ -170,4 +170,5 @@ class EncadrantsThesesController extends AppController
             $this->set('Theses', $resultset);
         }
     }
+
 }
