@@ -1,4 +1,6 @@
-<div class="note">Rappel : L'ordre de mission doit parvenir au secrétariat <span class="bold">5 jours ouvrés</span> avant le départ.</div>
+<?php
+
+	$this->assign('title', 'Lifat manager');
 
 	echo $this->Html->tag('h2','Présentation du site');
 	echo $this->Html->para('','Ce site permet la gestion du laboratoire d\'informatique de l\'université de Tours.');

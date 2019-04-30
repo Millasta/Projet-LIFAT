@@ -1,4 +1,4 @@
-<table id="menu" align="right">
+<table id="menu">
 	<tr>
 		<td>
 			<?=$this->Html->link(__('Membres'), ['controller' => 'membres', 'action' => 'index'])?>
@@ -31,7 +31,7 @@
    			<td>
 				<?php
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['permanent'] === true)
+					if ($user['role'] != 'admin' && $user['permanent'] === true)
 					{
 						echo " permanent";
 					}
