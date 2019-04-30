@@ -266,8 +266,69 @@ class MembresController extends AppController
             "PE" => $pe,
             "PU" => $pu
         ];
-        die(strval($resultset['PE']));
-        array_multisort($result[22],SORT_NUMERIC, SORT_DESC);
-        return $result;
+
+        return $resultset;
+    }
+
+    public function effectifParNationaliteSexe($dateEntree = null, $dateFin = null){
+        if ($dateEntree && $dateFin) {
+            $hommeFrancais=$this->Membres
+                ->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '1'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $hommeEtranger=$this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '0'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $femmeFrancaise=$this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '1'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $femmeEtrangere=$this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '0'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+
+        } else{
+            $hommeFrancais=$this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '1'])
+            ->count();
+            $hommeEtranger=$this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '0'])
+            ->count();
+            $femmeFrancaise=$this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '1'])
+            ->count();
+            $femmeEtrangere=$this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '0'])
+            ->count();
+
+        }
+
+        $resultset=["hommeFrancais"=>$hommeFrancais,
+            "hommeEtranger" => $hommeEtranger,
+            "femmeFrancaise" => $femmeFrancaise,
+            "femmeEtrangere" => $femmeEtrangere
+        ];
+
+        die(strval($resultset['femmeFrancaise']));
+        return $resultset;
     }
 }
