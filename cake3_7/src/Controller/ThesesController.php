@@ -133,6 +133,29 @@ class ThesesController extends AppController
         $this->set(compact('query', 'count'));
     }
 
+
+    /**
+     * Retourne une liste de these ordonnees par type de these selon un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des theses
+     */
+    public function listeTheseParType($dateEntree = null, $dateFin = null)
+    {
+        $result = $this->Theses->find('all');
+
+        if ($dateEntree && $dateFin) {
+            $result=$result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_fin', $dateEntree, $dateFin);
+            });
+        }
+        $result = $result->toArray();
+        foreach ($result as $key => $row) {
+            $type[$key]  = $row['type'];
+        }
+        array_multisort($type, SORT_ASC, SORT_STRING, $result);
+        return $result;
+    }
 	/**
 	 * Checks the currently logged in user's rights to access a page (called when changing pages).
 	 * @param $user : the user currently logged in
