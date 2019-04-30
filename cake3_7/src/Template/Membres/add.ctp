@@ -10,7 +10,7 @@ $optionsMembres = [
     'SECRETARIAT' => 'Secretariat',
     'MEMBRE' => 'Membre'
 ];
-$optionsSexe = [
+$optionsGenre = [
     'H' => 'Homme',
     'F' => 'Femme'
 ];
@@ -29,13 +29,13 @@ $optionsSexe = [
         <legend><?= __('Ajout d\'un Membre') ?></legend>
         <?php
             echo $this->Form->select('role', $optionsMembres);
-            echo $this->Form->control('nom');
-            echo $this->Form->control('prenom');
-            echo $this->Form->control('email');
-            echo $this->Form->control('passwd');
-            echo $this->Form->control('adresse_agent_1');
+            echo $this->Form->control('nom', ['empty' => false]);
+            echo $this->Form->control('prenom', ['empty' => false]);
+            echo $this->Form->control('email', ['empty' => false]);
+            echo $this->Form->control('passwd', ['label' => "Mot de passe"]);
+            echo $this->Form->control('adresse_agent_1', ['empty' => false]);
             echo $this->Form->control('adresse_agent_2');
-            echo $this->Form->control('residence_admin_1');
+            echo $this->Form->control('residence_admin_1', ['empty' => false]);
             echo $this->Form->control('residence_admin_2');
             echo $this->Form->control('type_personnel');
             echo $this->Form->control('intitule');
@@ -48,16 +48,16 @@ $optionsSexe = [
             echo $this->Form->control('matricule');
             echo $this->Form->control('date_naissance', ['empty' => true]);
             echo $this->Form->control('actif');
-            echo $this->Form->control('lieu_travail_id', ['options' => $lieuTravails, 'empty' => true]);
+            echo $this->Form->control('lieu_travail_id', ['options' => $lieuTravails, 'empty' => false]);
             echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
             echo $this->Form->control('nationalite');
-            echo $this->Form->control('est_francais');
-            echo $this->Form->select('genre', $optionsSexe);
+            echo $this->Form->control('est_francais', ['label' => "Français"]);
+            echo $this->Form->select('genre', $optionsGenre);
             echo $this->Form->control('hdr');
-            echo $this->Form->control('permanent');
-            echo $this->Form->control('est_porteur');
+            echo $this->Form->control('permanent', ['label' => "Membre permanent"]);
+            echo $this->Form->control('est_porteur', ['label' => "Membre porteur"]);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Valider')) ?>
     <?= $this->Form->end() ?>
 </div>

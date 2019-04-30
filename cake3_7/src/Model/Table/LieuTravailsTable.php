@@ -33,7 +33,7 @@ class LieuTravailsTable extends Table
         parent::initialize($config);
 
         $this->setTable('lieu_travails');
-        $this->setDisplayField('id');
+        $this->setDisplayField('nom_lieu');
         $this->setPrimaryKey('id');
 
         $this->hasMany('Membres', [
