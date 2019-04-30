@@ -58,25 +58,25 @@ class MembresController extends AppController
         if ($this->request->is('post')) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
             if ($this->Membres->save($membre)) {
-				// Récupération du Membre.id créé
-				$query = $this->Membres->find('all')
-									->where(['Membres.email =' => $this->request->getData()['email']])
-									->limit(1);			
-				$membreId = $query->first();
-						
-				// INSERT dans Dirigeants en Encadrants
-				$this->loadModel('Encadrants');
-				$this->loadModel('Dirigeants');
-				
-				$query = $this->Dirigeants->query();
-				$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
-				
-				$query = $this->Encadrants->query();
-				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
-				
-				$this->Flash->success(__('The membre has been saved.'));
-				
-				return $this->redirect(['action' => 'index']);
+                // Récupération du Membre.id créé
+                $query = $this->Membres->find('all')
+                    ->where(['Membres.email =' => $this->request->getData()['email']])
+                    ->limit(1);
+                $membreId = $query->first();
+
+                // INSERT dans Dirigeants en Encadrants
+                $this->loadModel('Encadrants');
+                $this->loadModel('Dirigeants');
+
+                $query = $this->Dirigeants->query();
+                $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+
+                $query = $this->Encadrants->query();
+                $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+
+                $this->Flash->success(__('The membre has been saved.'));
+
+                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The membre could not be saved. Please, try again.'));
         }
@@ -142,83 +142,87 @@ class MembresController extends AppController
             $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
         }
     }
-    
+
     public function logout()
     {
         $this->Flash->success('Vous avez été déconnecté.');
         return $this->redirect($this->Auth->logout());
     }
 
-	/**
-	 * Checks the currently logged in user's rights to access a page (called when changing pages).
-	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
-	 */
+    /**
+     * Checks the currently logged in user's rights to access a page (called when changing pages).
+     * @param $user : the user currently logged in
+     * @return bool : if the user is allowed (or not) to access the requested page
+     */
     public function isAuthorized($user)
-	{
-		if(parent::isAuthorized($user) === true)
-		{
-			return true;
-		}
-		else
-		{
-			$action = $this->request->getParam('action');
-			$this->loadModel('Equipes');
-			$equipesRespo = $this->Equipes->findByResponsableId($user['id']);
+    {
+        if (parent::isAuthorized($user) === true) {
+            return true;
+        } else {
+            $action = $this->request->getParam('action');
+            $this->loadModel('Equipes');
+            $equipesRespo = $this->Equipes->findByResponsableId($user['id']);
 
-			if (in_array($action, ['edit', 'delete']))
-			{
-				//	edit de delete doivent être faits sur un utilisateur existant...
-				$membre_slug = $this->request->getParam('pass.0');
-				if (!$membre_slug)
-				{
-					return false;
-				}
-				else
-				{
-					$membre = $this->Membres->findById($membre_slug)->first();
-					$equipe_id = $membre->equipe_id;
+            if (in_array($action, ['edit', 'delete'])) {
+                //	edit de delete doivent être faits sur un utilisateur existant...
+                $membre_slug = $this->request->getParam('pass.0');
+                if (!$membre_slug) {
+                    return false;
+                } else {
+                    $membre = $this->Membres->findById($membre_slug)->first();
+                    $equipe_id = $membre->equipe_id;
 
-					//	Un membre peut s'auto edit / delete
-					if ($membre->id === $user['id'])
-					{
-						return true;
-					}
-					else if ($equipe_id != null)
-					{
-						//	Un chef d'équipe peut faire de même pour les membres de son équipe
-						foreach ($equipesRespo as $equipeRespo){
-							if($equipeRespo->id === $equipe_id)
-							{
-								return true;
-							}
-						}
-					}
-				}
-			}
-			else if($action === 'add')
-			{
-				//	Un chef d'équipe peut ajouter un membre à une de ses équipes
-				return $equipesRespo->count() > 0;
-				//	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
-			}
-		}
-		return false;
-	}
+                    //	Un membre peut s'auto edit / delete
+                    if ($membre->id === $user['id']) {
+                        return true;
+                    } else if ($equipe_id != null) {
+                        //	Un chef d'équipe peut faire de même pour les membres de son équipe
+                        foreach ($equipesRespo as $equipeRespo) {
+                            if ($equipeRespo->id === $equipe_id) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            } else if ($action === 'add') {
+                //	Un chef d'équipe peut ajouter un membre à une de ses équipes
+                return $equipesRespo->count() > 0;
+                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
+            }
+        }
+        return false;
+    }
 
-    public function listeDoctorant($dateEntree = null, $dateFin = null){
-        //$dateEntree='2010-03-03';
-        //$dateFin='2020-02-02';
+    /**
+     * Retourne la liste des doctorants en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
+    public function listeDoctorant($dateEntree = null, $dateFin = null)
+    {
         $result = $this->Membres->find('all')
-            ->where(['type_personnel'=> 'DO']);
+            ->where(['type_personnel' => 'DO']);
 
         if ($dateEntree && $dateFin) {
-            $result=$result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                 return $exp->between('date_creation', $dateEntree, $dateFin);
-            })
-            ->toArray();
+            });
+        }
+        return $result->toArray();
+    }
+
+
+    public function listeMembreParEquipe($dateEntree = null, $dateFin = null){
+        $result=$this->Membres->find('all');
+
+        if ($dateEntree && $dateFin) {
+            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->toArray();
         }
 
+        array_multisort($result[22],SORT_NUMERIC, SORT_DESC);
         return $result;
     }
 }

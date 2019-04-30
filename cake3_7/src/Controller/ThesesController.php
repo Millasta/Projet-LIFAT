@@ -43,7 +43,7 @@ class ThesesController extends AppController
         ]);
 
         $this->set('theses', $theses);
-    }
+}
 
     /**
      * Add method
