@@ -25,7 +25,7 @@
 			<?php
 				// titre du site (banniere)
 				echo $this->Html->div('',null, array('id' => 'header'));
-				echo $this->Html->tag('h1','Gestion des Ordres de Mission');
+				echo $this->Html->tag('h1','LIFAT Manager');
 				echo '</div>';
 			?>
 

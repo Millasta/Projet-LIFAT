@@ -7,12 +7,12 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Membre'), ['action' => 'edit', $membre->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Membre'), ['action' => 'delete', $membre->id], ['confirm' => __('Are you sure you want to delete # {0}?', $membre->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Membres'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Membre'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Lieu Travails'), ['controller' => 'LieuTravails', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Lieu Travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Modifier le membre'), ['action' => 'edit', $membre->id]) ?> </li>
+        <li><?= $this->Form->postLink(__('Supprimer le Membre'), ['action' => 'delete', $membre->id], ['confirm' => __('Voulez vous vraiment supprimer # {0}?', $membre->id)]) ?> </li>
+        <li><?= $this->Html->link(__('Liste des membres'), ['action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Nouveau membre'), ['action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Liste des lieux de travail'), ['controller' => 'LieuTravails', 'action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Nouveau lieu de travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="membres view large-9 medium-8 columns content">
@@ -33,10 +33,6 @@
         <tr>
             <th scope="row"><?= __('Email') ?></th>
             <td><?= h($membre->email) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Passwd') ?></th>
-            <td><?= h($membre->passwd) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Adresse Agent 1') ?></th>
