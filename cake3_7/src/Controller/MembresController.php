@@ -92,33 +92,33 @@ class MembresController extends AppController
      */
     public function edit($id = null)
     {
-		if($id == null)
-			$membre = $this->Membres->newEntity();
-		else
-			$membre = $this->Membres->get($id, [
-				'contain' => []
-			]);
+        if ($id == null)
+            $membre = $this->Membres->newEntity();
+        else
+            $membre = $this->Membres->get($id, [
+                'contain' => []
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
             if ($this->Membres->save($membre)) {
-				if($id == null) {
-					$this->Flash->success(__('Nouveau membre'));
-					// Récupération du Membre.id créé
-					$query = $this->Membres->find('all')
-										->where(['Membres.email =' => $this->request->getData()['email']])
-										->limit(1);			
-					$membreId = $query->first();
-							
-					// INSERT dans Dirigeants en Encadrants
-					$this->loadModel('Encadrants');
-					$this->loadModel('Dirigeants');
-					
-					$query = $this->Dirigeants->query();
-					$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
-					
-					$query = $this->Encadrants->query();
-					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
-				}
+                if ($id == null) {
+                    $this->Flash->success(__('Nouveau membre'));
+                    // Récupération du Membre.id créé
+                    $query = $this->Membres->find('all')
+                        ->where(['Membres.email =' => $this->request->getData()['email']])
+                        ->limit(1);
+                    $membreId = $query->first();
+
+                    // INSERT dans Dirigeants en Encadrants
+                    $this->loadModel('Encadrants');
+                    $this->loadModel('Dirigeants');
+
+                    $query = $this->Dirigeants->query();
+                    $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+
+                    $query = $this->Encadrants->query();
+                    $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+                }
                 $this->Flash->success(__('The membre has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -161,67 +161,191 @@ class MembresController extends AppController
             $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
         }
     }
-    
+
     public function logout()
     {
         $this->Flash->success('Vous avez été déconnecté.');
         return $this->redirect($this->Auth->logout());
     }
 
-	/**
-	 * Checks the currently logged in user's rights to access a page (called when changing pages).
-	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
-	 */
+    /**
+     * Checks the currently logged in user's rights to access a page (called when changing pages).
+     * @param $user : the user currently logged in
+     * @return bool : if the user is allowed (or not) to access the requested page
+     */
     public function isAuthorized($user)
-	{
-		if(parent::isAuthorized($user) === true)
-		{
-			return true;
-		}
-		else
-		{
-			$action = $this->request->getParam('action');
-			$this->loadModel('Equipes');
-			$equipesRespo = $this->Equipes->findByResponsableId($user['id']);
+    {
+        if (parent::isAuthorized($user) === true) {
+            return true;
+        } else {
+            $action = $this->request->getParam('action');
+            $this->loadModel('Equipes');
+            $equipesRespo = $this->Equipes->findByResponsableId($user['id']);
 
-			if (in_array($action, ['edit', 'delete']))
-			{
-				//	edit de delete doivent être faits sur un utilisateur existant...
-				$membre_slug = $this->request->getParam('pass.0');
-				if (!$membre_slug)
-				{
-					return false;
-				}
-				else
-				{
-					$membre = $this->Membres->findById($membre_slug)->first();
-					$equipe_id = $membre->equipe_id;
+            if (in_array($action, ['edit', 'delete'])) {
+                //	edit de delete doivent être faits sur un utilisateur existant...
+                $membre_slug = $this->request->getParam('pass.0');
+                if (!$membre_slug) {
+                    return false;
+                } else {
+                    $membre = $this->Membres->findById($membre_slug)->first();
+                    $equipe_id = $membre->equipe_id;
 
-					//	Un membre peut s'auto edit / delete
-					if ($membre->id === $user['id'])
-					{
-						return true;
-					}
-					else if ($equipe_id != null)
-					{
-						//	Un chef d'équipe peut faire de même pour les membres de son équipe
-						foreach ($equipesRespo as $equipeRespo){
-							if($equipeRespo->id === $equipe_id)
-							{
-								return true;
-							}
-						}
-					}
-				}
-			}
-			else if($action === 'add')
-			{
-				//	Un chef d'équipe peut ajouter un membre à une de ses équipes
-				return $equipesRespo->count() > 0;
-				//	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
-			}
-		}
-		return false;
-	}
+                    //	Un membre peut s'auto edit / delete
+                    if ($membre->id === $user['id']) {
+                        return true;
+                    } else if ($equipe_id != null) {
+                        //	Un chef d'équipe peut faire de même pour les membres de son équipe
+                        foreach ($equipesRespo as $equipeRespo) {
+                            if ($equipeRespo->id === $equipe_id) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            } else if ($action === 'add') {
+                //	Un chef d'équipe peut ajouter un membre à une de ses équipes
+                return $equipesRespo->count() > 0;
+                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle l'user est mise correspond à une des équipes gérées par le user !!!!!
+            }
+        }
+        return false;
+    }
+
+
+    public function listeDoctorant($dateEntree = null, $dateFin = null)
+    {
+        $result = $this->Membres->find('all')
+            ->where(['type_personnel' => 'DO']);
+
+        if ($dateEntree && $dateFin) {
+            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            });
+        }
+        return $result->toArray();
+    }
+
+
+    public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
+    {
+        $result = $this->Membres->find('all');
+
+        if ($dateEntree && $dateFin) {
+            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->toArray();
+        }
+
+        array_multisort($result[22], SORT_NUMERIC, SORT_DESC);
+        return $result;
+    }
+
+
+    public function effectifParType($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $do = $this->Membres->find('all')
+                ->where(['type_personnel' => 'DO']);
+
+            $pe = $this->Membres->find('all')
+                ->where(['type_personnel' => 'PE']);
+
+            $pu = $this->Membres->find('all')
+                ->where(['type_personnel' => 'PU']);
+
+            $do = $do->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+            $pe = $pe->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+
+            $pu = $pu->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('date_creation', $dateEntree, $dateFin);
+            })->count();
+        } else {
+            $do = $this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->count();
+
+            $pe = $this->Membres->find('all')
+                ->where(['type_personnel' => 'PE'])
+                ->count();
+
+            $pu = $this->Membres->find('all')
+                ->where(['type_personnel' => 'PU'])
+                ->count();
+        }
+
+        $resultset = ["Do" => $do,
+            "PE" => $pe,
+            "PU" => $pu
+        ];
+
+        return $resultset;
+    }
+
+    public function effectifParNationaliteSexe($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $hommeFrancais = $this->Membres
+                ->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '1'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $hommeEtranger = $this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '0'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $femmeFrancaise = $this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '1'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+            $femmeEtrangere = $this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '0'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->count();
+
+        } else {
+            $hommeFrancais = $this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '1'])
+                ->count();
+            $hommeEtranger = $this->Membres->find('all')
+                ->where(['genre' => 'H',
+                    'est_francais' => '0'])
+                ->count();
+            $femmeFrancaise = $this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '1'])
+                ->count();
+            $femmeEtrangere = $this->Membres->find('all')
+                ->where(['genre' => 'F',
+                    'est_francais' => '0'])
+                ->count();
+
+        }
+
+        $resultset = ["hommeFrancais" => $hommeFrancais,
+            "hommeEtranger" => $hommeEtranger,
+            "femmeFrancaise" => $femmeFrancaise,
+            "femmeEtrangere" => $femmeEtrangere
+        ];
+
+        die(strval($resultset['femmeFrancaise']));
+        return $resultset;
+    }
 }
