@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Chronos\Date;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
 
@@ -171,37 +172,15 @@ class ThesesController extends AppController
 		return false;
 	}
 
-    /*public function listeThesesParType($type=null, $dateEntree = null, $dateFin = null){
-        if($dateEntree && $dateFin){
-            if($type == null){
-                listeTheses($dateEntree, $dateFin);
-            }
-            $query = $this->Theses->find('all');
-            $query->where(['type' => $type]);
-            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('theses.date_fin', $dateEntree, $dateFin);
-            });
-
-            $resultset=array();
-            foreach ($query as $row){
-                $resultset[]=$row["thesis"];
-            }
-            $this->set('Theses', $resultset);
-        }else{
-            $result = $this->Theses->find('all', [
-                'conditions' => ['type' => $type]
-            ]);
-            $resultset=array();
-            foreach ($result as $row){
-                $resultset[]=$row["thesis"];
-            }
-            $this->set('Theses', $resultset);
-        }
+    /**
+     * Retourne la liste des theses en cours
+     * @return array : liste des theses
+     */
+    public function listeThesesEnCours(){
+        $now = strval(Date::now());
+        $result = $this->Theses->find('all')->where(['date_debut <= ' => $now])->andWhere(['date_fin >= ' => $now])->toArray();
+        die(strval($result[3]));
+        return $result;
     }
-
-    public function listeTheses($dateEntree = null, $dateFin = null){
-
-
-    }*/
 
 }
