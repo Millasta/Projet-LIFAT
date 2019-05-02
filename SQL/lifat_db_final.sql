@@ -22,7 +22,7 @@ SET time_zone = "+00:00";
 -- Base de données :  `lifat_db`
 --
 
-CREATE DATABASE lifat_db;
+CREATE DATABASE IF NOT EXISTS lifat_db;
 USE lifat_db;
 
 -- --------------------------------------------------------
@@ -49,6 +49,10 @@ CREATE TABLE `dirigeants` (
 -- Déchargement des données de la table `dirigeants`
 --
 
+/*INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
+(2),
+(3);*/
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +78,10 @@ CREATE TABLE `encadrants` (
 --
 -- Déchargement des données de la table `encadrants`
 --
+
+/*INSERT INTO `encadrants` (`encadrant_id`) VALUES
+(2),
+(3);*/
 
 -- --------------------------------------------------------
 
@@ -163,8 +171,8 @@ CREATE TABLE `lieu_travails` (
 -- Déchargement des données de la table `lieu_travails`
 --
 
-INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
-(1, 'Polytech TOURS', 1);
+/*INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
+(1, 'Polytech TOURS', 1);*/
 
 -- --------------------------------------------------------
 
@@ -210,9 +218,9 @@ CREATE TABLE `membres` (
 -- Déchargement des données de la table `membres`
 --
 
-INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
+/*INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
 (3, 'admin', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$PksbXyiUFxHocqxYr4HmlOJfGGOJqfeWmYwieXQroCL3ChQQr1zEC', '', '', '', '', '', '', '', '0', 5, 'admin', '', '', NULL, NULL, 1, NULL, NULL, '', 1, '', 0, 1, 0, NULL, NULL);
-
+*/
 -- --------------------------------------------------------
 
 --
