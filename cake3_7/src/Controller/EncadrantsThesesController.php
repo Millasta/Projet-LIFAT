@@ -135,12 +135,10 @@ class EncadrantsThesesController extends AppController
                 }
             }
             $count = $query->count();
-            die(strval($tmp));
-            $this->set(compact('tmp', 'count'));
+            return $count;
         }else{
             $count = $result->count();
-            die(strval($count));
-            $this->set(compact('count', 'count'));
+            return $count;
         }
     }
 
@@ -154,20 +152,24 @@ class EncadrantsThesesController extends AppController
             });
 
             $resultset=array();
+
             foreach ($query as $row){
                 $resultset[]=$row["thesis"];
             }
-            $this->set('Theses', $resultset);
+
+            return $resultset;
         }else{
             $result = $this->EncadrantsTheses->find('all', [
                 'conditions' => ['encadrant_id' => $id],
                 'contain' => ['Theses']
             ]);
+
             $resultset=array();
             foreach ($result as $row){
                 $resultset[]=$row["thesis"];
             }
-            $this->set('Theses', $resultset);
+
+            return $resultset;
         }
     }
 }

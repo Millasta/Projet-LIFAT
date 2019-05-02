@@ -346,8 +346,18 @@ class MembresController extends AppController
             "femmeFrancaise" => $femmeFrancaise,
             "femmeEtrangere" => $femmeEtrangere
         ];
-
-        die(strval($resultset['femmeFrancaise']));
         return $resultset;
+    }
+
+
+    public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null){
+        $result=$this->Membres->find('all')
+            ->where(['type_personnel' => 'DO'])->toArray();
+        foreach ($result as $key => $row) {
+            $equipe_id[$key]  = $row['equipe_id'];
+        }
+        array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
+        die(strval($result[1]));
+        return $result;
     }
 }
