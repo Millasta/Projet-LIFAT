@@ -231,14 +231,17 @@ class MembresController extends AppController
 
     public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
     {
-        $result = $this->Membres->find('all');
+
 
         if ($dateEntree && $dateFin) {
-            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+            $result = $this->Membres->find('all')
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                 return $exp->between('date_creation', $dateEntree, $dateFin);
-            })->toArray();
+            });
+        }else{
+            $result = $this->Membres->find('all');
         }
-
+        $result->toArray();
         foreach ($result as $key => $row) {
             $equipe_id[$key]  = $row['equipe_id'];
         }
@@ -353,13 +356,46 @@ class MembresController extends AppController
 
 
     public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null){
-        $result=$this->Membres->find('all')
-            ->where(['type_personnel' => 'DO'])->toArray();
+        if($dateEntree && $dateFin){
+            $result=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        }else{
+            $result=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->toArray();
+        }
+
         foreach ($result as $key => $row) {
             $equipe_id[$key]  = $row['equipe_id'];
         }
         array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
-        die(strval($result[1]));
+
+        return $result;
+    }
+
+    public function listeProjetMembre($dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $result=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        }else{
+            $result=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->toArray();
+        }
+
+        foreach ($result as $key => $row) {
+            $equipe_id[$key]  = $row['equipe_id'];
+        }
+        array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
+
         return $result;
     }
 }
