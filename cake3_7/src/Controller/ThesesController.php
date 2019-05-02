@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Chronos\Date;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
 
@@ -130,6 +131,13 @@ class ThesesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
+
+    /**
+     * Retourne le nombre de soutenance en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de soutenances
+     */
     public function nombreDeSoutenances($dateEntree = null, $dateFin = null){
         $query = $this->Theses->find();
         if ($dateEntree&& $dateFin) {
@@ -138,6 +146,7 @@ class ThesesController extends AppController
             });
         }
         $count = $query->count();
+        die(strval($count));
         $this->set(compact('query', 'count'));
     }
 
@@ -181,6 +190,40 @@ class ThesesController extends AppController
 		}
 		return false;
 	}
+
+    /**
+     * Retourne la liste des theses en cours
+     * @return array : liste des theses
+     */
+    public function listeThesesEnCours()
+    {
+        $now = strval(Date::now());
+        $result = $this->Theses->find('all')->where(['date_debut <= ' => $now])->andWhere(['date_fin >= ' => $now])->toArray();
+        return $result;
+    }
+
+    /**
+     * Retourne le nombre de soutenances pour une année donnée en paramètre
+     * @param null $annee
+     * @return $count
+     */
+    public function nombreSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee]);
+        $count = $result->count();
+        return $count;
+    }
+
+    /**
+     * Retourne la liste des soutenances pour une année donnée en paramètre
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee])->toArray();
+        return $result;
+    }
+
 
 
 }

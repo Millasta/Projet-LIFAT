@@ -114,7 +114,13 @@ class EncadrantsThesesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-
+    /**
+     * Retourne le nombre de theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant a chercher
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de theses
+     */
     public function nombreDeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
         $result = $this->EncadrantsTheses->find('all', [
             'conditions' => ['encadrant_id' => $id],
@@ -135,15 +141,19 @@ class EncadrantsThesesController extends AppController
                 }
             }
             $count = $query->count();
-            die(strval($tmp));
-            $this->set(compact('tmp', 'count'));
+            return $count;
         }else{
             $count = $result->count();
-            die(strval($count));
-            $this->set(compact('count', 'count'));
+            return $count;
         }
     }
-
+    /**
+     * Retourne la liste des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des theses
+     */
     public function listeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
             $query = $this->EncadrantsTheses->find('all');
@@ -154,20 +164,25 @@ class EncadrantsThesesController extends AppController
             });
 
             $resultset=array();
+
             foreach ($query as $row){
                 $resultset[]=$row["thesis"];
             }
-            $this->set('Theses', $resultset);
+
+            return $resultset;
         }else{
             $result = $this->EncadrantsTheses->find('all', [
                 'conditions' => ['encadrant_id' => $id],
                 'contain' => ['Theses']
             ]);
+
             $resultset=array();
             foreach ($result as $row){
                 $resultset[]=$row["thesis"];
             }
-            $this->set('Theses', $resultset);
+
+            return $resultset;
         }
     }
+
 }
