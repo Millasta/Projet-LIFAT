@@ -237,10 +237,12 @@ class MembresController extends AppController
             })->toArray();
         }
 
-        array_multisort($result[22], SORT_NUMERIC, SORT_DESC);
+        foreach ($result as $key => $row) {
+            $equipe_id[$key]  = $row['equipe_id'];
+        }
+        array_multisort($equipe_id, SORT_NUMERIC, SORT_DESC, $result);
         return $result;
     }
-
 
     public function effectifParType($dateEntree = null, $dateFin = null)
     {
