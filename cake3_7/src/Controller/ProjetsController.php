@@ -132,4 +132,11 @@ class ProjetsController extends AppController
 		}
 		return false;
 	}
+
+    public function selectionerProjetParId($id = null)
+    {
+        $projet = $this->Projets->findById($id);
+
+        return $projet->first();
+    }
 }
