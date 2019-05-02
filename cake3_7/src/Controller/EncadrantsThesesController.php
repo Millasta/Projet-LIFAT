@@ -114,7 +114,13 @@ class EncadrantsThesesController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-
+    /**
+     * Retourne le nombre de theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant a chercher
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de theses
+     */
     public function nombreDeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
         $result = $this->EncadrantsTheses->find('all', [
             'conditions' => ['encadrant_id' => $id],
@@ -141,7 +147,13 @@ class EncadrantsThesesController extends AppController
             return $count;
         }
     }
-
+    /**
+     * Retourne la liste des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des theses
+     */
     public function listeThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
             $query = $this->EncadrantsTheses->find('all');
@@ -172,4 +184,5 @@ class EncadrantsThesesController extends AppController
             return $resultset;
         }
     }
+
 }

@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use App\Model\Table\EquipesResponsablesTable;
 use Cake\Log\Log;
+use Cake\ORM\Query;
+use Cake\Database\Expression\QueryExpression;
 
 /**
  * Membres Controller
