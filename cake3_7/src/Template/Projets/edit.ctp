@@ -7,25 +7,15 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $projet->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $projet->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Projets'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Financements'), ['controller' => 'Financements', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Financement'), ['controller' => 'Financements', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Missions'), ['controller' => 'Missions', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Mission'), ['controller' => 'Missions', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Equipes'), ['controller' => 'Equipes', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Equipe'), ['controller' => 'Equipes', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Liste des projets'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Liste des financements'), ['controller' => 'Financements', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('Nouveau financement'), ['controller' => 'Financements', 'action' => 'edit']) ?></li>
     </ul>
 </nav>
 <div class="projets form large-9 medium-8 columns content">
     <?= $this->Form->create($projet) ?>
     <fieldset>
-        <legend><?= __('Edit Projet') ?></legend>
+        <legend><?= $projet->id==0 ? __('Ajout d\'un projet') : __('Edition d\'un projet');  ?></legend>
         <?php
             echo $this->Form->control('titre');
             echo $this->Form->control('description');
@@ -37,6 +27,6 @@
             echo $this->Form->control('equipes._ids', ['options' => $equipes]);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Valider')) ?>
     <?= $this->Form->end() ?>
 </div>
