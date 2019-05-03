@@ -41,8 +41,9 @@ class ProjetsController extends AppController
         ]);
 
         $this->loadModel('Membres');
+        $projet->responsables = array();
         foreach ($projet->equipes as &$equipes) {
-            $projet->responsables = $this->Membres->get($equipes->responsable_id);
+            $projet->responsables[] = $this->Membres->get($equipes->responsable_id);
         }
 
         $this->set('projet', $projet);

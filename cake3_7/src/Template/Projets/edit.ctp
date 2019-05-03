@@ -9,7 +9,6 @@
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Liste des projets'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('Liste des financements'), ['controller' => 'Financements', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('Nouveau financement'), ['controller' => 'Financements', 'action' => 'edit']) ?></li>
     </ul>
 </nav>
 <div class="projets form large-9 medium-8 columns content">

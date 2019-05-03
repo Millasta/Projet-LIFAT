@@ -56,15 +56,17 @@
                 <th scope="col"><?= __('Nom et prénom du responsable') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
+            <?php $i=0; ?>
             <?php foreach ($projet->equipes as $equipes): ?>
             <tr>
                 <td><?= h($equipes->id) ?></td>
                 <td><?= h($equipes->nom_equipe) ?></td>
-                <td><?= h($projet->responsables->nom." ".$projet->responsables->prenom) ?></td>
+                <td><?= h($projet->responsables[$i]->nom." ".$projet->responsables[$i]->prenom) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Equipes', 'action' => 'view', $equipes->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Equipes', 'action' => 'edit', $equipes->id]) ?>
                 </td>
+                <?php $i++; ?>
             </tr>
             <?php endforeach; ?>
         </table>
