@@ -45,6 +45,7 @@ class FinancementsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+    /*
     public function add()
     {
         $financement = $this->Financements->newEntity();
@@ -59,6 +60,7 @@ class FinancementsController extends AppController
         }
         $this->set(compact('financement'));
     }
+    */
 
     /**
      * Edit method
@@ -69,9 +71,12 @@ class FinancementsController extends AppController
      */
     public function edit($id = null)
     {
-        $financement = $this->Financements->get($id, [
-            'contain' => []
-        ]);
+        if($id == null)
+            $financement = $this->Financements->newEntity();
+        else
+            $financement = $this->Financements->get($id, [
+                'contain' => []
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $financement = $this->Financements->patchEntity($financement, $this->request->getData());
             if ($this->Financements->save($financement)) {

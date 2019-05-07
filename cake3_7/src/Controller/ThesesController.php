@@ -195,11 +195,35 @@ class ThesesController extends AppController
      * Retourne la liste des theses en cours
      * @return array : liste des theses
      */
-    public function listeThesesEnCours(){
+    public function listeThesesEnCours()
+    {
         $now = strval(Date::now());
         $result = $this->Theses->find('all')->where(['date_debut <= ' => $now])->andWhere(['date_fin >= ' => $now])->toArray();
-        die(strval($result[3]));
         return $result;
     }
+
+    /**
+     * Retourne le nombre de soutenances pour une année donnée en paramètre
+     * @param null $annee
+     * @return $count
+     */
+    public function nombreSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee]);
+        $count = $result->count();
+        return $count;
+    }
+
+    /**
+     * Retourne la liste des soutenances pour une année donnée en paramètre
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee])->toArray();
+        return $result;
+    }
+
+
 
 }

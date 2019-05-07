@@ -4,16 +4,8 @@
  * @var \App\Model\Entity\Financement[]|\Cake\Collection\CollectionInterface $financements
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New Financement'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Projets'), ['controller' => 'Projets', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Projet'), ['controller' => 'Projets', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
 <div class="financements index large-9 medium-8 columns content">
-    <h3><?= __('Financements') ?></h3>
+    <h3><?= __('Financements du laboratoire') ?> <font size="+1">[<?= $this->Html->link(__('Nouveau financement'), ['action' => 'edit']) ?>]</font> </h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -29,14 +21,14 @@
             <?php foreach ($financements as $financement): ?>
             <tr>
                 <td><?= $this->Number->format($financement->id) ?></td>
-                <td><?= h($financement->international) ?></td>
+                <td><?= $financement->international ? h('Oui') : h('Non'); ?></td>
                 <td><?= h($financement->nationalite_financement) ?></td>
-                <td><?= h($financement->financement_prive) ?></td>
+                <td><?= $financement->financement_prive ? h('Oui') : h('Non'); ?></td>
                 <td><?= h($financement->financement) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $financement->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $financement->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $financement->id], ['confirm' => __('Are you sure you want to delete # {0}?', $financement->id)]) ?>
+                    <?= $this->Html->link(__('Details'), ['action' => 'view', $financement->id]) ?>
+                    <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $financement->id]) ?>
+                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $financement->id], ['confirm' => __('Etes-vous sur de vouloir supprimer le financement #{0}?', $financement->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -44,12 +36,12 @@
     </table>
     <div class="paginator">
         <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->first('<< ' . __('début')) ?>
+            <?= $this->Paginator->prev('< ' . __('précedente')) ?>
             <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
+            <?= $this->Paginator->next(__('suivante') . ' >') ?>
+            <?= $this->Paginator->last(__('fin') . ' >>') ?>
         </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} sur {{pages}}, affiche {{current}} financement sur {{count}}')]) ?></p>
     </div>
 </div>

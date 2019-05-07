@@ -40,6 +40,12 @@ class ProjetsController extends AppController
             'contain' => ['Financements', 'Equipes', 'Missions']
         ]);
 
+        $this->loadModel('Membres');
+        $projet->responsables = array();
+        foreach ($projet->equipes as &$equipes) {
+            $projet->responsables[] = $this->Membres->get($equipes->responsable_id);
+        }
+
         $this->set('projet', $projet);
     }
 
@@ -74,9 +80,12 @@ class ProjetsController extends AppController
      */
     public function edit($id = null)
     {
-        $projet = $this->Projets->get($id, [
-            'contain' => ['Equipes']
-        ]);
+        if($id == null)
+            $projet = $this->Projets->newEntity();
+        else
+            $projet = $this->Projets->get($id, [
+                'contain' => ['Equipes']
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projet = $this->Projets->patchEntity($projet, $this->request->getData());
             if ($this->Projets->save($projet)) {
@@ -132,11 +141,4 @@ class ProjetsController extends AppController
 		}
 		return false;
 	}
-
-    public function selectionerProjetParId($id = null)
-    {
-        $projet = $this->Projets->findById($id);
-
-        return $projet->first();
-    }
 }
