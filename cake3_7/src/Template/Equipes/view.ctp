@@ -43,7 +43,7 @@
         <h4><?= __('Responsable d\'équipe') ?></h4>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <td><?= $this->Html->link($equipe->equipes_responsables['nom'].' '.$equipe->equipes_responsables['prenom'], ['controller' => 'EquipesResponsables', 'action' => 'view', $equipe->equipes_responsables['id']]) ?></td>
+                <td><?= $this->Html->link($equipe->equipes_responsables['nom'].' '.$equipe->equipes_responsables['prenom'], ['controller' => 'Membres', 'action' => 'view', $equipe->equipes_responsables['id']]) ?></td>
             </tr>
         </table>
     </div>
