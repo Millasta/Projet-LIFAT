@@ -23,17 +23,7 @@ class MembresController extends AppController
      */
     public function index()
     {
-    	//	Version de base :
-    	/*
-        $this->paginate = [
-            'contain' => ['LieuTravails', 'Equipes']
-        ];
-        $membres = $this->paginate($this->Membres);
-
-        $this->set(compact('membres'));
-    	*/
-
-		$query = $this->Membres
+    	$query = $this->Membres
 			// Use the plugins 'search' custom finder and pass in the
 			// processed query params
 			->find('search', ['search' => $this->request->getQueryParams()]);
@@ -196,7 +186,7 @@ class MembresController extends AppController
         } else {
             $action = $this->request->getParam('action');
             $this->loadModel('Equipes');
-            $equipesRespo = $this->Equipes->findByResponsableId($user['id']);
+            $equipesRespo = $this->Equipes->findByResponsableId($user['id'])->extract('id')->toArray();
 
             if (in_array($action, ['edit', 'delete'])) {
                 //	edit et delete doivent être faits sur un utilisateur existant...
@@ -212,11 +202,9 @@ class MembresController extends AppController
                         return true;
                     } else if ($equipe_id != null) {
                         //	Un chef d'équipe peut faire de même pour les membres de son équipe
-                        foreach ($equipesRespo as $equipeRespo) {
-                            if ($equipeRespo->id === $equipe_id) {
-                                return true;
-                            }
-                        }
+						if(in_array($equipe_id, $equipesRespo, true)) {
+							return true;
+						}
                     }
                 }
             } else if ($action === 'add') {
