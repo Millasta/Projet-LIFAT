@@ -9,7 +9,6 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('nom_lieu') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('est_dans_liste') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -18,13 +17,12 @@
         <tbody>
             <?php foreach ($lieuTravails as $lieuTravail): ?>
             <tr>
-                <td><?= $this->Number->format($lieuTravail->id) ?></td>
                 <td><?= h($lieuTravail->nom_lieu) ?></td>
                 <td><?= $lieuTravail->est_dans_liste ? h("Oui") : h("Non"); ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $lieuTravail->id]) ?>
                     <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $lieuTravail->id]) ?>
-                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $lieuTravail->id], ['confirm' => __('Are you sure you want to delete # {0}?', $lieuTravail->id)]) ?>
+                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $lieuTravail->id], ['confirm' => __('Confirmer la suppression du lieu de travail {0} ?', $lieuTravail->nom_lieu)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -14,7 +14,7 @@
 				<?=$this->Html->link(__('Thèses'), ['controller' => 'theses', 'action' => 'index'])?>
 			</td>
 			<td>
-				<?=$this->Html->link(__('Lieux'), ['controller' => 'lieu-travails', 'action' => 'index'])?>
+				<?=$this->Html->link(__('Lieux de travail'), ['controller' => 'lieu-travails', 'action' => 'index'])?>
 			</td>
 			<td>
 				<?=$this->Html->link(__('Financements'), ['controller' => 'financements', 'action' => 'index'])?>

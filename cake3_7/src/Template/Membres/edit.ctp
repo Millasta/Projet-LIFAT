@@ -16,6 +16,7 @@ $optionsGenre = [
 ];
 ?>
 <div class="membres form large-9 medium-8 columns content">
+	<?= $membre->passwd = "" ?>
     <?= $this->Form->create($membre) ?>
     <fieldset>
         <legend><?= $membre->id==0 ? __('Ajout d\'un membre') : __('Edition d\'un membre');  ?></legend>

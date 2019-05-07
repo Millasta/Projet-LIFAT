@@ -23,7 +23,7 @@
                 <td><?= $this->Number->format($financement->id) ?></td>
                 <td><?= $financement->international ? h('Oui') : h('Non'); ?></td>
                 <td><?= h($financement->nationalite_financement) ?></td>
-                <td><?= h($financement->financement_prive) ?></td>
+                <td><?= $financement->financement_prive ? h('Oui') : h('Non'); ?></td>
                 <td><?= h($financement->financement) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $financement->id]) ?>

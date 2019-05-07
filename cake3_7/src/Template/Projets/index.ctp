@@ -9,9 +9,7 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('titre') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('description') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('type') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('budget') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_debut') ?></th>
@@ -23,18 +21,16 @@
         <tbody>
             <?php foreach ($projets as $projet): ?>
             <tr>
-                <td><?= $this->Number->format($projet->id) ?></td>
                 <td><?= h($projet->titre) ?></td>
-                <td><?= h($projet->description) ?></td>
                 <td><?= h($projet->type) ?></td>
                 <td><?= $this->Number->format($projet->budget) ?></td>
                 <td><?= h($projet->date_debut) ?></td>
                 <td><?= h($projet->date_fin) ?></td>
-                <td><?= $projet->has('financement') ? $this->Html->link($projet->financement->id, ['controller' => 'Financements', 'action' => 'view', $projet->financement->id]) : '' ?></td>
+                <td><?= $projet->has('financement') ? $this->Html->link('Voir financement', ['controller' => 'Financements', 'action' => 'view', $projet->financement->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $projet->id]) ?>
                     <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $projet->id]) ?>
-                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $projet->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le projet #{0}?', $projet->titre)]) ?>
+                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $projet->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le projet "{0}" ?', $projet->titre)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
