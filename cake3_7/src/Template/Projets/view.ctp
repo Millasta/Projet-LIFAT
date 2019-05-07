@@ -5,17 +5,8 @@
  * @var \App\Model\Entity\Membre $membre
  */
 ?>
-
-
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Modifier le projet'), ['action' => 'edit', $projet->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Supprimer le projet'), ['action' => 'delete', $projet->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le projet #{0}?', $projet->titre)]) ?> </li>
-    </ul>
-</nav>
 <div class="projets view large-9 medium-8 columns content">
-    <h3><?= h("Titre du projet : ".$projet->titre) ?></h3>
+    <h3><?= h("Titre du projet : ".$projet->titre) ?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $projet->id]) ?>]</font> </h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Description') ?></th>

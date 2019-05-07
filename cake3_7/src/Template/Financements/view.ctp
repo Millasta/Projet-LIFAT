@@ -4,15 +4,9 @@
  * @var \App\Model\Entity\Financement $financement
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Modifier le financement'), ['action' => 'edit', $financement->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Supprimer le financement'), ['action' => 'delete', $financement->id], ['confirm' => __('Etes-vous sur de vouloir supprimer le financement #{0}?', $financement->id)]) ?> </li>
-    </ul>
-</nav>
 <div class="financements view large-9 medium-8 columns content">
-    <h3><?= h('Financement') ?></h3>
+    <h3><?= h('Financement') ?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $financement->id]) ?>]</font> </h3>
+
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Nationalite Financement') ?></th>

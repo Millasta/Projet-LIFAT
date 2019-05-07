@@ -16,7 +16,6 @@
     </ul>
 </nav>
 <div class="membres view large-9 medium-8 columns content">
-    <h3><?= h($membre->id) ?></h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Role') ?></th>
