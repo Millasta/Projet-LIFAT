@@ -257,7 +257,11 @@ class MembresController extends AppController
             })->toArray();
         }
 
-        array_multisort($result[22],SORT_NUMERIC, SORT_DESC);
+        foreach ($result as $key => $row) {
+            $equipe[$key]  = $row['equipe_id'];
+        }
+        array_multisort($equipe,SORT_NUMERIC, SORT_ASC, $result);
+
         return $result;
     }
 
@@ -363,7 +367,6 @@ class MembresController extends AppController
             "femmeEtrangere" => $femmeEtrangere
         ];
 
-        die(strval($resultset['femmeFrancaise']));
         return $resultset;
     }
 }
