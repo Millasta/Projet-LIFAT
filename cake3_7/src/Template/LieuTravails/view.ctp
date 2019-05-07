@@ -4,15 +4,9 @@
  * @var \App\Model\Entity\LieuTravail $lieuTravail
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Modifier le lieu de travail'), ['action' => 'edit', $lieuTravail->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Supprimer le lieu de travail'), ['action' => 'delete', $lieuTravail->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le lieu #{0}?', $lieuTravail->nom_lieu)]) ?> </li>
-    </ul>
-</nav>
 <div class="lieuTravails view large-9 medium-8 columns content">
-    <h3><?= h("Lieu de travail") ?></h3>
+    <h3><?= h("Lieu de travail") ?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $lieuTravail->id]) ?>]</font> </h3>
+
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Nom du lieu de travail') ?></th>
