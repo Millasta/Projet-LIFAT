@@ -19,10 +19,13 @@
 			<td>
 				<?=$this->Html->link(__('Financements'), ['controller' => 'financements', 'action' => 'index'])?>
 			</td>
+			<td>
+                <?=$this->Html->link(__('Export'), ['controller' => 'export', 'action' => 'index'])?>
+            </td>
    			<td>
 				<?php
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['role'] != 'admin' && $user['permanent'] === true)
+					if ($user['role'] != 'admin' && $user['permanent'] == true)
 					{
 						echo " permanent";
 					}

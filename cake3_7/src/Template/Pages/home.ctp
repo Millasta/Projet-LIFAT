@@ -9,7 +9,7 @@
 
 	echo $this->Html->tag('h2','Inscription et connexion'); 
 	echo '<p>Si vous n\'avez jamais utilisé le site, il faut vous inscrire en ';
-	echo $this->Html->link('cliquant ici', array('controller' => 'membres', 'action' => 'add'));
+	echo $this->Html->link('cliquant ici', array('controller' => 'membres', 'action' => 'edit'));
 	echo '.</p>';
 	echo '<p>Si vous possédez déjà un compte, deux connexions sont possibles :<br>- Par ';
 
