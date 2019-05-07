@@ -23,12 +23,26 @@ class MembresController extends AppController
      */
     public function index()
     {
+    	//	Version de base :
+    	/*
         $this->paginate = [
             'contain' => ['LieuTravails', 'Equipes']
         ];
         $membres = $this->paginate($this->Membres);
 
         $this->set(compact('membres'));
+    	*/
+
+		$query = $this->Membres
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->paginate = [
+			'contain' => ['LieuTravails', 'Equipes']
+		];
+
+		$this->set('membres', $this->paginate($query));
     }
 
     /**
