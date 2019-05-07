@@ -373,7 +373,6 @@ class MembresController extends AppController
             $equipe_id[$key]  = $row['equipe_id'];
         }
         array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
-
         return $result;
     }
 

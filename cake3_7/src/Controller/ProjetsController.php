@@ -126,19 +126,23 @@ class ProjetsController extends AppController
 	 * @return bool : if the user is allowed (or not) to access the requested page
 	 */
     public function isAuthorized($user)
-	{
-		if(parent::isAuthorized($user) === true)
-		{
-			return true;
-		}
-		else
-		{
-			//	Tous les membres permanents ont tous les droits sur les projets
-			if($user['permanent'] === true)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    {
+        if (parent::isAuthorized($user) === true) {
+            return true;
+        } else {
+            //	Tous les membres permanents ont tous les droits sur les projets
+            if ($user['permanent'] === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function listeBudgetsAnnuels($id = null, $dateEntree = null, $dateFin = null){
+        $this->loadModel('BudgetsAnnuels');
+        $result = $this->BudgetsAnnuels->find('all')
+            ->where(['projet_id' => $id])
+            ->toArray();
+        return $result;
+    }
 }
