@@ -377,25 +377,51 @@ class MembresController extends AppController
         return $result;
     }
 
-    public function listeProjetMembre($dateEntree = null, $dateFin = null){
+    public function listeProjetMembre($id = null, $dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
-            $result=$this->Membres->find('all')
-                ->where(['type_personnel' => 'DO'])
+            $equipeId = $this->Membres->find('all')
+                ->select(['equipe_id'])
+                ->where(['id' => $id])
                 ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                     return $exp->between('date_creation', $dateEntree, $dateFin);
                 })
                 ->toArray();
-        }else{
-            $result=$this->Membres->find('all')
-                ->where(['type_personnel' => 'DO'])
+
+            $this->loadModel('EquipesProjets');
+            $projet_id = $this->EquipesProjets->find('all')
+                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
+                ->select(['projet_id'])
                 ->toArray();
-        }
 
-        foreach ($result as $key => $row) {
-            $equipe_id[$key]  = $row['equipe_id'];
-        }
-        array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
+            $result = array();
+            foreach ($projet_id as $row) {
+                $this->loadModel('Projets');
+                $tmp = $this->Projets->find('all')
+                    ->where(['id' => $row['projet_id']])
+                    ->toArray();
+                array_push($result, $tmp[0]);
+            }
+        }else {
+            $equipeId = $this->Membres->find('all')
+                ->select(['equipe_id'])
+                ->where(['id' => $id])
+                ->toArray();
 
+            $this->loadModel('EquipesProjets');
+            $projet_id = $this->EquipesProjets->find('all')
+                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
+                ->select(['projet_id'])
+                ->toArray();
+
+            $result = array();
+            foreach ($projet_id as $row) {
+                $this->loadModel('Projets');
+                $tmp = $this->Projets->find('all')
+                    ->where(['id' => $row['projet_id']])
+                    ->toArray();
+                array_push($result, $tmp[0]);
+            }
+        }
         return $result;
     }
 }
