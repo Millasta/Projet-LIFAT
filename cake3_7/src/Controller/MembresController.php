@@ -6,6 +6,7 @@ use App\Model\Table\EquipesResponsablesTable;
 use Cake\Log\Log;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
+use Cake\I18n\Time;
 
 /**
  * Membres Controller
@@ -108,6 +109,7 @@ class MembresController extends AppController
             ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
+            $membre->date_creation=Time::now();
             if ($this->Membres->save($membre)) {
                 if ($id == null) {
                     $this->Flash->success(__('Nouveau membre'));
