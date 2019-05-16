@@ -42,17 +42,17 @@ class ThesesController extends AppController
         $theses = $this->Theses->get($id, [
             'contain' => ['Membres', 'Dirigeants', 'Encadrants']
         ]);
-		
+
 		$this->loadModel('Membres');
-		
+
 		foreach ($theses->dirigeants as &$dirigeants) {
 			$dirigeants = $this->Membres->get($dirigeants->dirigeant_id);
 		}
-		
+
 		foreach ($theses->encadrants as &$encadrants) {
 			$encadrants = $this->Membres->get($encadrants->encadrant_id);
 		}
-		
+
 		$this->set('theses', $theses);
     }
 
@@ -95,7 +95,7 @@ class ThesesController extends AppController
 			$theses = $this->Theses->get($id, [
 				'contain' => ['Dirigeants', 'Encadrants']
 			]);
-		
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
@@ -146,7 +146,7 @@ class ThesesController extends AppController
             });
         }
         $count = $query->count();
-        die(strval($count));
+        //die(strval($count));
         $this->set(compact('query', 'count'));
     }
 
