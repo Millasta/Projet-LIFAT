@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Membre[]|\Cake\Collection\CollectionInterface $membres
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="membres index large-9 medium-8 columns content">
     <h3><?= __('Membres du laboratoire')?> <font size="+1">[<?= $this->Html->link(__('Nouveau membre'), ['action' => 'edit']) ?>]</font> </h3>
     <table cellpadding="20" cellspacing="20">

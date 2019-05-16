@@ -73,6 +73,13 @@ class AppController extends Controller
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+
+		//	Permet d'utiliser friendsofcake/search
+		$this->loadComponent('Search.Prg', [
+			// This is default config. You can modify "actions" as needed to make
+			// the PRG component work only for specified methods.
+			'actions' => ['index']
+		]);
     }
 
 	/**
