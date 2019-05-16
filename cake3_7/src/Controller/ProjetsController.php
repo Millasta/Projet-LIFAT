@@ -138,7 +138,12 @@ class ProjetsController extends AppController
         return false;
     }
 
-    public function listeBudgetsAnnuels($id = null, $dateEntree = null, $dateFin = null){
+    /**
+     * Retourne la liste des budgets  par annees
+     * @param $id : identifiant du projet
+     * @return array : liste des budgets
+     */
+    public function listeBudgetsAnnuels($id = null){
         $this->loadModel('BudgetsAnnuels');
         $result = $this->BudgetsAnnuels->find('all')
             ->where(['projet_id' => $id])
