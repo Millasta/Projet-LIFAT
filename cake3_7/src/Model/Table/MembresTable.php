@@ -58,8 +58,8 @@ class MembresTable extends Table
 				'multiValue' => true,
 				'multiValueSeparator' => ' ',
 				'valueMode' => 'OR',
-				'fieldMode' => 'OR',
 				'comparison' => 'LIKE',
+				'fieldMode' => 'OR',
 				'field' => ['nom', 'prenom']
 			]);
 	}

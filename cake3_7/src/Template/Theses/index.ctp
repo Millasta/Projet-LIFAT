@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Theses[]|\Cake\Collection\CollectionInterface $theses
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="theses index columns content">
     <h3><?= __('Thèses') ?><font size="+1">  [<?= $this->Html->link(__('Nouvelle thèse'), ['action' => 'edit']) ?>]</font></h3>
     <table cellpadding="0" cellspacing="0">

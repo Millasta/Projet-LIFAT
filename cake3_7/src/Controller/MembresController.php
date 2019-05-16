@@ -23,7 +23,7 @@ class MembresController extends AppController
      */
     public function index()
     {
-    	$this->set('searchLabelExtra', 'nom ou prénom');
+    	$this->set('searchLabelExtra', 'nom et/ou prénom');
 
     	$query = $this->Membres
 			// Use the plugins 'search' custom finder and pass in the
@@ -428,6 +428,7 @@ class MembresController extends AppController
                 array_push($result, $tmp[0]);
             }
         }else {
+            $this->loadModel('Membres');
             $equipeId = $this->Membres->find('all')
                 ->select(['equipe_id'])
                 ->where(['id' => $id])

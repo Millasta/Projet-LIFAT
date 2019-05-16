@@ -19,12 +19,18 @@ class ProjetsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Financements']
-        ];
-        $projets = $this->paginate($this->Projets);
+		$this->set('searchLabelExtra', "titre du projet");
 
-        $this->set(compact('projets'));
+		$query = $this->Projets
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->paginate = [
+			'contain' => ['Financements']
+		];
+
+		$this->set('projets', $this->paginate($query));
     }
 
     /**
