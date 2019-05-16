@@ -12,9 +12,13 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenDate|null $date_debut
  * @property \Cake\I18n\FrozenDate|null $date_fin
  * @property string|null $signature
+ * @property string|null $autre_info
+ * @property bool|null $est_hdr
+ * @property int|null $financement_id
  * @property int|null $auteur_id
  *
  * @property \App\Model\Entity\Membre $membre
+ * @property \App\Model\Entity\Financement $financement
  * @property \App\Model\Entity\Dirigeant[] $dirigeants
  * @property \App\Model\Entity\Encadrant[] $encadrants
  */
@@ -35,7 +39,10 @@ class These extends Entity
         'date_debut' => true,
         'date_fin' => true,
         'autre_info' => true,
+		'est_hdr' => true,
+		'financement_id' => true,
         'auteur_id' => true,
+		'financement' => true,
         'membre' => true,
         'dirigeants' => true,
         'encadrants' => true

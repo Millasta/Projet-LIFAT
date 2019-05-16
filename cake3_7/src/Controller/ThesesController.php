@@ -23,7 +23,7 @@ class ThesesController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['Membres']
+            'contain' => ['Membres', 'Financements']
         ];
         $theses = $this->paginate($this->Theses);
 
@@ -40,7 +40,7 @@ class ThesesController extends AppController
     public function view($id = null)
     {
         $theses = $this->Theses->get($id, [
-            'contain' => ['Membres', 'Dirigeants', 'Encadrants']
+            'contain' => ['Membres', 'Financements', 'Dirigeants', 'Encadrants']
         ]);
 
 		$this->loadModel('Membres');
@@ -106,9 +106,10 @@ class ThesesController extends AppController
             $this->Flash->error(__('The theses could not be saved. Please, try again.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
+		$financements = $this->Theses->Financements->find('list', ['limit' => 200]);
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
+        $this->set(compact('theses', 'membres', 'financements', 'dirigeants', 'encadrants'));
     }
 
     /**
@@ -225,6 +226,47 @@ class ThesesController extends AppController
         return $result;
     }
 
+    /**
+     * Retourne le nombre de soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return $count : nombre de soutenances
+     */
+    public function nombreSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);});
+            $count = $result->count();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1]);
+            $count = $result->count();
+        }
+        return $count;
+    }
 
+    /**
+     * Retourne la liste des soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->toArray();
+        }
+        return $result;
+    }
 
 }

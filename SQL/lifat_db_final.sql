@@ -296,6 +296,8 @@ CREATE TABLE `theses` (
   `date_debut` date DEFAULT NULL,
   `date_fin` date DEFAULT NULL,
   `autre_info` varchar(160) DEFAULT NULL,
+  `est_hdr` tinyint(1) DEFAULT '0',
+  `financement_id` int(11) DEFAULT NULL,
   `auteur_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -438,6 +440,7 @@ ALTER TABLE `projets`
 --
 ALTER TABLE `theses`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `financement_id` (`financement_id`),
   ADD KEY `auteur_id` (`auteur_id`);
 
 --
@@ -599,7 +602,8 @@ ALTER TABLE `projets`
 -- Contraintes pour la table `theses`
 --
 ALTER TABLE `theses`
-  ADD CONSTRAINT `fk_theses_1` FOREIGN KEY (`auteur_id`) REFERENCES `membres` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `fk_theses_1` FOREIGN KEY (`auteur_id`) REFERENCES `membres` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_theses_2` FOREIGN KEY (`financement_id`) REFERENCES `financements` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
