@@ -14,6 +14,7 @@
                 <th scope="col"><?= $this->Paginator->sort('Date de début') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date de fin') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Auteur') ?></th>
+				<th scope="col"><?= $this->Paginator->sort('Financement') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -25,7 +26,8 @@
                 <td><?= h($theses->date_debut) ?></td>
                 <td><?= h($theses->date_fin) ?></td>
                 <td><?= $theses->has('membre') ? $this->Html->link($theses->membre->nom." ".$theses->membre->prenom, ['controller' => 'Membres', 'action' => 'view', $theses->membre->id]) : '' ?></td>
-                <td class="actions">
+                <td><?= $theses->has('financement') ? $this->Html->link("Financement", ['controller' => 'Financements', 'action' => 'view', $theses->financement->id]) : 'Pas de financement' ?></td>
+				<td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $theses->id]) ?>
                     <?= $this->Html->link(__('Editer'), ['action' => 'edit', $theses->id]) ?>
                     <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $theses->id], ['confirm' => __('Confirmer la suppression de la thèse "{0}" ?', $theses->sujet)]) ?>

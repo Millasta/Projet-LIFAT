@@ -153,6 +153,7 @@ class ThesesController extends AppController
 
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
+        $this->loadModel('Theses');
         $result = $this->Theses->find('all');
 
         if ($dateEntree && $dateFin) {
@@ -225,6 +226,47 @@ class ThesesController extends AppController
         return $result;
     }
 
+    /**
+     * Retourne le nombre de soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return $count : nombre de soutenances
+     */
+    public function nombreSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);});
+            $count = $result->count();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1]);
+            $count = $result->count();
+        }
+        return $count;
+    }
 
+    /**
+     * Retourne la liste des soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->toArray();
+        }
+        return $result;
+    }
 
 }
