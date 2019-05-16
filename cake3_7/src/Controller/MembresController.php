@@ -214,7 +214,12 @@ class MembresController extends AppController
         return false;
     }
 
-
+    /**
+     * Retourne la liste des doctorants en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
     public function listeDoctorant($dateEntree = null, $dateFin = null)
     {
         $result = $this->Membres->find('all')
@@ -228,7 +233,12 @@ class MembresController extends AppController
         return $result->toArray();
     }
 
-
+    /**
+     * Retourne la liste des membres par equipe en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des membres
+     */
     public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
     {
 
@@ -249,6 +259,12 @@ class MembresController extends AppController
         return $result;
     }
 
+    /**
+     * Retourne une liste des type avec leur effectifs respectifs en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des types/effectif
+     */
     public function effectifParType($dateEntree = null, $dateFin = null)
     {
         if ($dateEntree && $dateFin) {
@@ -293,6 +309,12 @@ class MembresController extends AppController
         return $resultset;
     }
 
+    /**
+     * Retourne la liste des effectifs selon leur sexe et nationalite en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des effectifs
+     */
     public function effectifParNationaliteSexe($dateEntree = null, $dateFin = null)
     {
         if ($dateEntree && $dateFin) {
@@ -354,7 +376,12 @@ class MembresController extends AppController
         return $resultset;
     }
 
-
+    /**
+     * Retourne la liste des doctorants par equipe en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
     public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
             $result=$this->Membres->find('all')
@@ -376,6 +403,13 @@ class MembresController extends AppController
         return $result;
     }
 
+    /**
+     * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps
+     * @param $id : identifiant du membre
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
     public function listeProjetMembre($id = null, $dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
             $equipeId = $this->Membres->find('all')
