@@ -2,9 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Entity\EncadrantsTheses;
 use Cake\Chronos\Date;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * Theses Controller
@@ -266,6 +268,42 @@ class ThesesController extends AppController
                 ->toArray();
         }
         return $result;
+    }
+
+    /**
+     * Retourne la liste des thèses par équipe selon l'id donné
+     * @param null $idEquipe
+     * @param null $dateEntree
+     * @param null $dateFin
+     * @return array
+     */
+    public function listeThesesParEquipe($idEquipe = null, $dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin)
+        {
+            $this->loadModel('Membres');
+            $result = $this->Membres->find()
+                ->select(['id'])
+                ->where(['equipe_id' => $idEquipe])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);
+                })
+                ->toArray();
+            $result2 = $this->Theses->find('all')
+                ->where(['auteur_id' => $result[0]['id']])
+                ->toArray();
+        } else {
+            $this->loadModel('Membres');
+            $result = $this->Membres->find()
+                ->select(['id'])
+                ->where(['equipe_id' => $idEquipe])
+                ->toArray();
+            $result2 = $this->Theses->find('all')
+                ->where(['auteur_id' => $result[0]['id']])
+                ->toArray();
+        }
+        die(strval($result2[1]));
+        return $result2;
     }
 
 }

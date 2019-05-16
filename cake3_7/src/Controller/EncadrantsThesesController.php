@@ -207,7 +207,6 @@ class EncadrantsThesesController extends AppController
 
         } else {
             $this->loadModel('Membres');
-            $this->loadModel('EncadrantsTheses');
             $result = $this->EncadrantsTheses->find()
                 ->select(['taux'])
                 ->select($this->Membres)
