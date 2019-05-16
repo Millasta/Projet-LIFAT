@@ -18,7 +18,7 @@ class GraphiqueController extends AppController
 {
     public function index(){
         //faire des if selon le graph ou list à faire
-        //$this->effectifsParType();
+         $this->effectifsParType();
         //$this->tableauListeDoctorant();
         //$this->tableauListeMembresParEquipe();
         //$this->tableaulisteThesesParEncadrant();
