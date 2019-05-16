@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Theses Model
  *
  * @property \App\Model\Table\MembresTable|\Cake\ORM\Association\BelongsTo $Membres
+ * @property \App\Model\Table\FinancementsTable|\Cake\ORM\Association\BelongsTo $Financements
  * @property \App\Model\Table\DirigeantsTable|\Cake\ORM\Association\BelongsToMany $Dirigeants
  * @property \App\Model\Table\EncadrantsTable|\Cake\ORM\Association\BelongsToMany $Encadrants
  *
@@ -40,6 +41,9 @@ class ThesesTable extends Table
 
         $this->belongsTo('Membres', [
             'foreignKey' => 'auteur_id'
+        ]);
+		$this->belongsTo('Financements', [
+            'foreignKey' => 'financement_id'
         ]);
         $this->belongsToMany('Dirigeants', [
             'foreignKey' => 'these_id',
@@ -88,6 +92,10 @@ class ThesesTable extends Table
             ->scalar('autre_info')
             ->maxLength('autre_info', 160)
             ->allowEmptyString('autre_info');
+			
+		$validator
+            ->boolean('est_hdr')
+            ->allowEmptyString('est_hdr');
 
         return $validator;
     }
@@ -102,6 +110,7 @@ class ThesesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['auteur_id'], 'Membres'));
+		$rules->add($rules->existsIn(['financement_id'], 'Financements'));
 
         return $rules;
     }
