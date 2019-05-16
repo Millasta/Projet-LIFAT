@@ -6,6 +6,10 @@
 /tmp/*
 /vendor/*
 
+# But not these files...
+######################
+!/vendor/JPGraph
+
 # OS generated files #
 ######################
 .DS_Store
