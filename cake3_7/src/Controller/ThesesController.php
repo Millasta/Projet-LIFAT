@@ -159,6 +159,7 @@ class ThesesController extends AppController
 
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
+        $this->loadModel('Theses');
         $result = $this->Theses->find('all');
 
         if ($dateEntree && $dateFin) {

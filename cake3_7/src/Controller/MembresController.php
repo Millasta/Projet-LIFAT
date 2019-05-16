@@ -428,6 +428,7 @@ class MembresController extends AppController
                 array_push($result, $tmp[0]);
             }
         }else {
+            $this->loadModel('Membres');
             $equipeId = $this->Membres->find('all')
                 ->select(['equipe_id'])
                 ->where(['id' => $id])
