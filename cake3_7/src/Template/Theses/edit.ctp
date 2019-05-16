@@ -13,10 +13,12 @@
 			echo $this->Form->control('type');
 			echo $this->Form->control('date_debut', ['empty' => true, 'type' => 'date']);
 			echo $this->Form->control('date_fin', ['empty' => true]);
+			echo $this->Form->control('est_hdr', ['empty' => true]);
 			echo $this->Form->control('autre_info');
 			echo $this->Form->control('auteur_id', ['options' => $membres, 'empty' => true]);
 			echo $this->Form->control('dirigeants._ids', ['options' => $membres]);
 			echo $this->Form->control('encadrants._ids', ['options' => $membres]);
+			echo $this->Form->control('financement_id', ['options' => $financements, 'empty' => true]);
 		?>
 	</fieldset>
 	<?= $this->Form->button(__('Envoyer')) ?>

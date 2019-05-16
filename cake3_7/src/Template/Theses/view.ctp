@@ -31,6 +31,10 @@
             <th scope="row"><?= __('Autre Info') ?></th>
             <td><?= h($theses->autre_info) ?></td>
         </tr>
+		<tr>
+            <th scope="row"><?= __('Est HDR') ?></th>
+            <td><?= $theses->est_hdr ? 'Oui' : 'Non'  ?></td>
+        </tr>
     </table>
     <div class="related">
         <h4><?= __('Dirigeant(s)') ?></h4>
@@ -59,5 +63,9 @@
             <?php endforeach; ?>
         </table>
         <?php endif; ?>
+    </div>
+	<div class="related">
+        <h4><?= __('Financement') ?></h4>
+        <?= !empty($theses->financement) ? $this->Html->link('Détail du financement', ['controller' => 'Financements', 'action' => 'view', $theses->financement->id]) : 'Pas de financement' ?>
     </div>
 </div>
