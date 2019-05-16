@@ -1,4 +1,4 @@
-<div id="searchbar" class="large-9 medium-8" style="float: right">	<!--	TODO : css - faire marcher style_lifat.css	-->
+<div id="searchbar" class="large-9 medium-8">	<!--	TODO : css - faire marcher style_lifat.css	-->
 	<?php
 	if(!isset($searchLabelExtra)) {
 		$searchLabelExtra = 'nom';
