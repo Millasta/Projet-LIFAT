@@ -1,9 +1,13 @@
 <div id="searchbar" class="large-9 medium-8" style="float: right">	<!--	TODO : css - faire marcher style_lifat.css	-->
 	<?php
+	if(!isset($searchLabelExtra)) {
+		$searchLabelExtra = 'nom';
+	}
+
 	echo $this->Form->create(null, ['valueSources' => 'query']);
 	//	Le paramètre de recherche dans la classe Table correspondante doit se nommer 'Recherche'
 	echo $this->Form->control('Recherche', [
-		'label' => 'Recherche (nom ou prénom) :'
+		'label' => 'Recherche ('.$searchLabelExtra.') :'
 	]);
 	echo $this->Form->button('Filtrer', ['type' => 'submit']);
 	echo ' ';

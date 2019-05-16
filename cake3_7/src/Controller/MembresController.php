@@ -23,6 +23,8 @@ class MembresController extends AppController
      */
     public function index()
     {
+    	$this->set('searchLabelExtra', 'nom ou prénom');
+
     	$query = $this->Membres
 			// Use the plugins 'search' custom finder and pass in the
 			// processed query params
