@@ -18,14 +18,19 @@ class GraphiqueController extends AppController
 {
     public function index(){
         //faire des if selon le graph ou list à faire
-        $this->tableauListeDoctorant();
+        //$this->effectifsParType();
+        //$this->tableauListeDoctorant();
         //$this->tableauListeMembresParEquipe();
         //$this->tableaulisteThesesParEncadrant();
         //$this->tableauListeEncadrantsAvecTaux();
+        //$this->tableauListeProjetMembre();
+        //$this->effectifsParType();
+        $this->tableauListeTheseParType();
     }
 
     public function effectifsParType(){
-        $donnees = MembresController::effectifParType();
+        $controlInstance = new MembresController();
+        $donnees = $controlInstance->effectifParType();
         foreach($donnees as $key => $value){
             $type[]= $key;
             $effectifs[] = $value;
@@ -65,7 +70,8 @@ class GraphiqueController extends AppController
     }
 
     public function tableauListeMembresParEquipe(){
-        $donnees = MembresController::listeMembreParEquipe();
+        $controlInstance = new MembresController();
+        $donnees = $controlInstance->listeMembreParEquipe();
         $tableau = $donnees->toArray();
         $entetes = ["id","role", "nom", "prenom", "email", "pass", "adresse_agent_1", "adresse_agent_2", "residence_admin_1",
             "residence_admin_2", "type_personnel", "intitule", "grade", "im_vehicule", "pf_vehicule", "signature_name",
@@ -166,7 +172,8 @@ class GraphiqueController extends AppController
     }
 
     public function tableauListeDoctorant(){
-        $tableau = MembresController::listeDoctorant();
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->listeDoctorant();
         //$tableau = $donnees;
         $entetes = ["id","role", "nom", "prenom", "email", "pass", "adresse_agent_1", "adresse_agent_2", "residence_admin_1",
             "residence_admin_2", "type_personnel", "intitule", "grade", "im_vehicule", "pf_vehicule", "signature_name",
@@ -262,7 +269,8 @@ class GraphiqueController extends AppController
 
     public function tableaulisteThesesParEncadrant(){
         //IL FAUT L'ID DE L'ENCADRANT
-        $tableau = EncadrantsThesesController::listeThesesParEncadrant(3);
+        $controlInstance = new EncadrantsThesesController();
+        $tableau = $controlInstance->listeThesesParEncadrant(3);
         $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
         $fichier = "listeThesesParEncadrant.csv";
 
@@ -306,7 +314,8 @@ class GraphiqueController extends AppController
     }
 
     public function tableauListeEncadrantsAvecTaux(){
-        $tableau = EncadrantsThesesController::listeEncadrantsAvecTaux(1);
+        $controlInstance = new EncadrantsThesesController();
+        $tableau = $controlInstance->listeEncadrantsAvecTaux(1);
 
         $entetes = ["id","role", "nom", "prenom", "email", "passwd", "adresse_agent_1", "adresse_agent_2", "residence_admin_1",
             "residence_admin_2", "type_personnel", "intitule", "grade", "im_vehicule", "pf_vehicule", "signature_name",
@@ -402,6 +411,92 @@ class GraphiqueController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    public function tableauListeProjetMembre(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->listeProjetMembre(2);
 
+        $entetes = ["id","titre","description","type","budget","date_debut","date_fin","financement_id"];
+        $fichier = "listeProjetMembre.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
 
+        $listeProjetMembre = array();
+        foreach($tableau as $key => $row){
+            $listeProjetMembre[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->titre,
+                $tableau[$key]->description,
+                $tableau[$key]->type,
+                $tableau[$key]->budget,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->financement_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->titre,
+                $tableau[$key]->description,
+                $tableau[$key]->type,
+                $tableau[$key]->budget,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->financement_id
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeProjetMembre);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauListeTheseParType(){
+        $controlInstance = new ThesesController();
+        $tableau = $controlInstance->listeTheseParType();
+        $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
+        $fichier = "listeTheseParType.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeThesesParType = array();
+        foreach($tableau as $key => $row){
+            $listeThesesParType[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id,
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeThesesParType);
+        $this->set("nomFichier", $fichier);
+    }
 }
