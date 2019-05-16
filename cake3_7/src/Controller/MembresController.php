@@ -222,6 +222,7 @@ class MembresController extends AppController
      */
     public function listeDoctorant($dateEntree = null, $dateFin = null)
     {
+        $this->loadModel('Membres');
         $result = $this->Membres->find('all')
             ->where(['type_personnel' => 'DO']);
 
@@ -241,9 +242,8 @@ class MembresController extends AppController
      */
     public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
     {
-
-
         if ($dateEntree && $dateFin) {
+            $this->loadModel('Membres');
             $result = $this->Membres->find('all')
                 ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                 return $exp->between('date_creation', $dateEntree, $dateFin);
