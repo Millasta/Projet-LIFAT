@@ -22,12 +22,18 @@ class ThesesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Membres', 'Financements']
-        ];
-        $theses = $this->paginate($this->Theses);
+		$this->set('searchLabelExtra', "sujet et/ou type");
 
-        $this->set(compact('theses'));
+		$query = $this->Theses
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->paginate = [
+			'contain' => ['Membres', 'Financements']
+		];
+
+		$this->set('theses', $this->paginate($query));
     }
 
     /**

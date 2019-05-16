@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Financement[]|\Cake\Collection\CollectionInterface $financements
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="financements index large-9 medium-8 columns content">
     <h3><?= __('Financements du laboratoire') ?> <font size="+1">[<?= $this->Html->link(__('Nouveau financement'), ['action' => 'edit']) ?>]</font> </h3>
     <table cellpadding="0" cellspacing="0">

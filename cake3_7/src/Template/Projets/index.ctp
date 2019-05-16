@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Projet[]|\Cake\Collection\CollectionInterface $projets
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="projets index large-9 medium-8 columns content">
     <h3><?= __('Projets du laboratoire') ?> <font size="+1">[<?= $this->Html->link(__('Nouveau projet'), ['action' => 'edit']) ?>]</font> </h3>
     <table cellpadding="0" cellspacing="0">
