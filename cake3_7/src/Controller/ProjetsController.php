@@ -40,6 +40,12 @@ class ProjetsController extends AppController
             'contain' => ['Financements', 'Equipes', 'Missions']
         ]);
 
+        $this->loadModel('Membres');
+        $projet->responsables = array();
+        foreach ($projet->equipes as &$equipes) {
+            $projet->responsables[] = $this->Membres->get($equipes->responsable_id);
+        }
+
         $this->set('projet', $projet);
     }
 
@@ -74,9 +80,12 @@ class ProjetsController extends AppController
      */
     public function edit($id = null)
     {
-        $projet = $this->Projets->get($id, [
-            'contain' => ['Equipes']
-        ]);
+        if($id == null)
+            $projet = $this->Projets->newEntity();
+        else
+            $projet = $this->Projets->get($id, [
+                'contain' => ['Equipes']
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projet = $this->Projets->patchEntity($projet, $this->request->getData());
             if ($this->Projets->save($projet)) {
@@ -117,19 +126,28 @@ class ProjetsController extends AppController
 	 * @return bool : if the user is allowed (or not) to access the requested page
 	 */
     public function isAuthorized($user)
-	{
-		if(parent::isAuthorized($user) === true)
-		{
-			return true;
-		}
-		else
-		{
-			//	Tous les membres permanents ont tous les droits sur les projets
-			if($user['permanent'] === true)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    {
+        if (parent::isAuthorized($user) === true) {
+            return true;
+        } else {
+            //	Tous les membres permanents ont tous les droits sur les projets
+            if ($user['permanent'] === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Retourne la liste des budgets  par annees
+     * @param $id : identifiant du projet
+     * @return array : liste des budgets
+     */
+    public function listeBudgetsAnnuels($id = null){
+        $this->loadModel('BudgetsAnnuels');
+        $result = $this->BudgetsAnnuels->find('all')
+            ->where(['projet_id' => $id])
+            ->toArray();
+        return $result;
+    }
 }

@@ -100,33 +100,33 @@ class MembresController extends AppController
      */
     public function edit($id = null)
     {
-		if($id == null)
-			$membre = $this->Membres->newEntity();
-		else
-			$membre = $this->Membres->get($id, [
-				'contain' => []
-			]);
+        if ($id == null)
+            $membre = $this->Membres->newEntity();
+        else
+            $membre = $this->Membres->get($id, [
+                'contain' => []
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
             if ($this->Membres->save($membre)) {
-				if($id == null) {
-					$this->Flash->success(__('Nouveau membre'));
-					// Récupération du Membre.id créé
-					$query = $this->Membres->find('all')
-										->where(['Membres.email =' => $this->request->getData()['email']])
-										->limit(1);			
-					$membreId = $query->first();
-							
-					// INSERT dans Dirigeants en Encadrants
-					$this->loadModel('Encadrants');
-					$this->loadModel('Dirigeants');
-					
-					$query = $this->Dirigeants->query();
-					$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
-					
-					$query = $this->Encadrants->query();
-					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
-				}
+                if ($id == null) {
+                    $this->Flash->success(__('Nouveau membre'));
+                    // Récupération du Membre.id créé
+                    $query = $this->Membres->find('all')
+                        ->where(['Membres.email =' => $this->request->getData()['email']])
+                        ->limit(1);
+                    $membreId = $query->first();
+
+                    // INSERT dans Dirigeants en Encadrants
+                    $this->loadModel('Encadrants');
+                    $this->loadModel('Dirigeants');
+
+                    $query = $this->Dirigeants->query();
+                    $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+
+                    $query = $this->Encadrants->query();
+                    $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+                }
                 $this->Flash->success(__('The membre has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
@@ -219,7 +219,7 @@ class MembresController extends AppController
     }
 
     /**
-     * Retourne la liste des doctorants en tenant compte d'un lapse de temps s'il est renseigne
+     * Retourne la liste des doctorants en prenant en compte une fenetre de temps
      * @param $dateEntree : date d'entree de la fenetre de temps
      * @param $dateFin : date de fin de la fenetre de temps
      * @return array : liste des doctorants
@@ -237,126 +237,217 @@ class MembresController extends AppController
         return $result->toArray();
     }
 
+    /**
+     * Retourne la liste des membres par equipe en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des membres
+     */
+    public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
+    {
 
-    public function listeMembreParEquipe($dateEntree = null, $dateFin = null){
-        $result=$this->Membres->find('all');
 
         if ($dateEntree && $dateFin) {
-            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+            $result = $this->Membres->find('all')
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                 return $exp->between('date_creation', $dateEntree, $dateFin);
-            })->toArray();
+            });
+        }else{
+            $result = $this->Membres->find('all');
         }
-
+        $result->toArray();
         foreach ($result as $key => $row) {
-            $equipe[$key]  = $row['equipe_id'];
+            $equipe_id[$key]  = $row['equipe_id'];
         }
-        array_multisort($equipe,SORT_NUMERIC, SORT_ASC, $result);
-
+        array_multisort($equipe_id, SORT_NUMERIC, SORT_DESC, $result);
         return $result;
     }
 
+	/**
+	 * Retourne une liste des type avec leur effectifs respectifs en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des types/effectif
+	 */
+	public function effectifParType($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$do = $this->Membres->find('all')
+				->where(['type_personnel' => 'DO']);
+			$pe = $this->Membres->find('all')
+				->where(['type_personnel' => 'PE']);
+			$pu = $this->Membres->find('all')
+				->where(['type_personnel' => 'PU']);
+			$do = $do->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+				return $exp->between('date_creation', $dateEntree, $dateFin);
+			})->count();
+			$pe = $pe->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+				return $exp->between('date_creation', $dateEntree, $dateFin);
+			})->count();
+			$pu = $pu->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+				return $exp->between('date_creation', $dateEntree, $dateFin);
+			})->count();
+		} else {
+			$do = $this->Membres->find('all')
+				->where(['type_personnel' => 'DO'])
+				->count();
+			$pe = $this->Membres->find('all')
+				->where(['type_personnel' => 'PE'])
+				->count();
+			$pu = $this->Membres->find('all')
+				->where(['type_personnel' => 'PU'])
+				->count();
+		}
+		$resultset = ["Do" => $do,
+			"PE" => $pe,
+			"PU" => $pu
+		];
+		return $resultset;
+	}
 
-    public function effectifParType($dateEntree = null, $dateFin = null){
-        if ($dateEntree && $dateFin) {
-            $do=$this->Membres->find('all')
-                ->where(['type_personnel' => 'DO']);
+	/**
+	 * Retourne la liste des effectifs selon leur sexe et nationalite en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des effectifs
+	 */
+	public function effectifParNationaliteSexe($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$hommeFrancais = $this->Membres
+				->find('all')
+				->where(['genre' => 'H',
+					'est_francais' => '1'])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->count();
+			$hommeEtranger = $this->Membres->find('all')
+				->where(['genre' => 'H',
+					'est_francais' => '0'])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->count();
+			$femmeFrancaise = $this->Membres->find('all')
+				->where(['genre' => 'F',
+					'est_francais' => '1'])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->count();
+			$femmeEtrangere = $this->Membres->find('all')
+				->where(['genre' => 'F',
+					'est_francais' => '0'])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->count();
+		} else {
+			$hommeFrancais = $this->Membres->find('all')
+				->where(['genre' => 'H',
+					'est_francais' => '1'])
+				->count();
+			$hommeEtranger = $this->Membres->find('all')
+				->where(['genre' => 'H',
+					'est_francais' => '0'])
+				->count();
+			$femmeFrancaise = $this->Membres->find('all')
+				->where(['genre' => 'F',
+					'est_francais' => '1'])
+				->count();
+			$femmeEtrangere = $this->Membres->find('all')
+				->where(['genre' => 'F',
+					'est_francais' => '0'])
+				->count();
+		}
+		$resultset = ["hommeFrancais" => $hommeFrancais,
+			"hommeEtranger" => $hommeEtranger,
+			"femmeFrancaise" => $femmeFrancaise,
+			"femmeEtrangere" => $femmeEtrangere
+		];
+		return $resultset;
+	}
 
-            $pe=$this->Membres->find('all')
-                ->where(['type_personnel' => 'PE']);
-
-            $pu=$this->Membres->find('all')
-                ->where(['type_personnel' => 'PE']);
-
-            $do = $do->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('date_creation', $dateEntree, $dateFin);
-            })->count();
-            $pe = $pe->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('date_creation', $dateEntree, $dateFin);
-            })->count();
-
-            $pu = $pu->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('date_creation', $dateEntree, $dateFin);
-            })->count();
-        } else{
-            $do=$this->Membres->find('all')
+    /**
+     * Retourne la liste des doctorants par equipe en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
+    public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $result=$this->Membres->find('all')
                 ->where(['type_personnel' => 'DO'])
-            ->count();
-
-            $pe=$this->Membres->find('all')
-                ->where(['type_personnel' => 'PE'])
-            ->count();
-
-            $pu=$this->Membres->find('all')
-                ->where(['type_personnel' => 'PE'])
-            ->count();
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        }else{
+            $result=$this->Membres->find('all')
+                ->where(['type_personnel' => 'DO'])
+                ->toArray();
         }
 
-        $resultset=["Do"=>$do,
-            "PE" => $pe,
-            "PU" => $pu
-        ];
-
-        return $resultset;
+        foreach ($result as $key => $row) {
+            $equipe_id[$key]  = $row['equipe_id'];
+        }
+        array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
+        return $result;
     }
 
-    public function effectifParNationaliteSexe($dateEntree = null, $dateFin = null){
-        if ($dateEntree && $dateFin) {
-            $hommeFrancais=$this->Membres
-                ->find('all')
-                ->where(['genre' => 'H',
-                    'est_francais' => '1'])
+    /**
+     * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps
+     * @param $id : identifiant du membre
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des doctorants
+     */
+    public function listeProjetMembre($id = null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $equipeId = $this->Membres->find('all')
+                ->select(['equipe_id'])
+                ->where(['id' => $id])
                 ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                     return $exp->between('date_creation', $dateEntree, $dateFin);
                 })
-                ->count();
-            $hommeEtranger=$this->Membres->find('all')
-                ->where(['genre' => 'H',
-                    'est_francais' => '0'])
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->count();
-            $femmeFrancaise=$this->Membres->find('all')
-                ->where(['genre' => 'F',
-                    'est_francais' => '1'])
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->count();
-            $femmeEtrangere=$this->Membres->find('all')
-                ->where(['genre' => 'F',
-                    'est_francais' => '0'])
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->count();
+                ->toArray();
 
-        } else{
-            $hommeFrancais=$this->Membres->find('all')
-                ->where(['genre' => 'H',
-                    'est_francais' => '1'])
-            ->count();
-            $hommeEtranger=$this->Membres->find('all')
-                ->where(['genre' => 'H',
-                    'est_francais' => '0'])
-            ->count();
-            $femmeFrancaise=$this->Membres->find('all')
-                ->where(['genre' => 'F',
-                    'est_francais' => '1'])
-            ->count();
-            $femmeEtrangere=$this->Membres->find('all')
-                ->where(['genre' => 'F',
-                    'est_francais' => '0'])
-            ->count();
+            $this->loadModel('EquipesProjets');
+            $projet_id = $this->EquipesProjets->find('all')
+                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
+                ->select(['projet_id'])
+                ->toArray();
 
+            $result = array();
+            foreach ($projet_id as $row) {
+                $this->loadModel('Projets');
+                $tmp = $this->Projets->find('all')
+                    ->where(['id' => $row['projet_id']])
+                    ->toArray();
+                array_push($result, $tmp[0]);
+            }
+        }else {
+            $equipeId = $this->Membres->find('all')
+                ->select(['equipe_id'])
+                ->where(['id' => $id])
+                ->toArray();
+
+            $this->loadModel('EquipesProjets');
+            $projet_id = $this->EquipesProjets->find('all')
+                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
+                ->select(['projet_id'])
+                ->toArray();
+
+            $result = array();
+            foreach ($projet_id as $row) {
+                $this->loadModel('Projets');
+                $tmp = $this->Projets->find('all')
+                    ->where(['id' => $row['projet_id']])
+                    ->toArray();
+                array_push($result, $tmp[0]);
+            }
         }
-
-        $resultset=["hommeFrancais"=>$hommeFrancais,
-            "hommeEtranger" => $hommeEtranger,
-            "femmeFrancaise" => $femmeFrancaise,
-            "femmeEtrangere" => $femmeEtrangere
-        ];
-
-        return $resultset;
+        return $result;
     }
 }

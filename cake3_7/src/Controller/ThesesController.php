@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Chronos\Date;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
 
@@ -42,15 +43,26 @@ class ThesesController extends AppController
             'contain' => ['Membres', 'Dirigeants', 'Encadrants']
         ]);
 
-        $this->set('theses', $theses);
-}
+		$this->loadModel('Membres');
+
+		foreach ($theses->dirigeants as &$dirigeants) {
+			$dirigeants = $this->Membres->get($dirigeants->dirigeant_id);
+		}
+
+		foreach ($theses->encadrants as &$encadrants) {
+			$encadrants = $this->Membres->get($encadrants->encadrant_id);
+		}
+
+		$this->set('theses', $theses);
+    }
 
     /**
      * Add method
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    /* GENERATED
+	public function add()
     {
         $theses = $this->Theses->newEntity();
         if ($this->request->is('post')) {
@@ -66,7 +78,7 @@ class ThesesController extends AppController
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
         $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
-    }
+    }*/
 
     /**
      * Edit method
@@ -77,9 +89,13 @@ class ThesesController extends AppController
      */
     public function edit($id = null)
     {
-        $theses = $this->Theses->get($id, [
-            'contain' => ['Dirigeants', 'Encadrants']
-        ]);
+		if($id == null)
+			$theses = $this->Theses->newEntity();
+		else
+			$theses = $this->Theses->get($id, [
+				'contain' => ['Dirigeants', 'Encadrants']
+			]);
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
@@ -130,16 +146,10 @@ class ThesesController extends AppController
             });
         }
         $count = $query->count();
+        //die(strval($count));
         $this->set(compact('query', 'count'));
     }
 
-
-    /**
-     * Retourne une liste de these ordonnees par type de these selon un lapse de temps s'il est renseigne
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des theses
-     */
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
         $result = $this->Theses->find('all');
@@ -150,12 +160,15 @@ class ThesesController extends AppController
             });
         }
         $result = $result->toArray();
+
         foreach ($result as $key => $row) {
             $type[$key]  = $row['type'];
         }
         array_multisort($type, SORT_ASC, SORT_STRING, $result);
+
         return $result;
     }
+
 	/**
 	 * Checks the currently logged in user's rights to access a page (called when changing pages).
 	 * @param $user : the user currently logged in
@@ -177,4 +190,40 @@ class ThesesController extends AppController
 		}
 		return false;
 	}
+
+    /**
+     * Retourne la liste des theses en cours
+     * @return array : liste des theses
+     */
+    public function listeThesesEnCours()
+    {
+        $now = strval(Date::now());
+        $result = $this->Theses->find('all')->where(['date_debut <= ' => $now])->andWhere(['date_fin >= ' => $now])->toArray();
+        return $result;
+    }
+
+    /**
+     * Retourne le nombre de soutenances pour une année donnée en paramètre
+     * @param null $annee
+     * @return $count
+     */
+    public function nombreSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee]);
+        $count = $result->count();
+        return $count;
+    }
+
+    /**
+     * Retourne la liste des soutenances pour une année donnée en paramètre
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesParAnnee($annee = null)
+    {
+        $result = $this->Theses->find('all')->where(['YEAR(date_fin) = ' => $annee])->toArray();
+        return $result;
+    }
+
+
+
 }

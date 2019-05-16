@@ -40,6 +40,18 @@ class EquipesController extends AppController
             'contain' => ['Membres', 'Projets', 'EquipesResponsables']
         ]);
 
+		// Chargement des entités membres en tant que mmebres de l'équipe 
+		$this->loadModel('Membres');
+		$query = $this->Membres->find('all')
+                        ->where(['Membres.equipe_id =' => $equipe->id]);
+		$equipe->membres = $query->all();
+		
+		// Chargement de l'entité membre en tant que responsables de l'équipe
+		$query = $this->Membres->find('all')
+                        ->where(['Membres.id =' => $equipe->responsable_id])
+						->limit(1);
+		$equipe->equipes_responsables = $query->first();
+		
         $this->set('equipe', $equipe);
     }
 
@@ -48,6 +60,7 @@ class EquipesController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+	/* GENERATED
     public function add()
     {
         $equipe = $this->Equipes->newEntity();
@@ -63,7 +76,7 @@ class EquipesController extends AppController
         $membres = $this->Equipes->Membres->find('list', ['limit' => 200]);
         $projets = $this->Equipes->Projets->find('list', ['limit' => 200]);
         $this->set(compact('equipe', 'membres', 'projets'));
-    }
+    }*/
 
     /**
      * Edit method
@@ -74,9 +87,12 @@ class EquipesController extends AppController
      */
     public function edit($id = null)
     {
-        $equipe = $this->Equipes->get($id, [
-            'contain' => ['Projets']
-        ]);
+		if($id == null)
+			$equipe = $this->Equipes->newEntity();
+		else
+			$equipe = $this->Equipes->get($id, [
+				'contain' => ['Projets']
+			]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipe = $this->Equipes->patchEntity($equipe, $this->request->getData());
             if ($this->Equipes->save($equipe)) {

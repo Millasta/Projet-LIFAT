@@ -4,23 +4,8 @@
  * @var \App\Model\Entity\theses $theses
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit theses'), ['action' => 'edit', $theses->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete theses'), ['action' => 'delete', $theses->id], ['confirm' => __('Are you sure you want to delete # {0}?', $theses->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Theses'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New theses'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Membres'), ['controller' => 'Membres', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Membre'), ['controller' => 'Membres', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Dirigeants'), ['controller' => 'Dirigeants', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Dirigeant'), ['controller' => 'Dirigeants', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Encadrants'), ['controller' => 'Encadrants', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Encadrant'), ['controller' => 'Encadrants', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="theses view large-9 medium-8 columns content">
-    <h3><?= h($theses->id) ?></h3>
+<div class="theses view columns content">
+    <h3><?= h($theses->sujet)?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $theses->id]) ?>]</font size></h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Sujet') ?></th>
@@ -31,41 +16,30 @@
             <td><?= h($theses->type) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Autre Info') ?></th>
-            <td><?= h($theses->autre_info) ?></td>
+            <th scope="row"><?= __('Auteur') ?></th>
+            <td><?= $theses->has('membre') ? $this->Html->link($theses->membre->nom." ".$theses->membre->prenom, ['controller' => 'Membres', 'action' => 'view', $theses->membre->id]) : '' ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Membre') ?></th>
-            <td><?= $theses->has('membre') ? $this->Html->link($theses->membre->id, ['controller' => 'Membres', 'action' => 'view', $theses->membre->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($theses->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Date Debut') ?></th>
+            <th scope="row"><?= __('Date début') ?></th>
             <td><?= h($theses->date_debut) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Date Fin') ?></th>
+            <th scope="row"><?= __('Date fin') ?></th>
             <td><?= h($theses->date_fin) ?></td>
+        </tr>
+		<tr>
+            <th scope="row"><?= __('Autre Info') ?></th>
+            <td><?= h($theses->autre_info) ?></td>
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Dirigeants') ?></h4>
+        <h4><?= __('Dirigeant(s)') ?></h4>
         <?php if (!empty($theses->dirigeants)): ?>
         <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Dirigeant Id') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
             <?php foreach ($theses->dirigeants as $dirigeants): ?>
             <tr>
-                <td><?= h($dirigeants->dirigeant_id) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Dirigeants', 'action' => 'view', $dirigeants->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Dirigeants', 'action' => 'edit', $dirigeants->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Dirigeants', 'action' => 'delete', $dirigeants->id], ['confirm' => __('Are you sure you want to delete # {0}?', $dirigeants->id)]) ?>
+                    <?= $this->Html->link(__($dirigeants->nom." ".$dirigeants->prenom), ['controller' => 'Membres', 'action' => 'view', $dirigeants->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -73,20 +47,13 @@
         <?php endif; ?>
     </div>
     <div class="related">
-        <h4><?= __('Related Encadrants') ?></h4>
+        <h4><?= __('Encadrant(s)') ?></h4>
         <?php if (!empty($theses->encadrants)): ?>
         <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th scope="col"><?= __('Encadrant Id') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
-            </tr>
             <?php foreach ($theses->encadrants as $encadrants): ?>
             <tr>
-                <td><?= h($encadrants->encadrant_id) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Encadrants', 'action' => 'view', $encadrants->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Encadrants', 'action' => 'edit', $encadrants->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Encadrants', 'action' => 'delete', $encadrants->id], ['confirm' => __('Are you sure you want to delete # {0}?', $encadrants->id)]) ?>
+                    <?= $this->Html->link(__($encadrants->nom." ".$encadrants->prenom), ['controller' => 'Membres', 'action' => 'view', $encadrants->id]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>

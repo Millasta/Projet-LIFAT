@@ -45,7 +45,7 @@ class LieuTravailsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    /*public function add()
     {
         $lieuTravail = $this->LieuTravails->newEntity();
         if ($this->request->is('post')) {
@@ -59,6 +59,7 @@ class LieuTravailsController extends AppController
         }
         $this->set(compact('lieuTravail'));
     }
+    */
 
     /**
      * Edit method
@@ -69,9 +70,12 @@ class LieuTravailsController extends AppController
      */
     public function edit($id = null)
     {
-        $lieuTravail = $this->LieuTravails->get($id, [
-            'contain' => []
-        ]);
+        if ($id == null)
+            $lieuTravail = $this->LieuTravails->newEntity();
+        else
+            $lieuTravail = $this->LieuTravails->get($id, [
+                'contain' => []
+            ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $lieuTravail = $this->LieuTravails->patchEntity($lieuTravail, $this->request->getData());
             if ($this->LieuTravails->save($lieuTravail)) {

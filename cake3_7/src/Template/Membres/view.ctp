@@ -4,22 +4,11 @@
  * @var \App\Model\Entity\Membre $membre
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Membre'), ['action' => 'edit', $membre->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Membre'), ['action' => 'delete', $membre->id], ['confirm' => __('Are you sure you want to delete # {0}?', $membre->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Membres'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Membre'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Lieu Travails'), ['controller' => 'LieuTravails', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Lieu Travail'), ['controller' => 'LieuTravails', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
 <div class="membres view large-9 medium-8 columns content">
-    <h3><?= h($membre->id) ?></h3>
+    <h3><?= h($membre->nom.' '.$membre->prenom) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $membre->id]) ?>]</font size></h3>
     <table class="vertical-table">
         <tr>
-            <th scope="row"><?= __('Role') ?></th>
+            <th scope="row"><?= __('Rôle') ?></th>
             <td><?= h($membre->role) ?></td>
         </tr>
         <tr>
@@ -27,16 +16,12 @@
             <td><?= h($membre->nom) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Prenom') ?></th>
+            <th scope="row"><?= __('Prénom') ?></th>
             <td><?= h($membre->prenom) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Email') ?></th>
             <td><?= h($membre->email) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Passwd') ?></th>
-            <td><?= h($membre->passwd) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Adresse Agent 1') ?></th>
@@ -59,7 +44,7 @@
             <td><?= h($membre->type_personnel) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Intitule') ?></th>
+            <th scope="row"><?= __('Intitulé') ?></th>
             <td><?= h($membre->intitule) ?></td>
         </tr>
         <tr>
@@ -67,24 +52,16 @@
             <td><?= h($membre->grade) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Im Vehicule') ?></th>
+            <th scope="row"><?= __('Immatriculation du Véhicule') ?></th>
             <td><?= h($membre->im_vehicule) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Signature Name') ?></th>
-            <td><?= h($membre->signature_name) ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Login Cas') ?></th>
             <td><?= h($membre->login_cas) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Carte Sncf') ?></th>
-            <td><?= h($membre->carte_sncf) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Lieu Travail') ?></th>
-            <td><?= $membre->has('lieu_travail') ? $this->Html->link($membre->lieu_travail->id, ['controller' => 'LieuTravails', 'action' => 'view', $membre->lieu_travail->id]) : '' ?></td>
+            <td><?= $membre->has('lieu_travail') ? $this->Html->link($membre->lieu_travail->nom_lieu, ['controller' => 'LieuTravails', 'action' => 'view', $membre->lieu_travail->id]) : '' ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Nationalite') ?></th>
@@ -92,19 +69,14 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Genre') ?></th>
-            <td><?= h($membre->genre) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($membre->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Pf Vehicule') ?></th>
-            <td><?= $this->Number->format($membre->pf_vehicule) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Matricule') ?></th>
-            <td><?= $this->Number->format($membre->matricule) ?></td>
+            <td><?php
+				if($membre->genre == 'H')
+					echo "homme";
+				else if($membre->genre == 'F')
+					echo "femme";
+				else
+					echo "autre"; ?>
+				</td>
         </tr>
         <tr>
             <th scope="row"><?= __('Date Naissance') ?></th>
@@ -120,23 +92,23 @@
         </tr>
         <tr>
             <th scope="row"><?= __('Actif') ?></th>
-            <td><?= $membre->actif ? __('Yes') : __('No'); ?></td>
+            <td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Est Francais') ?></th>
-            <td><?= $membre->est_francais ? __('Yes') : __('No'); ?></td>
+            <td><?= $membre->est_francais ? __('Oui') : __('Non'); ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Hdr') ?></th>
-            <td><?= $membre->hdr ? __('Yes') : __('No'); ?></td>
+            <th scope="row"><?= __('Certification HDR') ?></th>
+            <td><?= $membre->hdr ? __('Oui') : __('Non'); ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Permanent') ?></th>
-            <td><?= $membre->permanent ? __('Yes') : __('No'); ?></td>
+            <th scope="row"><?= __('Membre Permanent ?') ?></th>
+            <td><?= $membre->permanent ? __('Oui') : __('Non'); ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Est Porteur') ?></th>
-            <td><?= $membre->est_porteur ? __('Yes') : __('No'); ?></td>
+            <th scope="row"><?= __('Membre Porteur ?') ?></th>
+            <td><?= $membre->est_porteur ? __('Oui') : __('Non'); ?></td>
         </tr>
     </table>
 </div>
