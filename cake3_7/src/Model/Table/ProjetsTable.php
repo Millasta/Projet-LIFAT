@@ -21,6 +21,7 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Projet patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Projet[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Projet findOrCreate($search, callable $callback = null, $options = [])
+ * @mixin \Search\Model\Behavior\SearchBehavior
  */
 class ProjetsTable extends Table
 {
@@ -51,6 +52,22 @@ class ProjetsTable extends Table
         ]);
 
         $this->displayField('titre');
+
+		// Add the behaviour to your table
+		$this->addBehavior('Search.Search');
+
+		// Setup search filter using search manager
+		$this->searchManager()
+			/*	Here we will alias the 'id' query param to search the `Projets.titre` field, using a LIKE match, with `%` both before and after.	*/
+			->add('Recherche', 'Search.Like', [
+				'before' => true,
+				'after' => true,
+				'multiValue' => true,
+				'multiValueSeparator' => ' ',
+				'valueMode' => 'OR',
+				'comparison' => 'LIKE',
+				'field' => ['titre']
+			]);
     }
 
     /**

@@ -92,14 +92,22 @@ UPDATE `equipes` SET  `responsable_id` = '18' WHERE `id` = 6;
 UPDATE `equipes` SET  `responsable_id` = '19' WHERE `id` = 7;
 
 --
+-- Creations des financements
+--
+INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('1', '0', 'Français', '0', '50000 euros');
+INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('2', '1', 'Allemand', '1', '250000 euros');
+INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('3', '1', 'Espagnol', '1', '275000 euros');
+INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('4', '0', 'Français', '0', '120000 euros');
+
+--
 -- Creations des theses
 --
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (1, 'these1', 'Informatique Robotique', '2019-05-01', '2021-01-23', 'autreInfo1', '9');
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (2, 'these2', 'Taitement d image avance', '2017-02-24', '2018-07-23', 'autreInfo2', '2');
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (3, 'these3', 'MicroElectronique avance', '2019-03-24', '2019-11-23', 'autreInfo3', '12');
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (4, 'these4', 'Resolution de transfert important de donnees', '2019-06-27', '2020-03-29', 'autreInfo4', '2');
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (5, 'these5', 'Medecine et Informatique', '2019-02-24', '2019-09-07', 'autreInfo5', '14');
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `auteur_id`) VALUES (6, 'these6', 'Informatique au service de la planete', '2020-06-24', '2021-01-19', 'autreInfo6', '15');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (1, 'these1', 'Informatique Robotique', '2019-05-01', '2021-01-23', 'autreInfo1', '0', NULL, '9');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (2, 'these2', 'Taitement d image avance', '2017-02-24', '2018-07-23', 'autreInfo2', '1', '1', '2');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (3, 'these3', 'MicroElectronique avance', '2019-03-24', '2019-11-23', 'autreInfo3', '0', '2', '12');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (4, 'these4', 'Resolution de transfert important de donnees', '2019-06-27', '2020-03-29', 'autreInfo4', '1', '3', '2');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (5, 'these5', 'Medecine et Informatique', '2019-02-24', '2019-09-07', 'autreInfo5', '0', '4', '14');
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`,  `financement_id`, `auteur_id`) VALUES (6, 'these6', 'Informatique au service de la planete', '2020-06-24', '2021-01-19', 'autreInfo6', '0', NULL, '15');
 
 --
 -- Creations des dirigents_theses
@@ -138,14 +146,6 @@ INSERT INTO `equipes_responsables` (`equipe_id`, `responsable_id`) VALUES ('4', 
 INSERT INTO `equipes_responsables` (`equipe_id`, `responsable_id`) VALUES ('5', '3');
 INSERT INTO `equipes_responsables` (`equipe_id`, `responsable_id`) VALUES ('6', '11');
 INSERT INTO `equipes_responsables` (`equipe_id`, `responsable_id`) VALUES ('7', '2');
-
---
--- Creations des financements
---
-INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('1', '0', 'Français', '0', '50000 euros');
-INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('2', '1', 'Allemand', '1', '250000 euros');
-INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('3', '1', 'Espagnol', '1', '275000 euros');
-INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES ('4', '0', 'Français', '0', '120000 euros');
 
 --
 -- Creations des projets

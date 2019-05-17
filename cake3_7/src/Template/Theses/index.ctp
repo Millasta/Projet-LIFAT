@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Theses[]|\Cake\Collection\CollectionInterface $theses
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="theses index columns content">
     <h3><?= __('Thèses') ?><font size="+1">  [<?= $this->Html->link(__('Nouvelle thèse'), ['action' => 'edit']) ?>]</font></h3>
     <table cellpadding="0" cellspacing="0">
@@ -14,6 +18,7 @@
                 <th scope="col"><?= $this->Paginator->sort('Date de début') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Date de fin') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('Auteur') ?></th>
+				<th scope="col"><?= $this->Paginator->sort('Financement') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -25,7 +30,8 @@
                 <td><?= h($theses->date_debut) ?></td>
                 <td><?= h($theses->date_fin) ?></td>
                 <td><?= $theses->has('membre') ? $this->Html->link($theses->membre->nom." ".$theses->membre->prenom, ['controller' => 'Membres', 'action' => 'view', $theses->membre->id]) : '' ?></td>
-                <td class="actions">
+                <td><?= $theses->has('financement') ? $this->Html->link("Financement", ['controller' => 'Financements', 'action' => 'view', $theses->financement->id]) : 'Pas de financement' ?></td>
+				<td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $theses->id]) ?>
                     <?= $this->Html->link(__('Editer'), ['action' => 'edit', $theses->id]) ?>
                     <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $theses->id], ['confirm' => __('Confirmer la suppression de la thèse "{0}" ?', $theses->sujet)]) ?>

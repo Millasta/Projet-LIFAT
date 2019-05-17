@@ -19,9 +19,14 @@ class FinancementsController extends AppController
      */
     public function index()
     {
-        $financements = $this->paginate($this->Financements);
+		$this->set('searchLabelExtra', 'nationalité et/ou nom');
 
-        $this->set(compact('financements'));
+		$query = $this->Financements
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->set('financements', $this->paginate($query));
     }
 
     /**

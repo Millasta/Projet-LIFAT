@@ -171,6 +171,7 @@ class EncadrantsThesesController extends AppController
 
             return $resultset;
         }else{
+            $this->loadModel('EncadrantsTheses');
             $result = $this->EncadrantsTheses->find('all', [
                 'conditions' => ['encadrant_id' => $id],
                 'contain' => ['Theses']

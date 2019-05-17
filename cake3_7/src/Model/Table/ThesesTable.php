@@ -10,6 +10,7 @@ use Cake\Validation\Validator;
  * Theses Model
  *
  * @property \App\Model\Table\MembresTable|\Cake\ORM\Association\BelongsTo $Membres
+ * @property \App\Model\Table\FinancementsTable|\Cake\ORM\Association\BelongsTo $Financements
  * @property \App\Model\Table\DirigeantsTable|\Cake\ORM\Association\BelongsToMany $Dirigeants
  * @property \App\Model\Table\EncadrantsTable|\Cake\ORM\Association\BelongsToMany $Encadrants
  *
@@ -21,6 +22,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Theses patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Theses[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Theses findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Search\Model\Behavior\SearchBehavior
  */
 class ThesesTable extends Table
 {
@@ -41,6 +44,9 @@ class ThesesTable extends Table
         $this->belongsTo('Membres', [
             'foreignKey' => 'auteur_id'
         ]);
+		$this->belongsTo('Financements', [
+            'foreignKey' => 'financement_id'
+        ]);
         $this->belongsToMany('Dirigeants', [
             'foreignKey' => 'these_id',
             'targetForeignKey' => 'dirigeant_id',
@@ -51,6 +57,23 @@ class ThesesTable extends Table
             'targetForeignKey' => 'encadrant_id',
             'joinTable' => 'encadrants_theses'
         ]);
+
+		// Add the behaviour to your table
+		$this->addBehavior('Search.Search');
+
+		// Setup search filter using search manager
+		$this->searchManager()
+			/*	Here we will alias the 'id' query param to search the `Theses.sujet` and `Theses.type` fields, using a LIKE match, with `%` both before and after.	*/
+			->add('Recherche', 'Search.Like', [
+				'before' => true,
+				'after' => true,
+				'multiValue' => true,
+				'multiValueSeparator' => ' ',
+				'valueMode' => 'OR',
+				'comparison' => 'LIKE',
+				'fieldMode' => 'OR',
+				'field' => ['sujet', 'type']
+			]);
     }
 
     /**
@@ -88,6 +111,10 @@ class ThesesTable extends Table
             ->scalar('autre_info')
             ->maxLength('autre_info', 160)
             ->allowEmptyString('autre_info');
+			
+		$validator
+            ->boolean('est_hdr')
+            ->allowEmptyString('est_hdr');
 
         return $validator;
     }
@@ -102,6 +129,7 @@ class ThesesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['auteur_id'], 'Membres'));
+		$rules->add($rules->existsIn(['financement_id'], 'Financements'));
 
         return $rules;
     }

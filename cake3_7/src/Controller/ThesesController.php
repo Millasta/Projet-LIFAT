@@ -2,9 +2,11 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Entity\EncadrantsTheses;
 use Cake\Chronos\Date;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
+use phpDocumentor\Reflection\Types\This;
 
 /**
  * Theses Controller
@@ -22,12 +24,18 @@ class ThesesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Membres']
-        ];
-        $theses = $this->paginate($this->Theses);
+		$this->set('searchLabelExtra', "sujet et/ou type");
 
-        $this->set(compact('theses'));
+		$query = $this->Theses
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->paginate = [
+			'contain' => ['Membres', 'Financements']
+		];
+
+		$this->set('theses', $this->paginate($query));
     }
 
     /**
@@ -40,19 +48,19 @@ class ThesesController extends AppController
     public function view($id = null)
     {
         $theses = $this->Theses->get($id, [
-            'contain' => ['Membres', 'Dirigeants', 'Encadrants']
+            'contain' => ['Membres', 'Financements', 'Dirigeants', 'Encadrants']
         ]);
-		
+
 		$this->loadModel('Membres');
-		
+
 		foreach ($theses->dirigeants as &$dirigeants) {
 			$dirigeants = $this->Membres->get($dirigeants->dirigeant_id);
 		}
-		
+
 		foreach ($theses->encadrants as &$encadrants) {
 			$encadrants = $this->Membres->get($encadrants->encadrant_id);
 		}
-		
+
 		$this->set('theses', $theses);
     }
 
@@ -95,7 +103,7 @@ class ThesesController extends AppController
 			$theses = $this->Theses->get($id, [
 				'contain' => ['Dirigeants', 'Encadrants']
 			]);
-		
+
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
@@ -106,9 +114,10 @@ class ThesesController extends AppController
             $this->Flash->error(__('The theses could not be saved. Please, try again.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
+		$financements = $this->Theses->Financements->find('list', ['limit' => 200]);
         $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
         $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
+        $this->set(compact('theses', 'membres', 'financements', 'dirigeants', 'encadrants'));
     }
 
     /**
@@ -146,12 +155,13 @@ class ThesesController extends AppController
             });
         }
         $count = $query->count();
-        die(strval($count));
+        //die(strval($count));
         $this->set(compact('query', 'count'));
     }
 
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
+        $this->loadModel('Theses');
         $result = $this->Theses->find('all');
 
         if ($dateEntree && $dateFin) {
@@ -224,6 +234,83 @@ class ThesesController extends AppController
         return $result;
     }
 
+    /**
+     * Retourne le nombre de soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return $count : nombre de soutenances
+     */
+    public function nombreSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);});
+            $count = $result->count();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1]);
+            $count = $result->count();
+        }
+        return $count;
+    }
 
+    /**
+     * Retourne la liste des soutenances d'Habilitation à Diriger les Recherches
+     * @param null $dateEntree, dateFin
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenancesHDR($dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin) {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);
+                })
+                ->toArray();
+        } else {
+            $result = $this->Theses->find('all')
+                ->where(['est_hdr' => 1])
+                ->toArray();
+        }
+        return $result;
+    }
+
+    /**
+     * Retourne la liste des thèses par équipe selon l'id donné
+     * @param null $idEquipe
+     * @param null $dateEntree
+     * @param null $dateFin
+     * @return array
+     */
+    public function listeThesesParEquipe($idEquipe = null, $dateEntree = null, $dateFin = null)
+    {
+        if($dateEntree && $dateFin)
+        {
+            $this->loadModel('Membres');
+            $result = $this->Membres->find()
+                ->select(['id'])
+                ->where(['equipe_id' => $idEquipe])
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_debut', $dateEntree, $dateFin);
+                })
+                ->toArray();
+            $result2 = $this->Theses->find('all')
+                ->where(['auteur_id' => $result[0]['id']])
+                ->toArray();
+        } else {
+            $this->loadModel('Membres');
+            $result = $this->Membres->find()
+                ->select(['id'])
+                ->where(['equipe_id' => $idEquipe])
+                ->toArray();
+            $result2 = $this->Theses->find('all')
+                ->where(['auteur_id' => $result[0]['id']])
+                ->toArray();
+        }
+        die(strval($result2[1]));
+        return $result2;
+    }
 
 }

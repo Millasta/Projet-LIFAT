@@ -5,6 +5,11 @@
 /logs/*
 /tmp/*
 /vendor/*
+/webroot/UploadedFiles/*
+
+# But not these files...
+######################
+!/vendor/JPGraph
 
 # OS generated files #
 ######################
