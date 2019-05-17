@@ -10,14 +10,18 @@ class ExportForm extends Form
 
     protected function _buildSchema(Schema $schema)
     {
-        return $schema->addField('typeExport', ['type' => 'string'])
+        return $schema->addField('exportGraphe', ['type' => 'boolean'])
+            ->addField('exportListe', ['type' => 'boolean'])
             ->addField('typeGraphe', ['type' => 'string'])
-            ->addField('typeListe', ['type' => 'string']);
+            ->addField('typeListe', ['type' => 'string'])
+            ->addField('dateDebut', ['type' => 'date'])
+            ->addField('dateFin', ['type' => 'date'])
+            ->addField('encadrant', ['type' => 'string'])
+            ->addField('equipe', ['type' => 'string']);
     }
 
     protected function _execute(array $data)
     {
-        // Envoie un email.
         return true;
     }
 }
