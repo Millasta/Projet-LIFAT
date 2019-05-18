@@ -25,10 +25,12 @@ class GraphiqueController extends AppController
         //$this->tableauListeEncadrantsAvecTaux();
         //$this->tableauListeProjetMembre();
         //$this->effectifsParType();
-        $this->tableauListeTheseParType();
+        //$this->tableauListeTheseParType();
+        //$this->tableauListeSoutenanceHDR();
+        $this->tableauListeSoutenancesParAnnee();
     }
 
-    public function effectifsParType(){
+    public function grapheEffectifsParType(){
         $controlInstance = new MembresController();
         $donnees = $controlInstance->effectifParType();
         foreach($donnees as $key => $value){
@@ -87,9 +89,6 @@ class GraphiqueController extends AppController
             $fp = fopen($fichier, 'w');
         }
 
-        foreach($entetes as $key => $row){
-            echo '<th>'.$row.'</th>';
-        }
         fputcsv($fp, $entetes, ";");
 
         $listeMembres = array();
@@ -498,5 +497,94 @@ class GraphiqueController extends AppController
         $this->set("entetes", $entetes);
         $this->set("tableau", $listeThesesParType);
         $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauListeSoutenanceHDR(){
+        $controlInstance = new ThesesController();
+        $tableau = $controlInstance->listeSoutenancesHDR();
+        $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
+        $fichier = "listeSoutenanceHDR.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeSoutenanceHDR = array();
+        foreach($tableau as $key => $row){
+            $listeSoutenanceHDR[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id,
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeSoutenanceHDR);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauListeSoutenancesParAnnee(){
+        $controlInstance = new ThesesController();
+        $tableau = $controlInstance->listeSoutenancesParAnnee(2019);
+
+        $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
+        $fichier = "listeSoutenanceParAnnee.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeSoutenanceParAnnee = array();
+        foreach($tableau as $key => $row){
+            $listeSoutenanceParAnnee[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id,
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeSoutenanceParAnnee);
+        $this->set("nomFichier", $fichier);
+
+
     }
 }
