@@ -22,6 +22,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\Theses patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Theses[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Theses findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Search\Model\Behavior\SearchBehavior
  */
 class ThesesTable extends Table
 {
@@ -55,6 +57,23 @@ class ThesesTable extends Table
             'targetForeignKey' => 'encadrant_id',
             'joinTable' => 'encadrants_theses'
         ]);
+
+		// Add the behaviour to your table
+		$this->addBehavior('Search.Search');
+
+		// Setup search filter using search manager
+		$this->searchManager()
+			/*	Here we will alias the 'id' query param to search the `Theses.sujet` and `Theses.type` fields, using a LIKE match, with `%` both before and after.	*/
+			->add('Recherche', 'Search.Like', [
+				'before' => true,
+				'after' => true,
+				'multiValue' => true,
+				'multiValueSeparator' => ' ',
+				'valueMode' => 'OR',
+				'comparison' => 'LIKE',
+				'fieldMode' => 'OR',
+				'field' => ['sujet', 'type']
+			]);
     }
 
     /**

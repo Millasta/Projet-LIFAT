@@ -19,6 +19,8 @@ use Cake\Validation\Validator;
  * @method \App\Model\Entity\LieuTravail patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\LieuTravail[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\LieuTravail findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Search\Model\Behavior\SearchBehavior
  */
 class LieuTravailsTable extends Table
 {
@@ -39,6 +41,22 @@ class LieuTravailsTable extends Table
         $this->hasMany('Membres', [
             'foreignKey' => 'lieu_travail_id'
         ]);
+
+		// Add the behaviour to your table
+		$this->addBehavior('Search.Search');
+
+		// Setup search filter using search manager
+		$this->searchManager()
+			/*	Here we will alias the 'id' query param to search the `LieuTravails.nom_lieu` field, using a LIKE match, with `%` both before and after.	*/
+			->add('Recherche', 'Search.Like', [
+				'before' => true,
+				'after' => true,
+				'multiValue' => true,
+				'multiValueSeparator' => ' ',
+				'valueMode' => 'OR',
+				'comparison' => 'LIKE',
+				'field' => ['nom_lieu']
+			]);
     }
 
     /**

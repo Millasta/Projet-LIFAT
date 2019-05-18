@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\Equipe[]|\Cake\Collection\CollectionInterface $equipes
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="equipes index large-9 medium-8 columns content">
     <h3><?= __('Equipes') ?><font size="+1">  [<?= $this->Html->link(__('Nouvelle équipe'), ['action' => 'edit']) ?>]</font></h3>
     <table cellpadding="0" cellspacing="0">

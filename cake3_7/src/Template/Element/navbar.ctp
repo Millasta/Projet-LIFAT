@@ -22,6 +22,9 @@
 			<td>
                 <?=$this->Html->link(__('Export'), ['controller' => 'export', 'action' => 'index'])?>
             </td>
+			<td>
+                <?=$this->Html->link(__('Fichiers'), ['controller' => 'share-file', 'action' => 'index'])?>
+            </td>
    			<td>
 				<?php
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
