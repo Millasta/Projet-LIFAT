@@ -13,8 +13,8 @@
             echo $this->Form->control('description');
             echo $this->Form->control('type');
             echo $this->Form->control('budget');
-            echo $this->Form->control('date_debut', ['empty' => true]);
-            echo $this->Form->control('date_fin', ['empty' => true]);
+            echo $this->Form->control('date_debut', ['empty' => true, 'minYear' => 1950, 'maxYear' => 2050]);
+            echo $this->Form->control('date_fin', ['empty' => true, 'minYear' => 1950, 'maxYear' => 2050]);
             echo $this->Form->control('financement_id', ['options' => $financements, 'empty' => true]);
             echo $this->Form->control('equipes._ids', ['options' => $equipes]);
         ?>

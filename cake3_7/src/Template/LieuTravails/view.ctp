@@ -13,10 +13,6 @@
             <td><?= h($lieuTravail->nom_lieu) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($lieuTravail->id) ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Ce lieu est dans la liste') ?></th>
             <td><?= $lieuTravail->est_dans_liste ? __('Oui') : __('Non'); ?></td>
         </tr>
@@ -26,7 +22,6 @@
         <?php if (!empty($lieuTravail->membres)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th scope="col"><?= __('Id') ?></th>
                 <th scope="col"><?= __('Role') ?></th>
                 <th scope="col"><?= __('Nom') ?></th>
                 <th scope="col"><?= __('Prenom') ?></th>
@@ -35,7 +30,6 @@
             </tr>
             <?php foreach ($lieuTravail->membres as $membres): ?>
             <tr>
-                <td><?= h($membres->id) ?></td>
                 <td><?= h($membres->role) ?></td>
                 <td><?= h($membres->nom) ?></td>
                 <td><?= h($membres->prenom) ?></td>

@@ -4,13 +4,6 @@
  * @var \App\Model\Entity\LieuTravail $lieuTravail
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Liste des lieux de travail'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('Liste des membres'), ['controller' => 'Membres', 'action' => 'index']) ?></li>
-    </ul>
-</nav>
 <div class="lieuTravails form large-9 medium-8 columns content">
     <?= $this->Form->create($lieuTravail) ?>
     <fieldset>
