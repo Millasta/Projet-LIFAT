@@ -46,28 +46,7 @@ class LieuTravailsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /*public function add()
-    {
-        $lieuTravail = $this->LieuTravails->newEntity();
-        if ($this->request->is('post')) {
-            $lieuTravail = $this->LieuTravails->patchEntity($lieuTravail, $this->request->getData());
-            if ($this->LieuTravails->save($lieuTravail)) {
-                $this->Flash->success(__('The lieu travail has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The lieu travail could not be saved. Please, try again.'));
-        }
-        $this->set(compact('lieuTravail'));
-    }
-    */
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Lieu Travail id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.

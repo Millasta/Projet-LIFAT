@@ -56,29 +56,7 @@ class ProjetsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $projet = $this->Projets->newEntity();
-        if ($this->request->is('post')) {
-            $projet = $this->Projets->patchEntity($projet, $this->request->getData());
-            if ($this->Projets->save($projet)) {
-                $this->Flash->success(__('The projet has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The projet could not be saved. Please, try again.'));
-        }
-        $financements = $this->Projets->Financements->find('list', ['limit' => 200]);
-        $equipes = $this->Projets->Equipes->find('list', ['limit' => 200]);
-        $this->set(compact('projet', 'financements', 'equipes'));
-    }
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Projet id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
@@ -155,5 +133,15 @@ class ProjetsController extends AppController
             ->where(['projet_id' => $id])
             ->toArray();
         return $result;
+    }
+    /**
+     * Retourne les informations d'un projet selon son id
+     * @param $id : identifiant du projet
+     * @return array : informations du projet
+     */
+    public function informationProjet($id = null)
+    {
+        $result=$this->Projets->get($id);
+        return $result->first();
     }
 }
