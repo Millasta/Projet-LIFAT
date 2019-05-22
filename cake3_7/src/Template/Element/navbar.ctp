@@ -27,7 +27,7 @@ use \App\Model\Entity\Membre;
                 <?=$this->Html->link(__('Export'), ['controller' => 'export', 'action' => 'index'])?>
             </td>
 			<td>
-                <?=$this->Html->link(__('Fichiers'), ['controller' => 'share-file', 'action' => 'index'])?>
+                <?=$this->Html->link(__('Fichiers'), ['controller' => 'fichiers', 'action' => 'index'])?>
             </td>
    			<td>
 				<?php
