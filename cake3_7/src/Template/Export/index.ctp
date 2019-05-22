@@ -47,6 +47,9 @@ function toggleOptions() {
         document.getElementById('hiddenEncadrant').style.display = 'none';
         document.getElementById('hiddenEquipe').style.display = '';
     }
+    else if (document.getElementById('typeListe').value === 'ET5'){
+        document.getElementById('hiddenYear').style.display = '';
+    }
     //no other inputs needed
     else{
         document.getElementById('hiddenEncadrant').style.display = 'none';
@@ -74,7 +77,15 @@ function toggleOptions() {
             echo $this->Form->select('equipe', $optionsEquipes);
         ?>
     </div>
+    <div id="hiddenYear" style="display:none;">
     <?php
+         echo $this->Form->year('annee', [
+            'minYear' => 2000,
+            'maxYear' => date('Y')
+        ]);
+        ?>
+        </div>
+        <?php
         echo $this->Form->control('dateDebut',['minYear'=>'1900']);
         echo $this->Form->control('dateFin',['minYear'=>'1900']);
         echo $this->Form->button('Valider');

@@ -226,7 +226,7 @@ class EncadrantsThesesController extends AppController
      * Retourne la liste des encadrants avec leur taux d'encadrement pour une these donnee
      * @return array : liste des encadrants
      */
-    public function listeEncadrantsAvecTaux($idThese = null, $dateEntree = null, $dateFin = null)
+    public function listeEncadrantsAvecTaux($dateEntree = null, $dateFin = null)
     {
         if($dateEntree && $dateFin)
         {
@@ -238,7 +238,6 @@ class EncadrantsThesesController extends AppController
                 ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
                     return $exp->between('date_creation', $dateEntree, $dateFin);
                 })
-                ->where(['these_id' => $idThese])
                 ->toArray();
 
         } else {
@@ -247,7 +246,6 @@ class EncadrantsThesesController extends AppController
                 ->select(['taux'])
                 ->select($this->Membres)
                 ->innerJoin(['Membres' => 'membres'], ['encadrant_id = membres.id'])
-                ->where(['these_id' => $idThese])
                 ->toArray();
         }
         return $result;
