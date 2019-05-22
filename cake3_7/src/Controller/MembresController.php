@@ -7,6 +7,7 @@ use Cake\Log\Log;
 use Cake\ORM\Query;
 use Cake\I18n\Time;
 use Cake\Database\Expression\QueryExpression;
+use Cake\Event\Event;
 
 /**
  * Membres Controller
@@ -17,6 +18,18 @@ use Cake\Database\Expression\QueryExpression;
  */
 class MembresController extends AppController
 {
+	/**
+     * Makes the /membres/register action public.
+     *
+     * @param Event $event
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow('register');
+        return parent::beforeFilter($event);
+    }
+	
     /**
      * Index method
      *

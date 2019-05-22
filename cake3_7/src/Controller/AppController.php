@@ -66,8 +66,8 @@ class AppController extends Controller
 
         //	la page de garde est accessible publiquement (mais que cette page)
 		$this->Auth->allow(array('controller' => 'pages', 'action' => 'display'));
-        //	cf. fonctions "isAuthorized" pour les autres permissions
-
+		//	cf. fonctions "isAuthorized" pour les autres permissions
+		
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html

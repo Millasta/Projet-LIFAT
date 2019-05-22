@@ -16,10 +16,13 @@ $optionsGenre = [
 ];
 ?>
 <div class="membres form large-9 medium-8 columns content">
+	<div class="note">
+		Votre compte utilisateur devra être validé par un administrateur avant d'être utilisé.
+	</div>
 	<?= $membre->passwd = "" ?>
     <?= $this->Form->create($membre) ?>
     <fieldset>
-        <legend><?= $membre->id==0 ? __('Ajout d\'un membre') : __('Edition d\'un membre');  ?></legend>
+        <legend><?= $membre->id==0 ? __('Formulaire d\'inscription') : __('Edition d\'un membre');  ?></legend>
         <?php
         echo $this->Form->select('role', $optionsMembres);
         echo $this->Form->control('nom');
