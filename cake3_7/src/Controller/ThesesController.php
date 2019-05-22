@@ -83,11 +83,11 @@ class ThesesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
-                $this->Flash->success(__('The theses has been saved.'));
+                $this->Flash->success(__('La theses a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de la theses a échoué. Merci de ré-essayer.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
 		$financements = $this->Theses->Financements->find('list', ['limit' => 200]);
@@ -108,9 +108,9 @@ class ThesesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $theses = $this->Theses->get($id);
         if ($this->Theses->delete($theses)) {
-            $this->Flash->success(__('The theses has been deleted.'));
+            $this->Flash->success(__('La these à été supprimé.'));
         } else {
-            $this->Flash->error(__('The theses could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de la these à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -160,28 +160,6 @@ class ThesesController extends AppController
 
         return $result;
     }
-
-	/**
-	 * Checks the currently logged in user's rights to access a page (called when changing pages).
-	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
-	 */
-	public function isAuthorized($user)
-	{
-		if(parent::isAuthorized($user) === true)
-		{
-			return true;
-		}
-		else
-		{
-			//	Tous les membres permanents ont tous les droits sur les theses
-			if($user['permanent'] === true)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 
     /**
      * Retourne la liste des theses en cours
@@ -294,4 +272,21 @@ class ThesesController extends AppController
         return $result2;
     }
 
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		if (parent::isAuthorized($user) === true) {
+			return true;
+		} else {
+			//	Tous les membres permanents ont tous les droits sur les projets
+			if ($user['permanent'] === true) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -19,12 +19,12 @@ class ExportController extends AppController
         if ($this->request->is('post')) {
             if ($export->execute($this->request->getData())) {
                 $export->setData($this->request->getData());
+                $this->results();
                 $this->Flash->success('Nous traitons votre demande.'.$export->getData('typeExport'));
             } else {
                 $this->Flash->error('Il y a eu un problème lors de la soumission de votre formulaire.');
             }
         }
-
         $this->loadModel('Membres');
         $encadrants = $this->Membres
             ->find()
@@ -45,6 +45,133 @@ class ExportController extends AppController
     }
 
     public function results(){
+        $export = new ExportForm();
+        if ($this->request->is('post')) {
+            if ($export->execute($this->request->getData())) {
+                $export->setData($this->request->getData());
+            } else {
+                $this->Flash->error('Il y a eu un problème lors de la soumission de votre formulaire.');
+            }
+        }
+
+
+        $boolGraph = $export->getData('exportGraphe');
+        $boolTableau = $export->getData('exportListe');
+
+
+        //$this->grapheEffectifsParType();
+
+        //Si l'utilisateur veut un graphe
+        if ($boolGraph == true){
+            $typeGraphe = $export->getData('typeGraphe');
+
+            if($typeGraphe == 'EM5'){
+                $this->grapheEffectifsParType();
+            }
+            else if($typeGraphe == 'EM7'){
+                //$this->grapheEffectifsDoctorantParEquipe();
+            }
+            else if($typeGraphe == 'EM9'){
+                //$this->grapheEffectifsParEquipe();
+            }
+            else if($typeGraphe == 'EM11'){
+                //$this->grapheMembresStatuaireOuContrat();
+            }
+            else if($typeGraphe == 'EM13'){
+                //$this->grapheOrigineMembreStatuaires();
+            }
+            else if($typeGraphe == 'EM15'){
+                //$this->grapheDoctorantGenreEtNationalite();
+            }
+            else if($typeGraphe == 'EM16') {
+                //$this->grapheFinancementsDoctorants();
+            }
+        }
+
+
+        //Si l'utilisateur veut un tableau
+        if ($boolTableau == true){
+            $typeListe = $export->getData('typeListe');
+            if($typeListe == "EM1"){
+                //FAUT L'ID DE L'ENCADRANT COMMENT ?
+                //$encadrant = $export('encadrant');
+                $this->tableaulisteThesesParEncadrant();
+            }
+            else if ($typeListe == "EM2"){
+                $this->tableauListeMembresParEquipe();
+            }
+            else if($typeListe == "EM3"){
+                //tableau liste projet auxquel un encadrant participe
+            }
+            else if($typeListe == "EM4"){
+                $this->tableauListeDoctorant();
+            }
+            else if($typeListe == "EM6"){
+                //Liste des effectifs par type
+            }
+            else if($typeListe == "EM8"){
+                //Liste effectif doctorant par equipe
+            }
+            else if($typeListe == "EM10"){
+                //liste des effectifs par equipe
+            }
+            else if ($typeListe == "EM12"){
+                //Liste des membres statuaire/sous-contrat
+            }
+            else if ($typeListe == "EM14"){
+                //Liste de l’origine des membres statuaire
+            }
+            else if($typeListe == "EM17"){
+                //Liste des financements des doctorants
+            }
+            else if($typeListe == "ET1"){
+                //Liste des encadrant avec % d’encadrement par encadrant
+                $this->tableauListeEncadrantsAvecTaux();
+            }
+            else if($typeListe == "ET2"){
+                //Liste des thèses par équipe
+            }
+            else if ($typeListe == "ET3"){
+                //Liste des soutenances
+            }
+            else if($typeListe == "ET4"){
+                //Liste des soutenances d’Habilitation à Diriger les Recherches
+            }
+            else if ($typeListe == "ET5"){
+                //Liste de soutenance par années
+            }
+            else if ($typeListe == "ET6"){
+                //Liste des thèses par type
+            }
+            else if($typeListe == "ET7"){
+                //Liste des thèses en cours
+            }
+            else if ($typeListe == "EPr1"){
+                //Liste des projets par type
+            }
+            else if ($typeListe == "EPr2"){
+                //Liste des projets par équipe
+            }
+            else if ($typeListe == "EPr3"){
+                //Liste des projets par membre
+                //get membres id
+                //$this->tableauListeProjetMembre($idMembre)
+            }
+            else if ($typeListe == "EPr4"){
+                //Liste des budgets par projet
+            }
+            else if ($typeListe == "EPu1"){
+                //Liste des publications par équipe
+            }
+            else if ($typeListe == "EPu2"){
+                //Liste des publications par type
+            }
+        }
+
+        /*$dateDebut = $export('dateDebut');
+        $dateDebut = $export('dateFin');
+        $encadrant = $export('encadrant');
+        $equipe = export('equipe');*/
         //faire des if selon le graph ou list à faire
         //$this->effectifsParType();
         //$this->tableauListeDoctorant();
@@ -55,7 +182,7 @@ class ExportController extends AppController
         //$this->effectifsParType();
         //$this->tableauListeTheseParType();
         //$this->tableauListeSoutenanceHDR();
-        $this->tableauListeSoutenancesParAnnee();
+        //$this->tableauListeSoutenancesParAnnee();
     }
 
     public function grapheEffectifsParType(){
@@ -93,8 +220,8 @@ class ExportController extends AppController
         // Ajout du titre du graphique
         $graphe->title->set("Histogramme");
 
-        @unlink("effectifsParType.png");
-        $graphe->stroke("effectifsParType.png");
+        @unlink("img/effectifsParType.png");
+        $graphe->stroke("img/effectifsParType.png");
 
         $this->set("nomGraphe", "effectifsParType.png");
     }
@@ -340,9 +467,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
-    public function tableauListeEncadrantsAvecTaux(){
+    public function tableauListeEncadrantsAvecTaux($idEncadrant){
         $controlInstance = new EncadrantsThesesController();
-        $tableau = $controlInstance->listeEncadrantsAvecTaux(1);
+        $tableau = $controlInstance->listeEncadrantsAvecTaux($idEncadrant);
 
         $entetes = ["id","role", "nom", "prenom", "email", "passwd", "adresse_agent_1", "adresse_agent_2", "residence_admin_1",
             "residence_admin_2", "type_personnel", "intitule", "grade", "im_vehicule", "pf_vehicule", "signature_name",
@@ -438,9 +565,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
-    public function tableauListeProjetMembre(){
+    public function tableauListeProjetMembre($idMembre){
         $controlInstance = new MembresController();
-        $tableau = $controlInstance->listeProjetMembre(2);
+        $tableau = $controlInstance->listeProjetMembre($idMembre);
 
         $entetes = ["id","titre","description","type","budget","date_debut","date_fin","financement_id"];
         $fichier = "listeProjetMembre.csv";
@@ -615,4 +742,15 @@ class ExportController extends AppController
 
 
     }
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		//	Tout le monde a droit de faire des exports
+		return true;
+	}
 }

@@ -51,11 +51,11 @@ class DirigeantsController extends AppController
         if ($this->request->is('post')) {
             $dirigeant = $this->Dirigeants->patchEntity($dirigeant, $this->request->getData());
             if ($this->Dirigeants->save($dirigeant)) {
-                $this->Flash->success(__('The dirigeant has been saved.'));
+                $this->Flash->success(__('Le dirigeant à été ajouté.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeant could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du dirigeant a échoué. Merci de ré-essayer.'));
         }
         $theses = $this->Dirigeants->Theses->find('list', ['limit' => 200]);
         $this->set(compact('dirigeant', 'theses'));
@@ -76,11 +76,11 @@ class DirigeantsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $dirigeant = $this->Dirigeants->patchEntity($dirigeant, $this->request->getData());
             if ($this->Dirigeants->save($dirigeant)) {
-                $this->Flash->success(__('The dirigeant has been saved.'));
+                $this->Flash->success(__('Le dirigeant à été ajouté.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeant could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du budget a échoué. Merci de ré-essayer.'));
         }
         $theses = $this->Dirigeants->Theses->find('list', ['limit' => 200]);
         $this->set(compact('dirigeant', 'theses'));
@@ -98,9 +98,9 @@ class DirigeantsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $dirigeant = $this->Dirigeants->get($id);
         if ($this->Dirigeants->delete($dirigeant)) {
-            $this->Flash->success(__('The dirigeant has been deleted.'));
+            $this->Flash->success(__('Le dirigeant à été supprimé.'));
         } else {
-            $this->Flash->error(__('The dirigeant could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du dirigeant à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

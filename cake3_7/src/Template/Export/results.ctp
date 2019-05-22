@@ -5,14 +5,13 @@
     $entetes = $this->get("entetes");
 ?>
 
-<a style="color:white;text-decoration:none;" href=<?php echo $fichierPNG; ?> download>
+<a style="color:white;text-decoration:none;" href=<?php echo '/Projet-LIFAT/cake3_7/img/'.$fichierPNG; ?> download>
     <button>Export Image</button>
 </a>
 
+<?php echo $this->Html->image($fichierPNG); ?>
 
-<img src=<?php echo $fichierPNG; ?> >
-
-<form method="get" action=<?php echo $fichier; ?>>
+<form method="get" action=<?php echo '/Projet-LIFAT/cake3_7/'.$fichier; ?>>
        <button type="submit">Export CSV</button>
  </form>
 
@@ -33,4 +32,4 @@
                 echo '</tr>';
         }
     ?>
-</table>
+</table>_

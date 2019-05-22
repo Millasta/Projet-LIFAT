@@ -1,13 +1,11 @@
 <?php
+
 namespace App\Controller;
 
-use App\Controller\AppController;
-use App\Model\Table\EquipesResponsablesTable;
-use Cake\I18n\Time;
-use Cake\Log\Log;
-use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
+use Cake\I18n\Time;
+use Cake\ORM\Query;
 
 /**
  * Membres Controller
@@ -19,27 +17,27 @@ use Cake\Event\Event;
 class MembresController extends AppController
 {
 	/**
-     * Makes the /membres/register action public.
-     *
-     * @param Event $event
-     * @return \Cake\Http\Response|null
-     */
-    public function beforeFilter(Event $event)
-    {
-        $this->Auth->allow('register');
-        return parent::beforeFilter($event);
-    }
-	
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
-    {
-    	$this->set('searchLabelExtra', 'nom et/ou prénom');
+	 * Makes the /membres/register action public.
+	 *
+	 * @param Event $event
+	 * @return \Cake\Http\Response|null
+	 */
+	public function beforeFilter(Event $event)
+	{
+		$this->Auth->allow('register');
+		return parent::beforeFilter($event);
+	}
 
-    	$query = $this->Membres
+	/**
+	 * Index method
+	 *
+	 * @return \Cake\Http\Response|void
+	 */
+	public function index()
+	{
+		$this->set('searchLabelExtra', 'nom et/ou prénom');
+
+		$query = $this->Membres
 			// Use the plugins 'search' custom finder and pass in the
 			// processed query params
 			->find('search', ['search' => $this->request->getQueryParams()]);
@@ -49,25 +47,25 @@ class MembresController extends AppController
 		];
 
 		$this->set('membres', $this->paginate($query));
-    }
+	}
 
-    /**
-     * View method
-     *
-     * @param string|null $id Membre id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $membre = $this->Membres->get($id, [
-            'contain' => ['LieuTravails', 'Equipes']
-        ]);
+	/**
+	 * View method
+	 *
+	 * @param string|null $id Membre id.
+	 * @return \Cake\Http\Response|void
+	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 */
+	public function view($id = null)
+	{
+		$membre = $this->Membres->get($id, [
+			'contain' => ['LieuTravails', 'Equipes']
+		]);
 
-        $this->set('membre', $membre);
-    }
+		$this->set('membre', $membre);
+	}
 
-    /**
+	/**
 	 * Register method
 	 *
 	 * @return \Cake\Http\Response|null Redirects on successful registration, renders view otherwise.
@@ -105,178 +103,136 @@ class MembresController extends AppController
 		$this->set(compact('membre', 'lieuTravails', 'equipes'));
 	}
 
-    /**
-     * Edit method ; if $id is null it behaves like an add method instead.
-     *
-     * @param string|null $id Membre id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        if ($id == null)
-            $membre = $this->Membres->newEntity();
-        else
-            $membre = $this->Membres->get($id, [
-                'contain' => []
-            ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $membre = $this->Membres->patchEntity($membre, $this->request->getData());
-            $membre->date_creation = Time::now();
-            if ($this->Membres->save($membre)) {
-                if ($id == null) {
-                    $this->Flash->success(__('Nouveau membre'));
-                    // Récupération du Membre.id créé
-                    $query = $this->Membres->find('all')
-                        ->where(['Membres.email =' => $this->request->getData()['email']])
-                        ->limit(1);
-                    $membreId = $query->first();
+	/**
+	 * Edit method ; if $id is null it behaves like an add method instead.
+	 *
+	 * @param string|null $id Membre id.
+	 * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
+	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 */
+	public function edit($id = null)
+	{
+		if ($id == null)
+			$membre = $this->Membres->newEntity();
+		else
+			$membre = $this->Membres->get($id, [
+				'contain' => []
+			]);
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			$membre = $this->Membres->patchEntity($membre, $this->request->getData());
+			$membre->date_creation = Time::now();
+			if ($this->Membres->save($membre)) {
+				if ($id == null) {
+					$this->Flash->success(__('Nouveau membre'));
+					// Récupération du Membre.id créé
+					$query = $this->Membres->find('all')
+						->where(['Membres.email =' => $this->request->getData()['email']])
+						->limit(1);
+					$membreId = $query->first();
 
-                    // INSERT dans Dirigeants en Encadrants
-                    $this->loadModel('Encadrants');
-                    $this->loadModel('Dirigeants');
+					// INSERT dans Dirigeants en Encadrants
+					$this->loadModel('Encadrants');
+					$this->loadModel('Dirigeants');
 
-                    $query = $this->Dirigeants->query();
-                    $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+					$query = $this->Dirigeants->query();
+					$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
 
-                    $query = $this->Encadrants->query();
-                    $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
-                }
-                $this->Flash->success(__('The membre has been saved.'));
+					$query = $this->Encadrants->query();
+					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				}
+				$this->Flash->success(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The membre could not be saved. Please, try again.'));
-        }
-        $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
-        $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
-        $this->set(compact('membre', 'lieuTravails', 'equipes'));
-    }
+				return $this->redirect(['action' => 'index']);
+			}
+			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
+		}
+		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
+		$equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+		$this->set(compact('membre', 'lieuTravails', 'equipes'));
+	}
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Membre id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $membre = $this->Membres->get($id);
-        if ($this->Membres->delete($membre)) {
-            $this->Flash->success(__('The membre has been deleted.'));
-        } else {
-            $this->Flash->error(__('The membre could not be deleted. Please, try again.'));
-        }
+	/**
+	 * Delete method
+	 *
+	 * @param string|null $id Membre id.
+	 * @return \Cake\Http\Response|null Redirects to index.
+	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 */
+	public function delete($id = null)
+	{
+		$this->request->allowMethod(['post', 'delete']);
+		$membre = $this->Membres->get($id);
+		if ($this->Membres->delete($membre)) {
+			$this->Flash->success(__('Le membre a été supprimé.'));
+		} else {
+			$this->Flash->error(__('La membre du budget à échoué.'));
+		}
 
-        return $this->redirect(['action' => 'index']);
-    }
+		return $this->redirect(['action' => 'index']);
+	}
 
-    public function login()
-    {
-        if ($this->request->is('post')) {
-            $membre = $this->Auth->identify();
-            if ($membre) {
-                $this->Auth->setUser($membre);
-                return $this->redirect($this->Auth->redirectUrl());
-            }
-            $this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
-        }
-    }
+	public function login()
+	{
+		if ($this->request->is('post')) {
+			$membre = $this->Auth->identify();
+			if ($membre) {
+				$this->Auth->setUser($membre);
+				return $this->redirect($this->Auth->redirectUrl());
+			}
+			$this->Flash->error('Votre identifiant ou votre mot de passe est incorrect.');
+		}
+	}
 
-    public function logout()
-    {
-        $this->Flash->success('Vous avez été déconnecté.');
-        return $this->redirect($this->Auth->logout());
-    }
+	public function logout()
+	{
+		$this->Flash->success('Vous avez été déconnecté.');
+		return $this->redirect($this->Auth->logout());
+	}
 
-    /**
-     * Checks the currently logged in user's rights to access a page (called when changing pages).
-     * @param $user : the user currently logged in
-     * @return bool : if the user is allowed (or not) to access the requested page
-     */
-    public function isAuthorized($user)
-    {
-        if (parent::isAuthorized($user) === true) {
-            return true;
-        } else {
-            $action = $this->request->getParam('action');
-            $this->loadModel('Equipes');
-            $equipesRespo = $this->Equipes->findByResponsableId($user['id'])->extract('id')->toArray();
+	/**
+	 * Retourne la liste des doctorants en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des doctorants
+	 */
+	public function listeDoctorant($dateEntree = null, $dateFin = null)
+	{
+		$this->loadModel('Membres');
+		$result = $this->Membres->find('all')
+			->where(['type_personnel' => 'DO']);
 
-            if (in_array($action, ['edit', 'delete'])) {
-                //	edit et delete doivent être faits sur un utilisateur existant...
-                $membre_slug = $this->request->getParam('pass.0');
-                if (!$membre_slug) {
-                    return false;
-                } else {
-                    $membre = $this->Membres->findById($membre_slug)->first();
-                    $equipe_id = $membre->equipe_id;
+		if ($dateEntree && $dateFin) {
+			$result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+				return $exp->between('date_creation', $dateEntree, $dateFin);
+			});
+		}
+		return $result->toArray();
+	}
 
-                    //	Un membre peut s'auto edit / delete
-                    if ($membre->id === $user['id']) {
-                        return true;
-                    } else if ($equipe_id != null) {
-                        //	Un chef d'équipe peut faire de même pour les membres de son équipe
-						if(in_array($equipe_id, $equipesRespo, true)) {
-							return true;
-						}
-                    }
-                }
-            } else if ($action === 'add') {
-                //	Un chef d'équipe peut ajouter un membre à une de ses équipes
-                return $equipesRespo->count() > 0;
-                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle le membre est mise correspond à une des équipes gérées par le user !!!!!
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Retourne la liste des doctorants en prenant en compte une fenetre de temps
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des doctorants
-     */
-    public function listeDoctorant($dateEntree = null, $dateFin = null)
-    {
-        $this->loadModel('Membres');
-        $result = $this->Membres->find('all')
-            ->where(['type_personnel' => 'DO']);
-
-        if ($dateEntree && $dateFin) {
-            $result = $result->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('date_creation', $dateEntree, $dateFin);
-            });
-        }
-        return $result->toArray();
-    }
-
-    /**
-     * Retourne la liste des membres par equipe en prenant en compte une fenetre de temps
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des membres
-     */
-    public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
-    {
-        if ($dateEntree && $dateFin) {
-            $this->loadModel('Membres');
-            $result = $this->Membres->find('all')
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                return $exp->between('date_creation', $dateEntree, $dateFin);
-            });
-        }else{
-            $result = $this->Membres->find('all');
-        }
-        $result->toArray();
-        foreach ($result as $key => $row) {
-            $equipe_id[$key]  = $row['equipe_id'];
-        }
-        array_multisort($equipe_id, SORT_NUMERIC, SORT_DESC, $result);
-        return $result;
-    }
+	/**
+	 * Retourne la liste des membres par equipe en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des membres
+	 */
+	public function listeMembreParEquipe($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$this->loadModel('Membres');
+			$result = $this->Membres->find('all')
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				});
+		} else {
+			$result = $this->Membres->find('all');
+		}
+		$result->toArray();
+		foreach ($result as $key => $row) {
+			$equipe_id[$key] = $row['equipe_id'];
+		}
+		array_multisort($equipe_id, SORT_NUMERIC, SORT_DESC, $result);
+		return $result;
+	}
 
 	/**
 	 * Retourne une liste des type avec leur effectifs respectifs en prenant en compte une fenetre de temps
@@ -320,37 +276,37 @@ class MembresController extends AppController
 		return $resultset;
 	}
 
-    /**
-     * Retourne une liste d'effectifs trie par type en prenant en compte une fenetre de temps
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des types/effectif
-     */
-    public function listeEffectifParType($dateEntree = null, $dateFin = null)
-    {
-        if ($dateEntree && $dateFin) {
-            $result=$this->Membres->find('all')
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->toArray();
+	/**
+	 * Retourne une liste d'effectifs trie par type en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des types/effectif
+	 */
+	public function listeEffectifParType($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$result = $this->Membres->find('all')
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->toArray();
 
-            foreach ($result as $key => $row) {
-                $type_personnel[$key]  = $row['type_personnel'];
-            }
-            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
-        } else {
-            $result=$this->Membres->find('all')
-            ->toArray();
+			foreach ($result as $key => $row) {
+				$type_personnel[$key] = $row['type_personnel'];
+			}
+			array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+		} else {
+			$result = $this->Membres->find('all')
+				->toArray();
 
-            foreach ($result as $key => $row) {
-                $type_personnel[$key]  = $row['type_personnel'];
-            }
-            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+			foreach ($result as $key => $row) {
+				$type_personnel[$key] = $row['type_personnel'];
+			}
+			array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
 
-        }
-        return $result;
-    }
+		}
+		return $result;
+	}
 
 	/**
 	 * Retourne la liste des effectifs selon leur sexe et nationalite en prenant en compte une fenetre de temps
@@ -416,86 +372,122 @@ class MembresController extends AppController
 		return $resultset;
 	}
 
-    /**
-     * Retourne la liste des doctorants par equipe en prenant en compte une fenetre de temps
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des doctorants
-     */
-    public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null){
-        if($dateEntree && $dateFin){
-            $result=$this->Membres->find('all')
-                ->where(['type_personnel' => 'DO'])
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->toArray();
-        }else{
-            $result=$this->Membres->find('all')
-                ->where(['type_personnel' => 'DO'])
-                ->toArray();
-        }
+	/**
+	 * Retourne la liste des doctorants par equipe en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des doctorants
+	 */
+	public function listeDoctorantParEquipe($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$result = $this->Membres->find('all')
+				->where(['type_personnel' => 'DO'])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->toArray();
+		} else {
+			$result = $this->Membres->find('all')
+				->where(['type_personnel' => 'DO'])
+				->toArray();
+		}
 
-        foreach ($result as $key => $row) {
-            $equipe_id[$key]  = $row['equipe_id'];
-        }
-        array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
-        return $result;
-    }
+		foreach ($result as $key => $row) {
+			$equipe_id[$key] = $row['equipe_id'];
+		}
+		array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
+		return $result;
+	}
 
-    /**
-     * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps
-     * @param $id : identifiant du membre
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : liste des doctorants
-     */
-    public function listeProjetMembre($id = null, $dateEntree = null, $dateFin = null){
-        if($dateEntree && $dateFin){
-            $equipeId = $this->Membres->find('all')
-                ->select(['equipe_id'])
-                ->where(['id' => $id])
-                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                    return $exp->between('date_creation', $dateEntree, $dateFin);
-                })
-                ->toArray();
+	/**
+	 * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps
+	 * @param $id : identifiant du membre
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : liste des doctorants
+	 */
+	public function listeProjetMembre($id = null, $dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$equipeId = $this->Membres->find('all')
+				->select(['equipe_id'])
+				->where(['id' => $id])
+				->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+					return $exp->between('date_creation', $dateEntree, $dateFin);
+				})
+				->toArray();
 
-            $this->loadModel('EquipesProjets');
-            $projet_id = $this->EquipesProjets->find('all')
-                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
-                ->select(['projet_id'])
-                ->toArray();
+			$this->loadModel('EquipesProjets');
+			$projet_id = $this->EquipesProjets->find('all')
+				->where(['equipe_id' => $equipeId[0]['equipe_id']])
+				->select(['projet_id'])
+				->toArray();
 
-            $result = array();
-            foreach ($projet_id as $row) {
-                $this->loadModel('Projets');
-                $tmp = $this->Projets->find('all')
-                    ->where(['id' => $row['projet_id']])
-                    ->toArray();
-                array_push($result, $tmp[0]);
-            }
-        }else {
-            $this->loadModel('Membres');
-            $equipeId = $this->Membres->find('all')
-                ->select(['equipe_id'])
-                ->where(['id' => $id])
-                ->toArray();
+			$result = array();
+			foreach ($projet_id as $row) {
+				$this->loadModel('Projets');
+				$tmp = $this->Projets->find('all')
+					->where(['id' => $row['projet_id']])
+					->toArray();
+				array_push($result, $tmp[0]);
+			}
+		} else {
+			$this->loadModel('Membres');
+			$equipeId = $this->Membres->find('all')
+				->select(['equipe_id'])
+				->where(['id' => $id])
+				->toArray();
 
-            $this->loadModel('EquipesProjets');
-            $projet_id = $this->EquipesProjets->find('all')
-                ->where(['equipe_id' => $equipeId[0]['equipe_id']])
-                ->select(['projet_id'])
-                ->toArray();
+			$this->loadModel('EquipesProjets');
+			$projet_id = $this->EquipesProjets->find('all')
+				->where(['equipe_id' => $equipeId[0]['equipe_id']])
+				->select(['projet_id'])
+				->toArray();
 
-            $result = array();
-            foreach ($projet_id as $row) {
-                $this->loadModel('Projets');
-                $tmp = $this->Projets->find('all')
-                    ->where(['id' => $row['projet_id']])
-                    ->toArray();
-                array_push($result, $tmp[0]);
-            }
-        }
-        return $result;
-    }
+			$result = array();
+			foreach ($projet_id as $row) {
+				$this->loadModel('Projets');
+				$tmp = $this->Projets->find('all')
+					->where(['id' => $row['projet_id']])
+					->toArray();
+				array_push($result, $tmp[0]);
+			}
+		}
+		return $result;
+	}
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		if (parent::isAuthorized($user) === true) {
+			return true;
+		} else {
+			$userEntity = $this->Membres->findById($user['id'])->first();
+			$action = $this->request->getParam('action');
+			$membre_slug = $this->request->getParam('pass.0');
+
+			if ($action === 'edit' && $membre_slug) {
+				$membre = $this->Membres->findById($membre_slug)->first();
+				$equipe_membre = $membre['equipe_id'];
+
+				//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
+				if (is_null($equipe_membre)) {
+					//	Membre cible sans équipe
+					return $userEntity['id'] === $membre['id'];
+				} else {
+					//	Membre cible appartenant à une équipe
+					return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
+				}
+
+
+				//	Add (edit sans slug) et Delete => admin (déjà true avec parent::isAuthorized())
+			}
+		}
+		return false;
+	}
 }

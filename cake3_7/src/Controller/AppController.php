@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use App\Model\Entity\Membre;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -104,11 +105,16 @@ class AppController extends Controller
 	public function isAuthorized($user)
 	{
 		//	Quoi qu'il arrive, l'admin a tous les droits
-		if (isset($user['role']) && $user['role'] === 'admin') {
+		if ($user['role'] === Membre::ADMIN) {
 			return true;
 		}
 
-		//	Quoi qu'il arrive, n'importe quel membre connecté peut avoir accès aux fontions 'index', 'view' et 'logout'
+		//	Les membres dont le compte n'est pas activé ne peuvent rien faire
+		if ($user['actif'] != true) {
+			return false;
+		}
+
+		//	Quoi qu'il arrive, n'importe quel membre connecté avec un compte actif peut avoir accès aux fontions 'index', 'view' et 'logout'
 		$action = $this->request->getParam('action');
 		if (in_array($action, ['index', 'view', 'logout'])) {
 			return true;

@@ -1,3 +1,7 @@
+<?php
+use \App\Model\Entity\Membre;
+?>
+
 <table id="menu">
 	<tr>
 		<?php if (!empty($user)): ?>
@@ -27,10 +31,16 @@
             </td>
    			<td>
 				<?php
-					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['role'] != 'admin' && $user['permanent'] == true)
-					{
-						echo "permanent";
+					echo $user['prenom'].' '.$user['nom'].' (';
+					if ($user['actif'] === true) {
+						echo $user['role'];
+						if ($user['permanent'] === true && $user['role'] != Membre::ADMIN)
+						{
+							echo " permanent";
+						}
+					}
+					else {
+						echo "Compte désactivé";
 					}
 					echo ") ";
 				?>

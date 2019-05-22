@@ -54,11 +54,11 @@ class BudgetsAnnuelsController extends AppController
         if ($this->request->is('post')) {
             $budgetsAnnuel = $this->BudgetsAnnuels->patchEntity($budgetsAnnuel, $this->request->getData());
             if ($this->BudgetsAnnuels->save($budgetsAnnuel)) {
-                $this->Flash->success(__('The budgets annuel has been saved.'));
+                $this->Flash->success(__('Le budget a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The budgets annuel could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du budget a échoué. Merci de ré-essayer.'));
         }
         $projets = $this->BudgetsAnnuels->Projets->find('list', ['limit' => 200]);
         $this->set(compact('budgetsAnnuel', 'projets'));
@@ -79,11 +79,11 @@ class BudgetsAnnuelsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $budgetsAnnuel = $this->BudgetsAnnuels->patchEntity($budgetsAnnuel, $this->request->getData());
             if ($this->BudgetsAnnuels->save($budgetsAnnuel)) {
-                $this->Flash->success(__('The budgets annuel has been saved.'));
+                $this->Flash->success(__('Le budget a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The budgets annuel could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du budget a échoué. Merci de ré-essayer.'));
         }
         $projets = $this->BudgetsAnnuels->Projets->find('list', ['limit' => 200]);
         $this->set(compact('budgetsAnnuel', 'projets'));
@@ -101,9 +101,9 @@ class BudgetsAnnuelsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $budgetsAnnuel = $this->BudgetsAnnuels->get($id);
         if ($this->BudgetsAnnuels->delete($budgetsAnnuel)) {
-            $this->Flash->success(__('The budgets annuel has been deleted.'));
+            $this->Flash->success(__('Le budget à été supprimé.'));
         } else {
-            $this->Flash->error(__('The budgets annuel could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du budget à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
