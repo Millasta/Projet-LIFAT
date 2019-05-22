@@ -17,14 +17,13 @@ echo $this->element('searchbar');
                 <th scope="col"><?= $this->Paginator->sort('nom') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('prenom') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_naissance') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('actif') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('lieu_travail_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('equipe_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('nationalite') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('hdr') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('permanent') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('est_porteur') ?></th>
-				<th scope="col"><?= $this->Paginator->sort('est_active') ?></th>
+				<th scope="col"><?= $this->Paginator->sort('actif') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -35,14 +34,13 @@ echo $this->element('searchbar');
                 <td><?= h($membre->nom) ?></td>
                 <td><?= h($membre->prenom) ?></td>
                 <td><?= h($membre->date_naissance) ?></td>
-                <td><?= $membre->actif ? h("Oui") : h("Non"); ?></td>
                 <td><?= $membre->has('lieu_travail') ? $this->Html->link($membre->lieu_travail->nom_lieu, ['controller' => 'LieuTravails', 'action' => 'view', $membre->lieu_travail->id]) : '' ?></td>
                 <td><?= $membre->has('equipe') ? $this->Html->link($membre->equipe->nom_equipe, ['controller' => 'Equipes', 'action' => 'view', $membre->equipe->id]) : '' ?></td>
                 <td><?= h($membre->nationalite) ?></td>
                 <td><?= $membre->hdr ? h("Oui") : h("Non"); ?></td>
                 <td><?= $membre->permanent ? h("Oui") : h("Non"); ?></td>
                 <td><?= $membre->est_porteur ? h("Oui") : h("Non"); ?></td>
-				<td><?= $membre->est_active ? h("Oui") : h("Non"); ?></td>
+				<td><?= $membre->actif ? h("Oui") : h("Non"); ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $membre->id]) ?>
                     <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $membre->id]) ?>

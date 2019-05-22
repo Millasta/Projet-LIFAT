@@ -91,10 +91,6 @@
             <td><?= h($membre->date_sortie) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Actif') ?></th>
-            <td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Est Francais') ?></th>
             <td><?= $membre->est_francais ? __('Oui') : __('Non'); ?></td>
         </tr>
@@ -110,5 +106,9 @@
             <th scope="row"><?= __('Membre Porteur ?') ?></th>
             <td><?= $membre->est_porteur ? __('Oui') : __('Non'); ?></td>
         </tr>
+		<tr>
+			<th scope="row"><?= __('Actif') ?></th>
+			<td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
+		</tr>
     </table>
 </div>
