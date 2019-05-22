@@ -28,7 +28,7 @@ class ExportController extends AppController
         $this->loadModel('Membres');
         $encadrants = $this->Membres
             ->find()
-            ->select(['nom', 'prenom'])
+            ->select(['id','nom', 'prenom'])
             ->join([
                 'table' => 'Encadrants',
                 'alias' => 'e',
@@ -38,7 +38,7 @@ class ExportController extends AppController
         $this->loadModel('Equipes');
         $equipes = $this->Equipes
             ->find()
-            ->select(['nom_equipe']);
+            ->select(['id','nom_equipe']);
 
         $this->set('export', $export);
         $this->set(compact('encadrants','equipes'));
@@ -65,20 +65,14 @@ class ExportController extends AppController
         if ($boolGraph == true){
             $typeGraphe = $export->getData('typeGraphe');
 
-            if($typeGraphe == 'EM5'){
+            if($typeGraphe == 'EM5'){ //OK
                 $this->grapheEffectifsParType();
             }
             else if($typeGraphe == 'EM7'){
                 //$this->grapheEffectifsDoctorantParEquipe();
             }
-            else if($typeGraphe == 'EM9'){
+            else if($typeGraphe == 'EM9') {
                 //$this->grapheEffectifsParEquipe();
-            }
-            else if($typeGraphe == 'EM11'){
-                //$this->grapheMembresStatuaireOuContrat();
-            }
-            else if($typeGraphe == 'EM13'){
-                //$this->grapheOrigineMembreStatuaires();
             }
             else if($typeGraphe == 'EM15'){
                 //$this->grapheDoctorantGenreEtNationalite();
@@ -92,59 +86,55 @@ class ExportController extends AppController
         //Si l'utilisateur veut un tableau
         if ($boolTableau == true){
             $typeListe = $export->getData('typeListe');
-            if($typeListe == "EM1"){
-                //FAUT L'ID DE L'ENCADRANT COMMENT ?
-                //$encadrant = $export('encadrant');
-                $this->tableaulisteThesesParEncadrant();
+            if($typeListe == "EM1"){ //OK
+                $encadrant = $export->getData('encadrant');
+                $this->tableaulisteThesesParEncadrant($encadrant);
             }
-            else if ($typeListe == "EM2"){
+            else if ($typeListe == "EM2"){ //OK MAIS ATTENTION YA DES PB
                 $this->tableauListeMembresParEquipe();
             }
-            else if($typeListe == "EM3"){
-                //tableau liste projet auxquel un encadrant participe
+            else if($typeListe == "EM3"){//OK
+                $encadrant = $export->getData('encadrant');
+                $this->tableauListeProjetMembre($encadrant);
             }
-            else if($typeListe == "EM4"){
+            else if($typeListe == "EM4"){ //OK
                 $this->tableauListeDoctorant();
             }
-            else if($typeListe == "EM6"){
+            else if($typeListe == "EM6"){ //OK
                 //Liste des effectifs par type
+                $this->tableauEffectifsParType();
             }
-            else if($typeListe == "EM8"){
+            else if($typeListe == "EM8"){ //A FAIRE
                 //Liste effectif doctorant par equipe
             }
-            else if($typeListe == "EM10"){
+            else if($typeListe == "EM10"){ // A FAIRE
                 //liste des effectifs par equipe
             }
-            else if ($typeListe == "EM12"){
-                //Liste des membres statuaire/sous-contrat
-            }
-            else if ($typeListe == "EM14"){
-                //Liste de l’origine des membres statuaire
-            }
-            else if($typeListe == "EM17"){
+            else if($typeListe == "EM17"){ // A FAIRE
                 //Liste des financements des doctorants
             }
-            else if($typeListe == "ET1"){
-                //Liste des encadrant avec % d’encadrement par encadrant
+            else if($typeListe == "ET1"){ //NON FAUT PARLER POUR CELUI LA
                 $this->tableauListeEncadrantsAvecTaux();
             }
-            else if($typeListe == "ET2"){
+            else if($typeListe == "ET2"){ // A CODER
                 //Liste des thèses par équipe
             }
             else if ($typeListe == "ET3"){
                 //Liste des soutenances
             }
-            else if($typeListe == "ET4"){
+            else if($typeListe == "ET4"){ //OK
                 //Liste des soutenances d’Habilitation à Diriger les Recherches
+                $this->tableauListeSoutenanceHDR();
             }
             else if ($typeListe == "ET5"){
                 //Liste de soutenance par années
             }
-            else if ($typeListe == "ET6"){
-                //Liste des thèses par type
+            else if ($typeListe == "ET6"){ //OK
+                $this->tableauListeTheseParType();
             }
-            else if($typeListe == "ET7"){
+            else if($typeListe == "ET7"){ //OK
                 //Liste des thèses en cours
+                $this->tableauThesesEnCours();
             }
             else if ($typeListe == "EPr1"){
                 //Liste des projets par type
@@ -152,37 +142,15 @@ class ExportController extends AppController
             else if ($typeListe == "EPr2"){
                 //Liste des projets par équipe
             }
-            else if ($typeListe == "EPr3"){
-                //Liste des projets par membre
-                //get membres id
-                //$this->tableauListeProjetMembre($idMembre)
+            else if ($typeListe == "EPr3"){ // ATTETION PAS LE LISTE DE MEMBRES
+                $encadrant = $export->getData('encadrant');
+                $this->tableauListeProjetMembre($encadrant);
             }
-            else if ($typeListe == "EPr4"){
-                //Liste des budgets par projet
+            else if ($typeListe == "EPr4"){//OK
+                $this->tableauBudgetsParProjet();
             }
-            else if ($typeListe == "EPu1"){
-                //Liste des publications par équipe
-            }
-            else if ($typeListe == "EPu2"){
-                //Liste des publications par type
-            }
-        }
 
-        /*$dateDebut = $export('dateDebut');
-        $dateDebut = $export('dateFin');
-        $encadrant = $export('encadrant');
-        $equipe = export('equipe');*/
-        //faire des if selon le graph ou list à faire
-        //$this->effectifsParType();
-        //$this->tableauListeDoctorant();
-        //$this->tableauListeMembresParEquipe();
-        //$this->tableaulisteThesesParEncadrant();
-        //$this->tableauListeEncadrantsAvecTaux();
-        //$this->tableauListeProjetMembre();
-        //$this->effectifsParType();
-        //$this->tableauListeTheseParType();
-        //$this->tableauListeSoutenanceHDR();
-        //$this->tableauListeSoutenancesParAnnee();
+        }
     }
 
     public function grapheEffectifsParType(){
@@ -421,10 +389,10 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
-    public function tableaulisteThesesParEncadrant(){
+    public function tableaulisteThesesParEncadrant($id){
         //IL FAUT L'ID DE L'ENCADRANT
         $controlInstance = new EncadrantsThesesController();
-        $tableau = $controlInstance->listeThesesParEncadrant(3);
+        $tableau = $controlInstance->listeThesesParEncadrant($id);
         $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
         $fichier = "listeThesesParEncadrant.csv";
 
@@ -740,6 +708,246 @@ class ExportController extends AppController
         $this->set("tableau", $listeSoutenanceParAnnee);
         $this->set("nomFichier", $fichier);
 
+
+    }
+
+    public function graphEffectifsParNationaliteParSexe(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->effectifParNationaliteSexe();
+        $entetes = ["Sexe_Nationalite","effectifs"];
+        $fichier = "effectifsParNationalite.csv";
+
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeEffectifsParNationaliteEtSexe = array();
+
+        foreach($tableau as $key => $row){
+            $listeEffectifsParNationaliteEtSexe[$key] =  array(
+                $key,
+                $row
+            );
+
+            fputcsv($fp, array(
+                $key,
+                $row
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeEffectifsParNationaliteEtSexe);
+        $this->set("nomFichier", $fichier);
+    }
+
+
+    public function tableauEffectifsParType(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->effectifParType();
+        /*foreach($donnees as $key => $value){
+            $type[]= $key;
+            $effectifs[] = $value;
+        }*/
+        //$tableau = $donnees->toArray();
+        //debug($tableau);
+        $entetes = ["type_personnel", "effectifs"];
+
+        $fichier = "listeEffectifsParTypes.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+
+        fputcsv($fp, $entetes, ";");
+
+        $listeEffectifsParTypes = array();
+
+        foreach($tableau as $key => $row){
+            $listeEffectifsParTypes[$key] =  array(
+                $key,
+                $row
+            );
+
+            fputcsv($fp, array(
+                $key,
+                $row
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeEffectifsParTypes);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauThesesEnCours(){
+        $controlInstance = new ThesesController();
+        $tableau = $controlInstance->listeThesesEnCours();
+        $entetes = ["id","sujet","type","date_debut","date_fin","autre_info","auteur_id"];
+        $fichier = "listeTheseEnCours.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeThesesParType = array();
+        foreach($tableau as $key => $row){
+            $listeThesesParType[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->sujet,
+                $tableau[$key]->type,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->auteur_info,
+                $tableau[$key]->auteur_id,
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeThesesParType);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauBudgetsParProjet(){
+        $controlInstance = new ProjetsController();
+        $tableau = $controlInstance->listeBudgetsAnnuels();
+        $entetes = ["projet_id","annee","budget"];
+        $fichier = "listeBudgetsParProjet.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeBudgetsParAnnee = array();
+        foreach($tableau as $key => $row){
+            $listeBudgetsParAnnee[$key] =  array(
+                $tableau[$key]->projet_id,
+                $tableau[$key]->annee,
+                $tableau[$key]->budget
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->projet_id,
+                $tableau[$key]->annee,
+                $tableau[$key]->budget
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeBudgetsParAnnee);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauBudgetsProjet(){
+        $controlInstance = new ProjetsController();
+        $tableau = $controlInstance->listeBudgetsAnnuelsProjet(2);
+        debug($tableau);
+        $entetes = ["projet_id","annee","budget"];
+        $fichier = "listeBudgetsProjet.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeBudgetsParAnnee = array();
+        foreach($tableau as $key => $row){
+            $listeBudgetsParAnnee[$key] =  array(
+                $tableau[$key]->projet_id,
+                $tableau[$key]->annee,
+                $tableau[$key]->budget
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->projet_id,
+                $tableau[$key]->annee,
+                $tableau[$key]->budget
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeBudgetsParAnnee);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauEffectifsParNationaliteParSexe(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->effectifParNationaliteSexe();
+
+
+        ////////////////////////////////////////////////////
+        foreach($tableau as $key => $value){
+            $type[]= $key;
+            $effectifs[] = $value;
+        }
+
+        $largeur = 1000;
+        $hauteur = 600;
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' . DS . 'jpgraph.php');
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' .  DS . 'jpgraph_pie.php');
+        // Initialisation du graphique
+        $graphe = new PieGraph($largeur, $hauteur);
+
+        // Echelle lineaire ('lin') en ordonnee et pas de valeur en abscisse ('text')
+        // Valeurs min et max seront determinees automatiquement
+        $graphe->setScale("textlin");
+
+        // Creation de l'histogramme
+
+        $camGraph = new PiePlot($effectifs);
+
+        // Ajout de l'histogramme au graphique
+        $camGraph->SetCenter(0.4);
+        //$camGraph->SetValueType($type);
+        $camGraph->SetLegends($type);
+        $graphe->add($camGraph);
+        //$graphe->xaxis->title->set("Type");
+        //$graphe->yaxis->title->set("Effectifs");
+        //$graphe->xaxis->setTickLabels($type);
+
+        // Ajout du titre du graphique
+        $graphe->title->set("Diagramme effectifs par NationnaliteSexe");
+
+        @unlink("effectifsParNationaliteSexe.png");
+        //$graphe->Add($camGraph);
+        $graphe->stroke("effectifsParNationaliteSexe.png");
+
+        $this->set("nomGraphe", "effectifsParNationaliteSexe.png");
 
     }
 }
