@@ -110,4 +110,44 @@ class EquipesProjetsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Retourne la liste des projets auxquels une equipe participe en prenant en compte une fenetre de temps
+     * @param $id : identifiant de l'equipe
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des projets
+     */
+    public function listeProjetEquipe($id = null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $this->loadModel('EquipesProjets');
+            $tmp = $this->EquipesProjets->find('all')
+                ->where(["equipe_id"=>$id])
+                ->contain(['Projets'])
+                ->toArray();
+
+            $result=array();
+            foreach($tmp as $row){
+                $timeProjet  = strtotime($row['projet']['date_debut']);
+                $dateIn = strtotime($dateEntree);
+                $dateOut = strtotime($dateFin);
+
+                if($timeProjet>=$dateIn && $timeProjet<=$dateOut){
+                    array_push($result,$row['projet']);
+                }
+            }
+        }else {
+            $this->loadModel('EquipesProjets');
+            $tmp = $this->EquipesProjets->find('all')
+                ->where(["equipe_id"=>$id])
+                ->contain(['Projets'])
+            ->toArray();
+
+            $result=array();
+            foreach($tmp as $row){
+                array_push($result,$row['projet']);
+            }
+        }
+        return $result;
+    }
 }

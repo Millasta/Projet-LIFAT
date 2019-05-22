@@ -285,7 +285,6 @@ class ThesesController extends AppController
                 ->where(['auteur_id' => $result[0]['id']])
                 ->toArray();
         }
-        die(strval($result2[1]));
         return $result2;
     }
 

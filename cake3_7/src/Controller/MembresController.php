@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Table\EquipesResponsablesTable;
+use Cake\I18n\Time;
 use Cake\Log\Log;
 use Cake\ORM\Query;
 use Cake\Database\Expression\QueryExpression;
@@ -54,6 +55,44 @@ class MembresController extends AppController
     }
 
     /**
+	 * Register method
+	 *
+	 * @return \Cake\Http\Response|null Redirects on successful registration, renders view otherwise.
+	 */
+	public function register()
+	{
+		$membre = $this->Membres->newEntity();
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			$membre = $this->Membres->patchEntity($membre, $this->request->getData());
+			$membre->date_creation = Time::now();
+			if ($this->Membres->save($membre)) {
+				// Récupération du Membre.id créé
+				$query = $this->Membres->find('all')
+					->where(['Membres.email =' => $this->request->getData()['email']])
+					->limit(1);
+				$membreId = $query->first();
+
+				// INSERT dans Dirigeants en Encadrants
+				$this->loadModel('Encadrants');
+				$this->loadModel('Dirigeants');
+
+				$query = $this->Dirigeants->query();
+				$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+
+				$query = $this->Encadrants->query();
+				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				$this->Flash->success(__('Enregistrement effectué, en attente de validation du compte.'));
+
+				return $this->redirect(['action' => 'index']);
+			}
+			$this->Flash->error(__('Impossible d\'enregistrer le compte.'));
+		}
+		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
+		$equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+		$this->set(compact('membre', 'lieuTravails', 'equipes'));
+	}
+
+    /**
      * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Membre id.
@@ -70,6 +109,7 @@ class MembresController extends AppController
             ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
+            $membre->date_creation = Time::now();
             if ($this->Membres->save($membre)) {
                 if ($id == null) {
                     $this->Flash->success(__('Nouveau membre'));
