@@ -142,11 +142,11 @@ class MembresController extends AppController
                     $query = $this->Encadrants->query();
                     $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
                 }
-                $this->Flash->success(__('The membre has been saved.'));
+                $this->Flash->success(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The membre could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
         }
         $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
         $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
@@ -165,9 +165,9 @@ class MembresController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $membre = $this->Membres->get($id);
         if ($this->Membres->delete($membre)) {
-            $this->Flash->success(__('The membre has been deleted.'));
+            $this->Flash->success(__('Le membre à été supprimé.'));
         } else {
-            $this->Flash->error(__('The membre could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La membre du budget à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

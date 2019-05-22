@@ -73,11 +73,11 @@ class ProjetsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $projet = $this->Projets->patchEntity($projet, $this->request->getData());
             if ($this->Projets->save($projet)) {
-                $this->Flash->success(__('The projet has been saved.'));
+                $this->Flash->success(__('Le projet a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The projet could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du projet a échoué. Merci de ré-essayer.'));
         }
         $financements = $this->Projets->Financements->find('list', ['limit' => 200]);
         $equipes = $this->Projets->Equipes->find('list', ['limit' => 200]);
@@ -96,9 +96,9 @@ class ProjetsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $projet = $this->Projets->get($id);
         if ($this->Projets->delete($projet)) {
-            $this->Flash->success(__('The projet has been deleted.'));
+            $this->Flash->success(__('Le projet à été supprimé.'));
         } else {
-            $this->Flash->error(__('The projet could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du projet à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

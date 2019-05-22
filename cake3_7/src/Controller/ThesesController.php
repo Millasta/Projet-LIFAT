@@ -83,11 +83,11 @@ class ThesesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
-                $this->Flash->success(__('The theses has been saved.'));
+                $this->Flash->success(__('La theses a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de la theses a échoué. Merci de ré-essayer.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
 		$financements = $this->Theses->Financements->find('list', ['limit' => 200]);
@@ -108,9 +108,9 @@ class ThesesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $theses = $this->Theses->get($id);
         if ($this->Theses->delete($theses)) {
-            $this->Flash->success(__('The theses has been deleted.'));
+            $this->Flash->success(__('La these à été supprimé.'));
         } else {
-            $this->Flash->error(__('The theses could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de la these à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

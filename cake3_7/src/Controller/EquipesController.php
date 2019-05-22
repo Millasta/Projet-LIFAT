@@ -46,7 +46,7 @@ class EquipesController extends AppController
             'contain' => ['Membres', 'Projets', 'EquipesResponsables']
         ]);
 
-		// Chargement des entités membres en tant que mmebres de l'équipe 
+		// Chargement des entités membres en tant que membres de l'équipe
 		$this->loadModel('Membres');
 		$query = $this->Membres->find('all')
                         ->where(['Membres.equipe_id =' => $equipe->id]);
@@ -79,11 +79,11 @@ class EquipesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipe = $this->Equipes->patchEntity($equipe, $this->request->getData());
             if ($this->Equipes->save($equipe)) {
-                $this->Flash->success(__('The equipe has been saved.'));
+                $this->Flash->success(__('L\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipe could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $membres = $this->Equipes->Membres->find('list', ['limit' => 200]);
         $projets = $this->Equipes->Projets->find('list', ['limit' => 200]);
@@ -102,9 +102,9 @@ class EquipesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $equipe = $this->Equipes->get($id);
         if ($this->Equipes->delete($equipe)) {
-            $this->Flash->success(__('The equipe has been deleted.'));
+            $this->Flash->success(__('L\'équipe à été supprimé.'));
         } else {
-            $this->Flash->error(__('The equipe could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de l\'équipe à échoué..'));
         }
 
         return $this->redirect(['action' => 'index']);
