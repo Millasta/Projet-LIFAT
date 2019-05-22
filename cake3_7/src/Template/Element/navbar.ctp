@@ -30,7 +30,7 @@
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
 					if ($user['role'] != 'admin' && $user['permanent'] == true)
 					{
-						echo " permanent";
+						echo "permanent";
 					}
 					echo ") ";
 				?>
