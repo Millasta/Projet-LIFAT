@@ -91,4 +91,8 @@ class LieuTravailsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+	/*
+	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut modifier / supprimer les lieux de travail.
+	 */
 }
