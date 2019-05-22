@@ -24,6 +24,7 @@ echo $this->element('searchbar');
                 <th scope="col"><?= $this->Paginator->sort('hdr') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('permanent') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('est_porteur') ?></th>
+				<th scope="col"><?= $this->Paginator->sort('est_active') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
@@ -41,6 +42,7 @@ echo $this->element('searchbar');
                 <td><?= $membre->hdr ? h("Oui") : h("Non"); ?></td>
                 <td><?= $membre->permanent ? h("Oui") : h("Non"); ?></td>
                 <td><?= $membre->est_porteur ? h("Oui") : h("Non"); ?></td>
+				<td><?= $membre->est_active ? h("Oui") : h("Non"); ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $membre->id]) ?>
                     <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $membre->id]) ?>
