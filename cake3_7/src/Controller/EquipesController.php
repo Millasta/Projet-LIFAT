@@ -109,4 +109,20 @@ class EquipesController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    /**
+     * Renvoies le nom de l'equipe selectionnee
+     *
+     * @param string|null $id Equipe id.
+     * @return string nom de l'equipe
+     */
+    public function getNomParId($id = null){
+        $result=$this->Equipes->find("all")
+            ->where(['id'=>$id])
+            ->select(['nom_equipe'])
+        ->first()
+        ->toArray();
+
+        return $result["nom_equipe"];
+    }
 }

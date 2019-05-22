@@ -187,7 +187,7 @@ class EncadrantsThesesController extends AppController
     }
 
     /**
-     * Retourne la liste des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * Retourne le nombre des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
      * @param $id : id de l'encadrant
      * @param $dateEntree : date d'entree de la fenetre de temps
      * @param $dateFin : date de fin de la fenetre de temps
