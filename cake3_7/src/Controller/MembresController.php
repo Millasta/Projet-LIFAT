@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\Membre;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\I18n\Time;
@@ -147,7 +148,11 @@ class MembresController extends AppController
 			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
 		}
 		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
+
 		$equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+
+		//	TODO : limiter choix équipes si user != admin
+
 		$this->set(compact('membre', 'lieuTravails', 'equipes'));
 	}
 
@@ -481,9 +486,8 @@ class MembresController extends AppController
 					return $userEntity['id'] === $membre['id'];
 				} else {
 					//	Membre cible appartenant à une équipe
-					return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
+					return ($userEntity['id'] === $membre['id']) || ($userEntity->estChefEquipe($equipe_membre));
 				}
-
 
 				//	Add (edit sans slug) et Delete => admin (déjà true avec parent::isAuthorized())
 			}
