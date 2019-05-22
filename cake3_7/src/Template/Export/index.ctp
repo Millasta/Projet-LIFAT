@@ -11,14 +11,14 @@ $optionsGraphes = ['DEFAULT' => 'Aucun' ,'EM5' => 'Graphique des effectifs par t
 'EM13' => 'Graphique de l’origine des membres statuaire', 'EM15' => 'Graphique doctorants par genre et nationalité',
 'EM16' => 'Graphique des financements des doctorants'];
 
-$optionsListes = ['DEFAULT' => 'Aucun', 'EM1' => 'Liste des thèses pour un encadrant', 'EM2' => 'Liste des membre de chaques équipes',
-'EM3' => 'Liste des projets auxquels un encadrants participe', 'EM4' => 'Liste des doctorants',
+$optionsListes = ['DEFAULT' => 'Aucun', 'EM1' => 'Liste des thèses pour un encadrant', 'EM2' => 'Liste des membres de chaques équipes',
+'EM3' => 'Liste des projets auxquels un encadrant participe', 'EM4' => 'Liste des doctorants',
 'EM6' => 'Liste des effectifs par type', 'EM8' => 'Liste des effectifs de doctorants par équipe',
 'EM10' => 'Liste des effectifs par équipe', 'EM12' => 'Liste des membres statuaire/sous-contrats',
 'EM14' => 'Liste de l’origine des membres statuaire', 'EM17' => 'Liste des financements des doctorants',
 'ET1' => 'Liste des encadrant avec % d’encadrement par encadrant', 'ET2' => 'Liste des thèses par équipe',
 'ET3' => 'Liste des soutenances', 'ET4' => 'Liste des soutenances d’Habilitation à Diriger les Recherches',
-'ET4' => 'Liste de soutenance par années', 'ET6' => 'Liste des thèses par type',
+'ET5' => 'Liste de soutenance par années', 'ET6' => 'Liste des thèses par type',
 'ET7' => 'Liste des thèses en cours', 'EPr1' => 'Liste des projets par type',
 'EPr2' => 'Liste des projets par équipe' , 'EPr3' => 'Liste des projets par membre',
 'EPr4' => 'Liste des budgets par projet', 'EPu1' => 'Liste des publications par équipe',
@@ -61,7 +61,7 @@ function toggleOptions() {
 <h3><?= h("Menu d'export de graphiques et de listes") ?> </h3>
 <div>
     <?php
-        echo $this->Form->create($export);
+        echo $this->Form->create($export, ['url' => ['action' => 'results']]);
         echo $this->Form->control('exportGraphe');
         echo $this->Form->control('exportListe');
         echo $this->Form->select('typeGraphe', $optionsGraphes, array('id' => 'typeGraphe', 'onchange' => "toggleOptions()"));
