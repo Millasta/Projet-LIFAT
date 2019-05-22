@@ -193,44 +193,6 @@ class MembresController extends AppController
     }
 
     /**
-     * Checks the currently logged in user's rights to access a page (called when changing pages).
-     * @param $user : the user currently logged in
-     * @return bool : if the user is allowed (or not) to access the requested page
-     */
-    public function isAuthorized($user)
-    {
-        if (parent::isAuthorized($user) === true) {
-			return true;
-		} else {
-			$userEntity = $this->Membres->findById($user['id'])->first();
-			$action = $this->request->getParam('action');
-			$membre_slug = $this->request->getParam('pass.0');
-
-			if ($action === 'edit' && !$membre_slug) {
-				//	Nouveau membre (=> action pour chef d'équipe)
-				return $userEntity->estChefEquipe();
-			} else if ($membre_slug) {
-				$membre = $this->Membres->findById($membre_slug)->first();
-				$equipe_membre = $membre['equipe_id'];
-
-				if ($action === 'edit') {
-					//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
-					if (is_null($equipe_membre)) {
-						//	Membre cible sans équipe
-						return $userEntity['id'] === $membre['id'];
-					} else {
-						//	Membre cible appartenant à une équipe
-						return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
-					}
-				}
-
-				//	Delete => admin (déjà true avec parent::isAuthorized())
-			}
-		}
-        return false;
-    }
-
-    /**
      * Retourne la liste des doctorants en prenant en compte une fenetre de temps
      * @param $dateEntree : date d'entree de la fenetre de temps
      * @param $dateFin : date de fin de la fenetre de temps
@@ -495,4 +457,42 @@ class MembresController extends AppController
         }
         return $result;
     }
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		if (parent::isAuthorized($user) === true) {
+			return true;
+		} else {
+			$userEntity = $this->Membres->findById($user['id'])->first();
+			$action = $this->request->getParam('action');
+			$membre_slug = $this->request->getParam('pass.0');
+
+			if ($action === 'edit' && !$membre_slug) {
+				//	Nouveau membre (=> action pour chef d'équipe)
+				return $userEntity->estChefEquipe();
+			} else if ($membre_slug) {
+				$membre = $this->Membres->findById($membre_slug)->first();
+				$equipe_membre = $membre['equipe_id'];
+
+				if ($action === 'edit') {
+					//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
+					if (is_null($equipe_membre)) {
+						//	Membre cible sans équipe
+						return $userEntity['id'] === $membre['id'];
+					} else {
+						//	Membre cible appartenant à une équipe
+						return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
+					}
+				}
+
+				//	Delete => admin (déjà true avec parent::isAuthorized())
+			}
+		}
+		return false;
+	}
 }
