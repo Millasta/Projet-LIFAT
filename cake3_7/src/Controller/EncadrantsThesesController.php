@@ -186,6 +186,9 @@ class EncadrantsThesesController extends AppController
         }
     }
 
+
+
+
     /**
      * Retourne la liste des encadrants avec leur taux d'encadrement pour une these donnee
      * @return array : liste des encadrants
