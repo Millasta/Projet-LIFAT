@@ -54,11 +54,11 @@ class DirigeantsThesesController extends AppController
         if ($this->request->is('post')) {
             $dirigeantsTheses = $this->DirigeantsTheses->patchEntity($dirigeantsTheses, $this->request->getData());
             if ($this->DirigeantsTheses->save($dirigeantsTheses)) {
-                $this->Flash->success(__('The dirigeants theses has been saved.'));
+                $this->Flash->success(__('Le dirigeant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeants theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du dirigeant a échoué. Merci de ré-essayer.'));
         }
         $dirigeants = $this->DirigeantsTheses->Dirigeants->find('list', ['limit' => 200]);
         $theses = $this->DirigeantsTheses->Theses->find('list', ['limit' => 200]);
@@ -80,11 +80,11 @@ class DirigeantsThesesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $dirigeantsTheses = $this->DirigeantsTheses->patchEntity($dirigeantsTheses, $this->request->getData());
             if ($this->DirigeantsTheses->save($dirigeantsTheses)) {
-                $this->Flash->success(__('The dirigeants theses has been saved.'));
+                $this->Flash->success(__('Le dirigeant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The dirigeants theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du dirigeant a échoué. Merci de ré-essayer.'));
         }
         $dirigeants = $this->DirigeantsTheses->Dirigeants->find('list', ['limit' => 200]);
         $theses = $this->DirigeantsTheses->Theses->find('list', ['limit' => 200]);
@@ -103,9 +103,9 @@ class DirigeantsThesesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $dirigeantsTheses = $this->DirigeantsTheses->get($id);
         if ($this->DirigeantsTheses->delete($dirigeantsTheses)) {
-            $this->Flash->success(__('The dirigeants theses has been deleted.'));
+            $this->Flash->success(__('Le dirigeant à été supprimé.'));
         } else {
-            $this->Flash->error(__('The dirigeants theses could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du dirigeant à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

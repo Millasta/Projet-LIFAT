@@ -46,29 +46,7 @@ class FinancementsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /*
-    public function add()
-    {
-        $financement = $this->Financements->newEntity();
-        if ($this->request->is('post')) {
-            $financement = $this->Financements->patchEntity($financement, $this->request->getData());
-            if ($this->Financements->save($financement)) {
-                $this->Flash->success(__('The financement has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The financement could not be saved. Please, try again.'));
-        }
-        $this->set(compact('financement'));
-    }
-    */
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Financement id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
@@ -85,11 +63,11 @@ class FinancementsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $financement = $this->Financements->patchEntity($financement, $this->request->getData());
             if ($this->Financements->save($financement)) {
-                $this->Flash->success(__('The financement has been saved.'));
+                $this->Flash->success(__('Le financement a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The financement could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du financement a échoué. Merci de ré-essayer.'));
         }
         $this->set(compact('financement'));
     }
@@ -106,9 +84,9 @@ class FinancementsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $financement = $this->Financements->get($id);
         if ($this->Financements->delete($financement)) {
-            $this->Flash->success(__('The financement has been deleted.'));
+            $this->Flash->success(__('Le financement à été supprimé.'));
         } else {
-            $this->Flash->error(__('The financement could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du financement à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

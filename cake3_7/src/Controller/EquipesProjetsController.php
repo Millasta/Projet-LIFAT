@@ -54,11 +54,11 @@ class EquipesProjetsController extends AppController
         if ($this->request->is('post')) {
             $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
             if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('The equipes projet has been saved.'));
+                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes projet could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
         $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
@@ -80,11 +80,11 @@ class EquipesProjetsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
             if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('The equipes projet has been saved.'));
+                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes projet could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
         $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
@@ -103,11 +103,51 @@ class EquipesProjetsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $equipesProjet = $this->EquipesProjets->get($id);
         if ($this->EquipesProjets->delete($equipesProjet)) {
-            $this->Flash->success(__('The equipes projet has been deleted.'));
+            $this->Flash->success(__('Le projet de l\'équipe à été supprimé.'));
         } else {
-            $this->Flash->error(__('The equipes projet could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du projet de l\'équipe à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Retourne la liste des projets auxquels une equipe participe en prenant en compte une fenetre de temps
+     * @param $id : identifiant de l'equipe
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des projets
+     */
+    public function listeProjetEquipe($id = null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $this->loadModel('EquipesProjets');
+            $tmp = $this->EquipesProjets->find('all')
+                ->where(["equipe_id"=>$id])
+                ->contain(['Projets'])
+                ->toArray();
+
+            $result=array();
+            foreach($tmp as $row){
+                $timeProjet  = strtotime($row['projet']['date_debut']);
+                $dateIn = strtotime($dateEntree);
+                $dateOut = strtotime($dateFin);
+
+                if($timeProjet>=$dateIn && $timeProjet<=$dateOut){
+                    array_push($result,$row['projet']);
+                }
+            }
+        }else {
+            $this->loadModel('EquipesProjets');
+            $tmp = $this->EquipesProjets->find('all')
+                ->where(["equipe_id"=>$id])
+                ->contain(['Projets'])
+            ->toArray();
+
+            $result=array();
+            foreach($tmp as $row){
+                array_push($result,$row['projet']);
+            }
+        }
+        return $result;
     }
 }

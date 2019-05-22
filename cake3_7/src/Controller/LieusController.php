@@ -51,11 +51,11 @@ class LieusController extends AppController
         if ($this->request->is('post')) {
             $lieus = $this->Lieus->patchEntity($lieus, $this->request->getData());
             if ($this->Lieus->save($lieus)) {
-                $this->Flash->success(__('The lieus has been saved.'));
+                $this->Flash->success(__('Le lieu a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The lieus could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du lieu a échoué. Merci de ré-essayer.'));
         }
         $this->set(compact('lieus'));
     }
@@ -75,11 +75,11 @@ class LieusController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $lieus = $this->Lieus->patchEntity($lieus, $this->request->getData());
             if ($this->Lieus->save($lieus)) {
-                $this->Flash->success(__('The lieus has been saved.'));
+                $this->Flash->success(__('Le lieu a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The lieus could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du lieu a échoué. Merci de ré-essayer.'));
         }
         $this->set(compact('lieus'));
     }
@@ -96,9 +96,9 @@ class LieusController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $lieus = $this->Lieus->get($id);
         if ($this->Lieus->delete($lieus)) {
-            $this->Flash->success(__('The lieus has been deleted.'));
+            $this->Flash->success(__('Le lieu à été supprimé.'));
         } else {
-            $this->Flash->error(__('The lieus could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du lieu à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

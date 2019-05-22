@@ -3,10 +3,11 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use App\Model\Table\EquipesResponsablesTable;
+use Cake\I18n\Time;
 use Cake\Log\Log;
 use Cake\ORM\Query;
-use Cake\I18n\Time;
 use Cake\Database\Expression\QueryExpression;
+use Cake\Event\Event;
 
 /**
  * Membres Controller
@@ -17,6 +18,18 @@ use Cake\Database\Expression\QueryExpression;
  */
 class MembresController extends AppController
 {
+	/**
+     * Makes the /membres/register action public.
+     *
+     * @param Event $event
+     * @return \Cake\Http\Response|null
+     */
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow('register');
+        return parent::beforeFilter($event);
+    }
+	
     /**
      * Index method
      *
@@ -55,45 +68,45 @@ class MembresController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /*public function add()
-    {
-        $membre = $this->Membres->newEntity();
-        if ($this->request->is('post')) {
-            $membre = $this->Membres->patchEntity($membre, $this->request->getData());
-            if ($this->Membres->save($membre)) {
-                // Récupération du Membre.id créé
-                $query = $this->Membres->find('all')
-                    ->where(['Membres.email =' => $this->request->getData()['email']])
-                    ->limit(1);
-                $membreId = $query->first();
+	 * Register method
+	 *
+	 * @return \Cake\Http\Response|null Redirects on successful registration, renders view otherwise.
+	 */
+	public function register()
+	{
+		$membre = $this->Membres->newEntity();
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			$membre = $this->Membres->patchEntity($membre, $this->request->getData());
+			$membre->date_creation = Time::now();
+			if ($this->Membres->save($membre)) {
+				// Récupération du Membre.id créé
+				$query = $this->Membres->find('all')
+					->where(['Membres.email =' => $this->request->getData()['email']])
+					->limit(1);
+				$membreId = $query->first();
 
-                // INSERT dans Dirigeants en Encadrants
-                $this->loadModel('Encadrants');
-                $this->loadModel('Dirigeants');
+				// INSERT dans Dirigeants en Encadrants
+				$this->loadModel('Encadrants');
+				$this->loadModel('Dirigeants');
 
-                $query = $this->Dirigeants->query();
-                $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
+				$query = $this->Dirigeants->query();
+				$query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
 
-                $query = $this->Encadrants->query();
-                $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				$query = $this->Encadrants->query();
+				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
+				$this->Flash->success(__('Enregistrement effectué, en attente de validation du compte.'));
 
-                $this->Flash->success(__('The membre has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The membre could not be saved. Please, try again.'));
-        }
-        $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
-        $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
-        $this->set(compact('membre', 'lieuTravails', 'equipes'));
-    }*/
+				return $this->redirect(['action' => 'index']);
+			}
+			$this->Flash->error(__('Impossible d\'enregistrer le compte.'));
+		}
+		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
+		$equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+		$this->set(compact('membre', 'lieuTravails', 'equipes'));
+	}
 
     /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Membre id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
@@ -129,11 +142,11 @@ class MembresController extends AppController
                     $query = $this->Encadrants->query();
                     $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
                 }
-                $this->Flash->success(__('The membre has been saved.'));
+                $this->Flash->success(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The membre could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
         }
         $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
         $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
@@ -152,9 +165,9 @@ class MembresController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $membre = $this->Membres->get($id);
         if ($this->Membres->delete($membre)) {
-            $this->Flash->success(__('The membre has been deleted.'));
+            $this->Flash->success(__('Le membre à été supprimé.'));
         } else {
-            $this->Flash->error(__('The membre could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La membre du budget à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -306,6 +319,38 @@ class MembresController extends AppController
 		];
 		return $resultset;
 	}
+
+    /**
+     * Retourne une liste d'effectifs trie par type en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des types/effectif
+     */
+    public function listeEffectifParType($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $result=$this->Membres->find('all')
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->toArray();
+
+            foreach ($result as $key => $row) {
+                $type_personnel[$key]  = $row['type_personnel'];
+            }
+            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+        } else {
+            $result=$this->Membres->find('all')
+            ->toArray();
+
+            foreach ($result as $key => $row) {
+                $type_personnel[$key]  = $row['type_personnel'];
+            }
+            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+
+        }
+        return $result;
+    }
 
 	/**
 	 * Retourne la liste des effectifs selon leur sexe et nationalite en prenant en compte une fenetre de temps

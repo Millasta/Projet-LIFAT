@@ -65,31 +65,7 @@ class ThesesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /* GENERATED
-	public function add()
-    {
-        $theses = $this->Theses->newEntity();
-        if ($this->request->is('post')) {
-            $theses = $this->Theses->patchEntity($theses, $this->request->getData(), ['associated' => ['Encadrants', 'Dirigeants']]);
-            if ($this->Theses->save($theses)) {
-                $this->Flash->success(__('The theses has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
-        }
-        $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
-        $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
-        $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
-    }*/
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Theses id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
@@ -107,11 +83,11 @@ class ThesesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $theses = $this->Theses->patchEntity($theses, $this->request->getData());
             if ($this->Theses->save($theses)) {
-                $this->Flash->success(__('The theses has been saved.'));
+                $this->Flash->success(__('La theses a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de la theses a échoué. Merci de ré-essayer.'));
         }
         $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
 		$financements = $this->Theses->Financements->find('list', ['limit' => 200]);
@@ -132,9 +108,9 @@ class ThesesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $theses = $this->Theses->get($id);
         if ($this->Theses->delete($theses)) {
-            $this->Flash->success(__('The theses has been deleted.'));
+            $this->Flash->success(__('La these à été supprimé.'));
         } else {
-            $this->Flash->error(__('The theses could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de la these à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -159,6 +135,12 @@ class ThesesController extends AppController
         $this->set(compact('query', 'count'));
     }
 
+    /**
+     * Retourne la liste des types trie selon leur type en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de soutenances
+     */
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
         $this->loadModel('Theses');
@@ -309,7 +291,6 @@ class ThesesController extends AppController
                 ->where(['auteur_id' => $result[0]['id']])
                 ->toArray();
         }
-        die(strval($result2[1]));
         return $result2;
     }
 

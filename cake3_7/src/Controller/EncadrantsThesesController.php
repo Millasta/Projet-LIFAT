@@ -57,11 +57,11 @@ class EncadrantsThesesController extends AppController
         if ($this->request->is('post')) {
             $encadrantsTheses = $this->EncadrantsTheses->patchEntity($encadrantsTheses, $this->request->getData());
             if ($this->EncadrantsTheses->save($encadrantsTheses)) {
-                $this->Flash->success(__('The encadrants theses has been saved.'));
+                $this->Flash->success(__('L\'encadrant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The encadrants theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de l\'encadrant a échoué. Merci de ré-essayer.'));
         }
         $encadrants = $this->EncadrantsTheses->Encadrants->find('list', ['limit' => 200]);
         $theses = $this->EncadrantsTheses->Theses->find('list', ['limit' => 200]);
@@ -83,11 +83,11 @@ class EncadrantsThesesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $encadrantsTheses = $this->EncadrantsTheses->patchEntity($encadrantsTheses, $this->request->getData());
             if ($this->EncadrantsTheses->save($encadrantsTheses)) {
-                $this->Flash->success(__('The encadrants theses has been saved.'));
+                $this->Flash->success(__('L\'encadrant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The encadrants theses could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de l\'encadrant a échoué. Merci de ré-essayer.'));
         }
         $encadrants = $this->EncadrantsTheses->Encadrants->find('list', ['limit' => 200]);
         $theses = $this->EncadrantsTheses->Theses->find('list', ['limit' => 200]);
@@ -106,9 +106,9 @@ class EncadrantsThesesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $encadrantsTheses = $this->EncadrantsTheses->get($id);
         if ($this->EncadrantsTheses->delete($encadrantsTheses)) {
-            $this->Flash->success(__('The encadrants theses has been deleted.'));
+            $this->Flash->success(__('L\'encadrant à été supprimé.'));
         } else {
-            $this->Flash->error(__('The encadrants theses could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de l\'encadrant à échoué'));
         }
 
         return $this->redirect(['action' => 'index']);
@@ -187,6 +187,42 @@ class EncadrantsThesesController extends AppController
     }
 
     /**
+     * Retourne la liste des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des theses
+     */
+    public function NombreThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $query = $this->EncadrantsTheses->find('all');
+            $query->contain(['Theses']);
+            $query->where(['encadrant_id' => $id]);
+            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('theses.date_fin', $dateEntree, $dateFin);
+            });
+            $result=$query->count();
+
+            return $result;
+        }else{
+            $this->loadModel('EncadrantsTheses');
+            $result = $this->EncadrantsTheses->find('all', [
+                'conditions' => ['encadrant_id' => $id],
+                'contain' => ['Theses']
+            ])
+            ->count();
+
+            die(strval($result));
+
+
+            return $result;
+        }
+    }
+
+
+
+
+    /**
      * Retourne la liste des encadrants avec leur taux d'encadrement pour une these donnee
      * @return array : liste des encadrants
      */
@@ -218,3 +254,4 @@ class EncadrantsThesesController extends AppController
     }
 
 }
+

@@ -54,11 +54,11 @@ class EquipesResponsablesController extends AppController
         if ($this->request->is('post')) {
             $equipesResponsable = $this->EquipesResponsables->patchEntity($equipesResponsable, $this->request->getData());
             if ($this->EquipesResponsables->save($equipesResponsable)) {
-                $this->Flash->success(__('The equipes responsable has been saved.'));
+                $this->Flash->success(__('Le responsable de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes responsable could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du responsable de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesResponsables->Equipes->find('list', ['limit' => 200]);
         $membres = $this->EquipesResponsables->Membres->find('list', ['limit' => 200]);
@@ -80,11 +80,11 @@ class EquipesResponsablesController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipesResponsable = $this->EquipesResponsables->patchEntity($equipesResponsable, $this->request->getData());
             if ($this->EquipesResponsables->save($equipesResponsable)) {
-                $this->Flash->success(__('The equipes responsable has been saved.'));
+                $this->Flash->success(__('Le responsable de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes responsable could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du responsable de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesResponsables->Equipes->find('list', ['limit' => 200]);
         $membres = $this->EquipesResponsables->Membres->find('list', ['limit' => 200]);
@@ -103,9 +103,9 @@ class EquipesResponsablesController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $equipesResponsable = $this->EquipesResponsables->get($id);
         if ($this->EquipesResponsables->delete($equipesResponsable)) {
-            $this->Flash->success(__('The equipes responsable has been deleted.'));
+            $this->Flash->success(__('Le responsable de l\'équipe à été supprimé .'));
         } else {
-            $this->Flash->error(__('The equipes responsable could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du responsable de l\'équipe à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);
