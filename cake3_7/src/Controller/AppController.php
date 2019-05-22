@@ -86,6 +86,7 @@ class AppController extends Controller
 	/**
 	 * Before filter : makes some user data accessible in the views.
 	 * (example : $user['nom']).
+	 * Unfortunately, for some odd reason putting the whole Membre entity does NOT work.
 	 * @param Event $event
 	 * @return \Cake\Http\Response|null
 	 */

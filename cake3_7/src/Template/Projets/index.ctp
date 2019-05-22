@@ -3,13 +3,21 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Projet[]|\Cake\Collection\CollectionInterface $projets
  */
-?>
+
+use App\Model\Entity\Membre; ?>
 <!-- Barre de recherche -->
 <?php
 echo $this->element('searchbar');
 ?>
 <div class="projets index large-9 medium-8 columns content">
-    <h3><?= __('Projets du laboratoire') ?> <font size="+1">[<?= $this->Html->link(__('Nouveau projet'), ['action' => 'edit']) ?>]</font> </h3>
+    <h3><?= __('Projets du laboratoire') ?> <font size="+1">
+			<?php
+			if ($user['permanent'] === true || $user['role'] === Membre::ADMIN) {
+				//	Seuls les membres permanents (& admins) peuvent ajouter des projets
+				echo '[' . $this->Html->link(__('Nouveau projet'), ['action' => 'edit']) . ']';
+			}
+			?>
+		</font> </h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -33,8 +41,14 @@ echo $this->element('searchbar');
                 <td><?= $projet->has('financement') ? $this->Html->link('Voir financement', ['controller' => 'Financements', 'action' => 'view', $projet->financement->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $projet->id]) ?>
-                    <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $projet->id]) ?>
-                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $projet->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le projet "{0}" ?', $projet->titre)]) ?>
+					<?php
+					if ($user['permanent'] === true || $user['role'] === Membre::ADMIN) {
+						//	Seuls les membres permanents (& admins) peuvent edit / delete les projets
+						echo $this->Html->link(__('Modifier'), ['action' => 'edit', $projet->id]);
+						echo ' ';
+						echo $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $projet->id], ['confirm' => __('Etes-vous sûr de vouloir supprimer le projet "{0}" ?', $projet->titre)]);
+					}
+					?>
                 </td>
             </tr>
             <?php endforeach; ?>

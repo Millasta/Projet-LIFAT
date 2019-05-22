@@ -3,9 +3,17 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Equipe $equipe
  */
-?>
+
+use App\Model\Entity\Membre; ?>
 <div class="equipes view large-9 medium-8 columns content">
-    <h3><?= h($equipe->nom_equipe) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $equipe->id]) ?>]</font size></h3>
+    <h3><?= h($equipe->nom_equipe) ?><font size="+1">
+			<?php
+			if ($user['role'] === Membre::ADMIN) {
+				//	Seuls les admins peuvent edit des équipes
+				echo '[' . $this->Html->link(__('Editer'), ['action' => 'edit', $equipe->id]) . ']';
+			}
+			?>
+		</font size></h3>
     <table class="vertical-table">
 		<h4><?= __('Membres') ?></h4>
 		<?php foreach ($equipe->membres as $membre): ?>

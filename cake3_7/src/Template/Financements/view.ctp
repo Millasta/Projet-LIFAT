@@ -3,10 +3,17 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Financement $financement
  */
-?>
-<div class="financements view large-9 medium-8 columns content">
-    <h3><?= h('Financement') ?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $financement->id]) ?>]</font> </h3>
 
+use App\Model\Entity\Membre; ?>
+<div class="financements view large-9 medium-8 columns content">
+    <h3><?= h('Financement') ?> <font size="+1">
+			<?php
+			if ($user['role'] === Membre::ADMIN) {
+				//	Seuls les admins peuvent edit des financements
+				echo '[' . $this->Html->link(__('Editer'), ['action' => 'edit', $financement->id]) . ']';
+			}
+			?>
+		</font> </h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Nationalite Financement') ?></th>

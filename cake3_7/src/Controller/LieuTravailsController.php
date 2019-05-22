@@ -93,6 +93,6 @@ class LieuTravailsController extends AppController
     }
 
 	/*
-	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut modifier / supprimer les lieux de travail.
+	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut ajouter / modifier / supprimer les lieux de travail.
 	 */
 }

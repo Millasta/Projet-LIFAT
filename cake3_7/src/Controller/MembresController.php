@@ -95,7 +95,7 @@ class MembresController extends AppController
 				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				$this->Flash->success(__('Enregistrement effectué, en attente de validation du compte.'));
 
-				return $this->redirect(['action' => 'index']);
+				return $this->redirect(['controller' => 'pages', 'action' => 'index']);
 			}
 			$this->Flash->error(__('Impossible d\'enregistrer le compte.'));
 		}
@@ -609,16 +609,9 @@ class MembresController extends AppController
 
 			if ($action === 'edit' && $membre_slug) {
 				$membre = $this->Membres->findById($membre_slug)->first();
-				$equipe_membre = $membre['equipe_id'];
 
 				//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
-				if (is_null($equipe_membre)) {
-					//	Membre cible sans équipe
-					return $userEntity['id'] === $membre['id'];
-				} else {
-					//	Membre cible appartenant à une équipe
-					return ($userEntity['id'] === $membre['id']) || ($userEntity->estChefEquipe($equipe_membre));
-				}
+				return ($userEntity['id'] === $membre['id']) || (!is_null($membre['equipe_id']) && $userEntity->estChefEquipe($membre['equipe_id']));
 
 				//	Add (edit sans slug) et Delete => admin (déjà true avec parent::isAuthorized())
 			}

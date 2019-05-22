@@ -3,13 +3,21 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Equipe[]|\Cake\Collection\CollectionInterface $equipes
  */
-?>
+
+use App\Model\Entity\Membre; ?>
 <!-- Barre de recherche -->
 <?php
 echo $this->element('searchbar');
 ?>
 <div class="equipes index large-9 medium-8 columns content">
-    <h3><?= __('Equipes') ?><font size="+1">  [<?= $this->Html->link(__('Nouvelle équipe'), ['action' => 'edit']) ?>]</font></h3>
+    <h3><?= __('Equipes') ?><font size="+1">
+			<?php
+			if ($user['role'] === Membre::ADMIN) {
+				//	Seuls les admins peuvent ajouter des équipes
+				echo '[' . $this->Html->link(__('Nouvelle équipe'), ['action' => 'edit']) . ']';
+			}
+			?>
+		</font></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -25,8 +33,14 @@ echo $this->element('searchbar');
                 <td><?= $equipe->has('membre') ? $this->Html->link($equipe->membre->nom." ".$equipe->membre->prenom, ['controller' => 'Membres', 'action' => 'view', $equipe->membre->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Details'), ['action' => 'view', $equipe->id]) ?>
-                    <?= $this->Html->link(__('Editer'), ['action' => 'edit', $equipe->id]) ?>
-                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $equipe->id], ['confirm' => __('Confirmer la suppression de l\'équipe "{0}"?', $equipe->nom_equipe)]) ?>
+					<?php
+					if ($user['role'] === Membre::ADMIN) {
+						//	Seuls les admins peuvent edit / delete des équipes
+						echo $this->Html->link(__('Editer'), ['action' => 'edit', $equipe->id]);
+						echo ' ';
+						echo $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $equipe->id], ['confirm' => __('Confirmer la suppression de l\'équipe "{0}"?', $equipe->nom_equipe)]);
+					}
+					?>
                 </td>
             </tr>
             <?php endforeach; ?>

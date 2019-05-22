@@ -5,7 +5,7 @@
  */
 ?>
 <div class="membres view large-9 medium-8 columns content">
-    <h3><?= h($membre->nom.' '.$membre->prenom) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $membre->id]) ?>]</font size></h3>
+    <h3><?= h($membre->nom.' '.$membre->prenom) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $membre->id]) ?>]</font size></h3><!--	TODO : edit link only if $user can edit this member	-->
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Rôle') ?></th>

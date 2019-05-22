@@ -9,8 +9,6 @@
                 <th scope="col"><?= $this->Paginator->sort('date_debut') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('date_fin') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('autre_info') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('auteur_id') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>

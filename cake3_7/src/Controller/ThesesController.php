@@ -294,7 +294,7 @@ class ThesesController extends AppController
 		if (parent::isAuthorized($user) === true) {
 			return true;
 		} else {
-			//	Tous les membres permanents ont tous les droits sur les projets
+			//	Tous les membres permanents ont tous les droits sur les thèses
 			if ($user['permanent'] === true) {
 				return true;
 			}

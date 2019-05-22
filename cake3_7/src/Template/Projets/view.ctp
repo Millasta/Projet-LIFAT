@@ -4,9 +4,17 @@
  * @var \App\Model\Entity\Projet $projet
  * @var \App\Model\Entity\Membre $membre
  */
-?>
+
+use App\Model\Entity\Membre; ?>
 <div class="projets view large-9 medium-8 columns content">
-    <h3><?= h("Titre du projet : ".$projet->titre) ?> <font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $projet->id]) ?>]</font> </h3>
+    <h3><?= h("Titre du projet : ".$projet->titre) ?> <font size="+1">
+			<?php
+			if ($user['permanent'] === true || $user['role'] === Membre::ADMIN) {
+				//	Seuls les membres permanents (& admins) peuvent edit les projets
+				echo '[' . $this->Html->link(__('Editer'), ['action' => 'edit', $projet->id]) . ']';
+			}
+			?>
+		</font> </h3>
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Description') ?></th>
