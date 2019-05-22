@@ -65,31 +65,7 @@ class ThesesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /* GENERATED
-	public function add()
-    {
-        $theses = $this->Theses->newEntity();
-        if ($this->request->is('post')) {
-            $theses = $this->Theses->patchEntity($theses, $this->request->getData(), ['associated' => ['Encadrants', 'Dirigeants']]);
-            if ($this->Theses->save($theses)) {
-                $this->Flash->success(__('The theses has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The theses could not be saved. Please, try again.'));
-        }
-        $membres = $this->Theses->Membres->find('list', ['limit' => 200]);
-        $dirigeants = $this->Theses->Dirigeants->find('list', ['limit' => 200]);
-        $encadrants = $this->Theses->Encadrants->find('list', ['limit' => 200]);
-        $this->set(compact('theses', 'membres', 'dirigeants', 'encadrants'));
-    }*/
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Theses id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.

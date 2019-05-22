@@ -62,30 +62,7 @@ class EquipesController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-	/* GENERATED
-    public function add()
-    {
-        $equipe = $this->Equipes->newEntity();
-        if ($this->request->is('post')) {
-            $equipe = $this->Equipes->patchEntity($equipe, $this->request->getData());
-            if ($this->Equipes->save($equipe)) {
-                $this->Flash->success(__('The equipe has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The equipe could not be saved. Please, try again.'));
-        }
-        $membres = $this->Equipes->Membres->find('list', ['limit' => 200]);
-        $projets = $this->Equipes->Projets->find('list', ['limit' => 200]);
-        $this->set(compact('equipe', 'membres', 'projets'));
-    }*/
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Equipe id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.

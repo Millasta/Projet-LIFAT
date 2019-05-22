@@ -12,6 +12,4 @@
         ?>
     </fieldset>
 </div>
-<p>Mot de passe oublié : </p>
-<?= $this->Html->link('Changer mon mot de passe.') ?>
 
