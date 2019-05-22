@@ -1,30 +1,26 @@
 <?php
+use \App\Model\Entity\Membre;
+
 /**
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Membre $membre
  */
-?>
-<?php
-$optionsMembres = [
-    'CHEFEQUIPE' => 'Chef d\'équipe',
-    'SECRETARIAT' => 'Secretariat',
-    'MEMBRE' => 'Membre'
-];
+
 $optionsGenre = [
-    'H' => 'Homme',
-    'F' => 'Femme'
+	'H' => 'Homme',
+	'F' => 'Femme'
 ];
 ?>
 <div class="membres form large-9 medium-8 columns content">
 	<div class="note">
 		Votre compte utilisateur devra être validé par un administrateur avant d'être utilisé.
 	</div>
-	<?= $membre->passwd = "" ?>
+	<?php $membre->passwd = "" ?>
     <?= $this->Form->create($membre) ?>
     <fieldset>
         <legend><?= $membre->id==0 ? __('Formulaire d\'inscription') : __('Edition d\'un membre');  ?></legend>
         <?php
-        echo $this->Form->select('role', $optionsMembres);
+        echo $this->Form->hidden('role', ['value' => Membre::MEMBRE]);
         echo $this->Form->control('nom');
         echo $this->Form->control('prenom');
         echo $this->Form->control('email');
@@ -53,7 +49,7 @@ $optionsGenre = [
         echo $this->Form->control('est_porteur', ['label' => "Membre porteur"]);
     ?>
 </fieldset>
-<?= $this->Form->control('actif', ['type' => 'hidden', 'value' => false]) ?>
+<?= $this->Form->hidden('actif', ['value' => false]) ?>
 <?= $this->Form->button(__('Valider')) ?>
 <?= $this->Form->end() ?>
 </div>
