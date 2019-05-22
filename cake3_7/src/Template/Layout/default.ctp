@@ -25,7 +25,7 @@
 			<?php
 				// titre du site (banniere)
 				echo $this->Html->div('',null, array('id' => 'header'));
-				echo $this->Html->tag('h1','LIFAT Manager');
+				echo $this->Html->link('<h1>LIFAT Manager</h1>', ['controller' => 'Pages', 'action' => 'index'], ['escape' => false]);
 				echo '</div>';
 			?>
 

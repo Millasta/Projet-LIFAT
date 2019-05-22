@@ -19,9 +19,14 @@ class LieuTravailsController extends AppController
      */
     public function index()
     {
-        $lieuTravails = $this->paginate($this->LieuTravails);
+		$this->set('searchLabelExtra', "nom du lieu");
 
-        $this->set(compact('lieuTravails'));
+		$query = $this->LieuTravails
+			// Use the plugins 'search' custom finder and pass in the
+			// processed query params
+			->find('search', ['search' => $this->request->getQueryParams()]);
+
+		$this->set('lieuTravails', $this->paginate($query));
     }
 
     /**

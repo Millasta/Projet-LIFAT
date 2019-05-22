@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use App\Model\Table\EquipesResponsablesTable;
 use Cake\Log\Log;
 use Cake\ORM\Query;
+use Cake\I18n\Time;
 use Cake\Database\Expression\QueryExpression;
 use Cake\I18n\Time;
 
@@ -24,7 +25,7 @@ class MembresController extends AppController
      */
     public function index()
     {
-    	$this->set('searchLabelExtra', 'nom ou prénom');
+    	$this->set('searchLabelExtra', 'nom et/ou prénom');
 
     	$query = $this->Membres
 			// Use the plugins 'search' custom finder and pass in the
@@ -109,7 +110,7 @@ class MembresController extends AppController
             ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $membre = $this->Membres->patchEntity($membre, $this->request->getData());
-            $membre->date_creation=Time::now();
+            $membre->date_creation = Time::now();
             if ($this->Membres->save($membre)) {
                 if ($id == null) {
                     $this->Flash->success(__('Nouveau membre'));

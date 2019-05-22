@@ -4,6 +4,10 @@
  * @var \App\Model\Entity\LieuTravail[]|\Cake\Collection\CollectionInterface $lieuTravails
  */
 ?>
+<!-- Barre de recherche -->
+<?php
+echo $this->element('searchbar');
+?>
 <div class="lieuTravails index large-9 medium-8 columns content">
     <h3><?= __('Lieux de travail')?> <font size="+1">[<?= $this->Html->link(__('Nouveau lieu de travail'), ['action' => 'edit']) ?>]</font> </h3>
     <table cellpadding="0" cellspacing="0">

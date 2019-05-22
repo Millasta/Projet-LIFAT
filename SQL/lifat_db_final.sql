@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mar. 23 avr. 2019 à 17:35
+-- Généré le :  jeu. 16 mai 2019 à 11:59
 -- Version du serveur :  10.1.38-MariaDB
 -- Version de PHP :  7.3.2
 
@@ -22,9 +22,6 @@ SET time_zone = "+00:00";
 -- Base de données :  `lifat_db`
 --
 
-CREATE DATABASE IF NOT EXISTS lifat_db;
-USE lifat_db;
-
 -- --------------------------------------------------------
 
 --
@@ -34,8 +31,10 @@ USE lifat_db;
 CREATE TABLE `budgets_annuels` (
   `projet_id` int(11) NOT NULL,
   `annee` int(11) NOT NULL,
-  `budget` int(9) DEFAULT 0
+  `budget` int(9) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
 -- Structure de la table `dirigeants`
@@ -49,9 +48,8 @@ CREATE TABLE `dirigeants` (
 -- Déchargement des données de la table `dirigeants`
 --
 
-/*INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
-(2),
-(3);*/
+INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
+(4);
 
 -- --------------------------------------------------------
 
@@ -62,8 +60,15 @@ CREATE TABLE `dirigeants` (
 CREATE TABLE `dirigeants_theses` (
   `dirigeant_id` int(11) NOT NULL,
   `these_id` int(11) NOT NULL,
-  `taux` int(3) DEFAULT 100
+  `taux` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `dirigeants_theses`
+--
+
+INSERT INTO `dirigeants_theses` (`dirigeant_id`, `these_id`, `taux`) VALUES
+(4, 1, 100);
 
 -- --------------------------------------------------------
 
@@ -79,9 +84,8 @@ CREATE TABLE `encadrants` (
 -- Déchargement des données de la table `encadrants`
 --
 
-/*INSERT INTO `encadrants` (`encadrant_id`) VALUES
-(2),
-(3);*/
+INSERT INTO `encadrants` (`encadrant_id`) VALUES
+(4);
 
 -- --------------------------------------------------------
 
@@ -92,8 +96,15 @@ CREATE TABLE `encadrants` (
 CREATE TABLE `encadrants_theses` (
   `encadrant_id` int(11) NOT NULL,
   `these_id` int(11) NOT NULL,
-  `taux` int(3) DEFAULT 100
+  `taux` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `encadrants_theses`
+--
+
+INSERT INTO `encadrants_theses` (`encadrant_id`, `these_id`, `taux`) VALUES
+(4, 1, 100);
 
 -- --------------------------------------------------------
 
@@ -107,6 +118,13 @@ CREATE TABLE `equipes` (
   `responsable_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `equipes`
+--
+
+INSERT INTO `equipes` (`id`, `nom_equipe`, `responsable_id`) VALUES
+(1, 'oof', 4);
+
 -- --------------------------------------------------------
 
 --
@@ -117,6 +135,13 @@ CREATE TABLE `equipes_projets` (
   `equipe_id` int(11) NOT NULL,
   `projet_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `equipes_projets`
+--
+
+INSERT INTO `equipes_projets` (`equipe_id`, `projet_id`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -142,6 +167,13 @@ CREATE TABLE `financements` (
   `financement_prive` tinyint(1) DEFAULT NULL,
   `financement` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `financements`
+--
+
+INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES
+(1, 0, 'Français', 1, 'L\'argent des abonnés');
 
 -- --------------------------------------------------------
 
@@ -171,8 +203,8 @@ CREATE TABLE `lieu_travails` (
 -- Déchargement des données de la table `lieu_travails`
 --
 
-/*INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
-(1, 'Polytech TOURS', 1);*/
+INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
+(2, 'le 93', 1);
 
 -- --------------------------------------------------------
 
@@ -218,9 +250,9 @@ CREATE TABLE `membres` (
 -- Déchargement des données de la table `membres`
 --
 
-/*INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
-(3, 'admin', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$PksbXyiUFxHocqxYr4HmlOJfGGOJqfeWmYwieXQroCL3ChQQr1zEC', '', '', '', '', '', '', '', '0', 5, 'admin', '', '', NULL, NULL, 1, NULL, NULL, '', 1, '', 0, 1, 0, NULL, NULL);
-*/
+INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
+(4, '', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$bzSGIbfxvGYjAh6H2f6rAuMKaAEAdYUrhrpNq/SoOmHKPnQdX58jG', '', '', '', '', '', '', '', 'AB123DC', 7, 'admin-', '', '', NULL, NULL, 1, 2, 1, '', 1, 'F', 0, 1, 0, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -283,6 +315,13 @@ CREATE TABLE `projets` (
   `financement_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Déchargement des données de la table `projets`
+--
+
+INSERT INTO `projets` (`id`, `titre`, `description`, `type`, `budget`, `date_debut`, `date_fin`, `financement_id`) VALUES
+(1, 'mais osef en fait', '', '', -42069, NULL, NULL, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -300,6 +339,13 @@ CREATE TABLE `theses` (
   `financement_id` int(11) DEFAULT NULL,
   `auteur_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Déchargement des données de la table `theses`
+--
+
+INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`, `financement_id`, `auteur_id`) VALUES
+(1, 'oh non un coboille', 'c\'est vraiment censé être en édition libre ?', NULL, NULL, '', 0, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -457,13 +503,13 @@ ALTER TABLE `transports`
 -- AUTO_INCREMENT pour la table `equipes`
 --
 ALTER TABLE `equipes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `financements`
 --
 ALTER TABLE `financements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `lieus`
@@ -475,13 +521,13 @@ ALTER TABLE `lieus`
 -- AUTO_INCREMENT pour la table `lieu_travails`
 --
 ALTER TABLE `lieu_travails`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pour la table `membres`
 --
 ALTER TABLE `membres`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `missions`
@@ -499,13 +545,13 @@ ALTER TABLE `motifs`
 -- AUTO_INCREMENT pour la table `projets`
 --
 ALTER TABLE `projets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `theses`
 --
 ALTER TABLE `theses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pour la table `transports`
@@ -518,11 +564,10 @@ ALTER TABLE `transports`
 --
 
 --
--- Contraintes pour la table `dirigeants`
+-- Contraintes pour la table `budgets_annuels`
 --
 ALTER TABLE `budgets_annuels`
   ADD CONSTRAINT `fk_budgets_annuels_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`);
-
 
 --
 -- Contraintes pour la table `dirigeants`
