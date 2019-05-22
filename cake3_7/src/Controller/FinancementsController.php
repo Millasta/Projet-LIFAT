@@ -46,29 +46,7 @@ class FinancementsController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /*
-    public function add()
-    {
-        $financement = $this->Financements->newEntity();
-        if ($this->request->is('post')) {
-            $financement = $this->Financements->patchEntity($financement, $this->request->getData());
-            if ($this->Financements->save($financement)) {
-                $this->Flash->success(__('The financement has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The financement could not be saved. Please, try again.'));
-        }
-        $this->set(compact('financement'));
-    }
-    */
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Financement id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.

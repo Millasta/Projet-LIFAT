@@ -54,45 +54,7 @@ class MembresController extends AppController
     }
 
     /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    /*public function add()
-    {
-        $membre = $this->Membres->newEntity();
-        if ($this->request->is('post')) {
-            $membre = $this->Membres->patchEntity($membre, $this->request->getData());
-            if ($this->Membres->save($membre)) {
-                // Récupération du Membre.id créé
-                $query = $this->Membres->find('all')
-                    ->where(['Membres.email =' => $this->request->getData()['email']])
-                    ->limit(1);
-                $membreId = $query->first();
-
-                // INSERT dans Dirigeants en Encadrants
-                $this->loadModel('Encadrants');
-                $this->loadModel('Dirigeants');
-
-                $query = $this->Dirigeants->query();
-                $query->insert(['dirigeant_id'])->values(['dirigeant_id' => $membreId['id']])->execute();
-
-                $query = $this->Encadrants->query();
-                $query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
-
-                $this->Flash->success(__('The membre has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The membre could not be saved. Please, try again.'));
-        }
-        $lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
-        $equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
-        $this->set(compact('membre', 'lieuTravails', 'equipes'));
-    }*/
-
-    /**
-     * Edit method
+     * Edit method ; if $id is null it behaves like an add method instead.
      *
      * @param string|null $id Membre id.
      * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
