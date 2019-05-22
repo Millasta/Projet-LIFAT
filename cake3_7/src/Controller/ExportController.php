@@ -615,4 +615,15 @@ class ExportController extends AppController
 
 
     }
+
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		//	Tout le monde a droit de faire des exports
+		return true;
+	}
 }

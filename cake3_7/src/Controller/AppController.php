@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use App\Model\Entity\Membre;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -104,7 +105,7 @@ class AppController extends Controller
 	public function isAuthorized($user)
 	{
 		//	Quoi qu'il arrive, l'admin a tous les droits
-		if (isset($user['role']) && $user['role'] === 'admin') {
+		if ($user['role'] === Membre::ADMIN) {
 			return true;
 		}
 

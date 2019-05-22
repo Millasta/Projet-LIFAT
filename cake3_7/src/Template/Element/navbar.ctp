@@ -1,3 +1,7 @@
+<?php
+use \App\Model\Entity\Membre;
+?>
+
 <table id="menu">
 	<tr>
 		<?php if (!empty($user)): ?>
@@ -28,9 +32,9 @@
    			<td>
 				<?php
 					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['role'] != 'admin' && $user['permanent'] == true)
+					if ($user['permanent'] === true && $user['role'] != Membre::ADMIN)
 					{
-						echo "permanent";
+						echo " permanent";
 					}
 					echo ") ";
 				?>

@@ -1,8 +1,10 @@
 <?php
 namespace App\Model\Entity;
 
+use App\Model\Table\EquipesTable;
 use Cake\ORM\Entity;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\ORM\TableRegistry;
 
 /**
  * Membre Entity
@@ -44,6 +46,16 @@ use Cake\Auth\DefaultPasswordHasher;
  */
 class Membre extends Entity
 {
+	/**
+	 * Class constant for the 'admin' role ($membre['role']).
+	 */
+	const ADMIN = 'admin';
+
+	/**
+	 * Class constant for the 'membre' role ($membre['role']).
+	 */
+	const MEMBRE = 'membre';
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -98,15 +110,41 @@ class Membre extends Entity
 
     /**
      * Function that hashes the user password.
+	 * Returns the current hashed password if $value is empty.
+	 *
      * @param $value
      * @return mixed
      */
     protected function _setPasswd($value)
     {
-        if (strlen($value)) {
+        if (strlen($value) > 0) {
             $hasher = new DefaultPasswordHasher();
-
             return $hasher->hash($value);
         }
+        else {
+			return $this['passwd'];
+		}
     }
+
+	/**
+	 * Teste si le membre ($this) est le chef de l'équipe dont l'id est $equipe_id.
+	 * Si $equipe_id est null (ou non renseigné) la fonction teste si le membre est chef d'au moins une équipe.
+	 *
+	 * @param $equipe_id
+	 * @return boolean
+	 */
+    public function estChefEquipe($equipe_id = null)
+	{
+		$equipes = TableRegistry::getTableLocator()->get('Equipes');
+		$query = $equipes->find()
+			->where(['responsable_id' => $this['id']]);
+
+		if (!is_null($equipe_id)) {
+			$query->andWhere(['id' => $equipe_id]);
+		}
+
+		$query->first();
+
+		return boolval($query->count());
+	}
 }

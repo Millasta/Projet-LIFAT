@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Entity\Membre;
 use App\Model\Table\EquipesResponsablesTable;
 use Cake\I18n\Time;
 use Cake\Log\Log;
@@ -17,7 +18,7 @@ use Cake\Database\Expression\QueryExpression;
  */
 class MembresController extends AppController
 {
-    /**
+	/**
      * Index method
      *
      * @return \Cake\Http\Response|void
@@ -186,37 +187,33 @@ class MembresController extends AppController
     public function isAuthorized($user)
     {
         if (parent::isAuthorized($user) === true) {
-            return true;
-        } else {
-            $action = $this->request->getParam('action');
-            $this->loadModel('Equipes');
-            $equipesRespo = $this->Equipes->findByResponsableId($user['id'])->extract('id')->toArray();
+			return true;
+		} else {
+			$userEntity = $this->Membres->findById($user['id'])->first();
+			$action = $this->request->getParam('action');
+			$membre_slug = $this->request->getParam('pass.0');
 
-            if (in_array($action, ['edit', 'delete'])) {
-                //	edit et delete doivent être faits sur un utilisateur existant...
-                $membre_slug = $this->request->getParam('pass.0');
-                if (!$membre_slug) {
-                    return false;
-                } else {
-                    $membre = $this->Membres->findById($membre_slug)->first();
-                    $equipe_id = $membre->equipe_id;
+			if ($action === 'edit' && !$membre_slug) {
+				//	Nouveau membre (=> action pour chef d'équipe)
+				return $userEntity->estChefEquipe();
+			} else if ($membre_slug) {
+				$membre = $this->Membres->findById($membre_slug)->first();
+				$equipe_membre = $membre['equipe_id'];
 
-                    //	Un membre peut s'auto edit / delete
-                    if ($membre->id === $user['id']) {
-                        return true;
-                    } else if ($equipe_id != null) {
-                        //	Un chef d'équipe peut faire de même pour les membres de son équipe
-						if(in_array($equipe_id, $equipesRespo, true)) {
-							return true;
-						}
-                    }
-                }
-            } else if ($action === 'add') {
-                //	Un chef d'équipe peut ajouter un membre à une de ses équipes
-                return $equipesRespo->count() > 0;
-                //	ATTENTION : lorsque le formulaire sera submit, il faudra tester si l'équipe dans laquelle le membre est mise correspond à une des équipes gérées par le user !!!!!
-            }
-        }
+				if ($action === 'edit') {
+					//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
+					if (is_null($equipe_membre)) {
+						//	Membre cible sans équipe
+						return $userEntity['id'] === $membre['id'];
+					} else {
+						//	Membre cible appartenant à une équipe
+						return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
+					}
+				}
+
+				//	Delete => admin (déjà true avec parent::isAuthorized())
+			}
+		}
         return false;
     }
 

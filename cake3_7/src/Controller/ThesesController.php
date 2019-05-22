@@ -162,15 +162,11 @@ class ThesesController extends AppController
 	 */
 	public function isAuthorized($user)
 	{
-		if(parent::isAuthorized($user) === true)
-		{
+		if (parent::isAuthorized($user) === true) {
 			return true;
-		}
-		else
-		{
-			//	Tous les membres permanents ont tous les droits sur les theses
-			if($user['permanent'] === true)
-			{
+		} else {
+			//	Tous les membres permanents ont tous les droits sur les projets
+			if ($user['permanent'] === true) {
 				return true;
 			}
 		}
