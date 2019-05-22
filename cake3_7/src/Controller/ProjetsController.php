@@ -133,12 +133,11 @@ class ProjetsController extends AppController
      * @param $id : identifiant du projet
      * @return array : informations du projet
      */
-    public function informationProjet($id = null)
+    public function informationProjet()
     {
         $result=$this->Projets->find('all')
-        ->where(["Projets.id" => $id])
         ->contain(["financements"]);
-        return $result->first();
+        return $result->toArray();
     }
 
 	/**

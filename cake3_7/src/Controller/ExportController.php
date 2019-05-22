@@ -144,7 +144,7 @@ class ExportController extends AppController
             }
             else if ($typeListe == "EPr1"){ //A FAIRE AVEC LA TABLE FINANCEMENT
                 //Liste des projets par type
-               // $this->tableauInformationProjet();
+               $this->tableauInformationProjet();
             }
             else if ($typeListe == "EPr2"){
                 //Liste des projets par équipe
@@ -1103,12 +1103,11 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
-    /*public function tableauInformationProjet(){
+    public function tableauInformationProjet(){
         $controlInstance = new ProjetsController();
-        $tableau = $controlInstance->informationProjet(1);
-        $entetes = ["id","titre","description","type","budget","date_debut","date_fin","financement_id","international"];
+        $tableau = $controlInstance->informationProjet();
+        $entetes = ["id","titre","description","type","budget","date_debut","date_fin","financement_id","international", "nationalite_financement","financement_prive","financement"];
         $fichier = "InformationProjet.csv";
-
         if (file_exists($fichier)){
             //si il existe
             unlink($fichier);
@@ -1120,6 +1119,7 @@ class ExportController extends AppController
         $informationProjet = array();
         foreach($tableau as $key => $row){
             $informationProjet[$key] =  array(
+
                 $tableau[$key]->id,
                 $tableau[$key]->titre,
                 $tableau[$key]->description,
@@ -1128,7 +1128,11 @@ class ExportController extends AppController
                 $tableau[$key]->date_debut,
                 $tableau[$key]->date_fin,
                 $tableau[$key]->financement_id,
-                $tableau[key]->international
+                $tableau[$key]['Financements']['international'],
+                $tableau[$key]['Financements']['nationalite_financement'],
+                $tableau[$key]['Financements']['financement_prive'],
+                $tableau[$key]['Financements']['financement']
+
             );
             fputcsv($fp, array(
                 $tableau[$key]->id,
@@ -1138,7 +1142,11 @@ class ExportController extends AppController
                 $tableau[$key]->budget,
                 $tableau[$key]->date_debut,
                 $tableau[$key]->date_fin,
-                $tableau[$key]->financement_id
+                $tableau[$key]->financement_id,
+                $tableau[$key]['Financements']['international'],
+                $tableau[$key]['Financements']['nationalite_financement'],
+                $tableau[$key]['Financements']['financement_prive'],
+                $tableau[$key]['Financements']['financement']
             ), ";");
 
         }
@@ -1147,7 +1155,7 @@ class ExportController extends AppController
         $this->set("entetes", $entetes);
         $this->set("tableau", $informationProjet);
         $this->set("nomFichier", $fichier);
-    }*/
+    }
 
     public function tableauNombreDeDoctorantsParEquipe(){
         $controlInstance = new MembresController();

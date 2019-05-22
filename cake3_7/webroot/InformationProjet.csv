@@ -1,2 +1,5 @@
-id;titre;description;type;budget;date_debut;date_fin;financement_id;international
-1;projet1;descriptionProjet1;type1;100000;4/1/16;10/16/21;1
+id;titre;description;type;budget;date_debut;date_fin;financement_id;international;nationalite_financement;financement_prive;financement
+1;projet1;descriptionProjet1;type1;100000;4/1/16;10/16/21;1;;Français;;"50000 euros"
+2;projet2;descriptionProjet2;type3;300000;11/3/17;10/16/22;2;1;Allemand;1;"250000 euros"
+3;projet3;descriptionProjet3;type2;400000;7/12/17;11/21/23;3;1;Espagnol;1;"275000 euros"
+4;projet4;descriptionProjet4;type4;200000;5/27/16;10/16/22;4;;Français;;"120000 euros"
