@@ -202,7 +202,7 @@ CREATE TABLE `fichiers` (
     `nom` varchar(100) NOT NULL,
     `titre` varchar(100) DEFAULT NULL,
     `description` varchar(500) DEFAULT NULL,
-    `date_upload` date DEFAULT NULL,
+    `date_upload` datetime DEFAULT CURRENT_TIMESTAMP,
     `membre_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
