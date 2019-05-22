@@ -140,7 +140,7 @@ class MembresController extends AppController
 					$query = $this->Encadrants->query();
 					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				}
-				$this->Flash->success(__('Le membre a bien été édité.'));
+				$this->Flash->success(__('Le membre a été ajouté avec succès.'));
 				return $this->redirect(['action' => 'index']);
 			}
 			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
