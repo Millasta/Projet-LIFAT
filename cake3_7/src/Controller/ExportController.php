@@ -69,10 +69,10 @@ class ExportController extends AppController
                 $this->grapheEffectifsParType();
             }
             else if($typeGraphe == 'EM7'){
-                //$this->grapheEffectifsDoctorantParEquipe();
+                $this->graphNombreDeDoctorantsParEquipe();
             }
             else if($typeGraphe == 'EM9') {
-                //$this->grapheEffectifsParEquipe();
+                $this->graphEffectifsParEquipe();
             }
             else if($typeGraphe == 'EM15'){
                 //$this->grapheDoctorantGenreEtNationalite();
@@ -105,11 +105,12 @@ class ExportController extends AppController
                 //Liste des effectifs par type
                 $this->tableauEffectifsParType();
             }
-            else if($typeListe == "EM8"){ //En cours de code
-                //Liste effectif doctorant par equipe
+            else if($typeListe == "EM8"){ //ok
+                $this->tableauNombreDeDoctorantsParEquipe();
             }
-            else if($typeListe == "EM10"){ // En cours de code
+            else if($typeListe == "EM10"){ // ok
                 //liste des effectifs par equipe
+                $this->tableauEffectifsParEquipe();
             }
             else if($typeListe == "EM17"){ // En cours de code
                 //Liste des financements des doctorants
@@ -148,6 +149,7 @@ class ExportController extends AppController
             else if ($typeListe == "EPr2"){
                 //Liste des projets par équipe
             }
+
             else if ($typeListe == "EPr3"){ // ATTETION PAS LE LISTE DE MEMBRES
                 $encadrant = $export->getData('encadrant');
                 $this->tableauListeProjetMembre($encadrant);
@@ -1014,6 +1016,50 @@ class ExportController extends AppController
 
     }
 
+    public function graphEffectifsParEquipe(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->nombreEffectifParEquipe();
+
+        foreach($tableau as $key => $value){
+            $equipe[]= $value[0];
+            $effectifs[] = $value[1];
+        }
+
+        $largeur = 1000;
+        $hauteur = 600;
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' . DS . 'jpgraph.php');
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' .  DS . 'jpgraph_pie.php');
+        // Initialisation du graphique
+        $graphe = new PieGraph($largeur, $hauteur);
+
+        // Echelle lineaire ('lin') en ordonnee et pas de valeur en abscisse ('text')
+        // Valeurs min et max seront determinees automatiquement
+        $graphe->setScale("textlin");
+
+        // Creation de l'histogramme
+
+        $camGraph = new PiePlot($effectifs);
+
+        // Ajout de l'histogramme au graphique
+        $camGraph->SetCenter(0.4);
+        //$camGraph->SetValueType($type);
+        $camGraph->SetLegends($equipe);
+        $graphe->add($camGraph);
+        //$graphe->xaxis->title->set("Type");
+        //$graphe->yaxis->title->set("Effectifs");
+        //$graphe->xaxis->setTickLabels($type);
+
+        // Ajout du titre du graphique
+        $graphe->title->set("Diagramme effectifs par Equipe");
+
+        @unlink("img/effectifsParEquipe.png");
+        //$graphe->Add($camGraph);
+        $graphe->stroke("img/effectifsParEquipe.png");
+
+        $this->set("nomGraphe", "effectifsParEquipe.png");
+
+    }
+
     public function tableauListeThesesParEquipe($idEquipe){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeThesesParEquipe($idEquipe);
@@ -1102,4 +1148,115 @@ class ExportController extends AppController
         $this->set("tableau", $informationProjet);
         $this->set("nomFichier", $fichier);
     }*/
+
+    public function tableauNombreDeDoctorantsParEquipe(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->nombreDoctorantParEquipe();
+        $entetes = ["Nom Equipe","Nombre Doctorants"];
+        $fichier = "NombreDoctorantsParEquipe.csv";
+
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $NombreDoctorantParEquipe = array();
+        foreach($tableau as $key => $row){
+            $NombreDoctorantParEquipe[$key] =  array(
+                $row[0],
+                $row[1]
+            );
+
+            fputcsv($fp, array(
+                $row[0],
+                $row[1]
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $NombreDoctorantParEquipe);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function tableauEffectifsParEquipe(){
+        $controlInstance = new MembresController();
+        $tableau = $controlInstance->nombreEffectifParEquipe();
+        $entetes = ["Nom Equipe","Nombre"];
+        $fichier = "EffectifsParEquipe.csv";
+
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $EffectifsParEquipe = array();
+        foreach($tableau as $key => $row){
+            $EffectifsParEquipe[$key] =  array(
+                $row[0],
+                $row[1]
+            );
+
+            fputcsv($fp, array(
+                $row[0],
+                $row[1]
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $EffectifsParEquipe);
+        $this->set("nomFichier", $fichier);
+    }
+
+    public function graphNombreDeDoctorantsParEquipe(){
+        $controlInstance = new MembresController();
+        $donnees = $controlInstance->nombreDoctorantParEquipe();
+        foreach($donnees as $key => $value){
+            $equipe[]= $value[0];
+            $effectifs[] = $value[1];
+        }
+
+        $largeur = 1000;
+        $hauteur = 600;
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' . DS . 'jpgraph.php');
+        require_once(ROOT . DS . 'vendor' . DS . 'JPGraph' .  DS . 'jpgraph_bar.php');
+        // Initialisation du graphique
+        $graphe = new Graph($largeur, $hauteur);
+
+        // Echelle lineaire ('lin') en ordonnee et pas de valeur en abscisse ('text')
+        // Valeurs min et max seront determinees automatiquement
+        $graphe->setScale("textlin");
+
+        // Creation de l'histogramme
+
+
+
+        $histo = new BarPlot($effectifs);
+
+        // Ajout de l'histogramme au graphique
+
+        $graphe->add($histo);
+        $graphe->xaxis->title->set("Equipe");
+        $graphe->yaxis->title->set("Effectifs");
+        $graphe->xaxis->setTickLabels($equipe);
+
+        // Ajout du titre du graphique
+        $graphe->title->set("Histogramme");
+
+        @unlink("img/NombreDeDoctorantsParEquipe.png");
+        $graphe->stroke("img/NombreDeDoctorantsParEquipe.png");
+
+        $this->set("nomGraphe", "NombreDeDoctorantsParEquipe.png");
+    }
 }
