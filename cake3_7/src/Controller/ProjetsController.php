@@ -135,7 +135,9 @@ class ProjetsController extends AppController
      */
     public function informationProjet($id = null)
     {
-        $result=$this->Projets->get($id);
+        $result=$this->Projets->find('all')
+        ->where(["Projets.id" => $id])
+        ->contain(["financements"]);
         return $result->first();
     }
 
