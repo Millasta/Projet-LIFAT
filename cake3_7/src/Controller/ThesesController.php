@@ -194,6 +194,18 @@ class ThesesController extends AppController
         return $result;
     }
 
+
+    /**
+     * Retourne la liste des soutenances
+     * @return array : liste des soutenances
+     */
+    public function listeSoutenances()
+    {
+        $result = $this->Theses->find('all')->toArray();
+        return $result;
+    }
+
+
     /**
      * Retourne le nombre de soutenances d'Habilitation à Diriger les Recherches
      * @param null $dateEntree, dateFin
