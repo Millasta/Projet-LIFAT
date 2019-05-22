@@ -31,10 +31,16 @@ use \App\Model\Entity\Membre;
             </td>
    			<td>
 				<?php
-					echo $user['prenom'].' '.$user['nom'].' ('.$user['role'];
-					if ($user['permanent'] === true && $user['role'] != Membre::ADMIN)
-					{
-						echo " permanent";
+					echo $user['prenom'].' '.$user['nom'].' (';
+					if ($user['actif'] === true) {
+						echo $user['role'];
+						if ($user['permanent'] === true && $user['role'] != Membre::ADMIN)
+						{
+							echo " permanent";
+						}
+					}
+					else {
+						echo "Compte désactivé";
 					}
 					echo ") ";
 				?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  jeu. 16 mai 2019 à 11:59
+-- Généré le :  mer. 22 mai 2019 à 14:08
 -- Version du serveur :  10.1.38-MariaDB
 -- Version de PHP :  7.3.2
 
@@ -251,7 +251,7 @@ CREATE TABLE `membres` (
 --
 
 INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
-(4, '', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$bzSGIbfxvGYjAh6H2f6rAuMKaAEAdYUrhrpNq/SoOmHKPnQdX58jG', '', '', '', '', '', '', '', 'AB123DC', 7, 'admin-', '', '', NULL, NULL, 1, 2, 1, '', 1, 'F', 0, 1, 0, NULL, NULL);
+(4, 'admin', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$bzSGIbfxvGYjAh6H2f6rAuMKaAEAdYUrhrpNq/SoOmHKPnQdX58jG', '', '', '', '', '', '', '', 'AB123DC', 7, 'admin-', '', '', NULL, NULL, 1, 2, 1, '', 1, 'F', 0, 1, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 

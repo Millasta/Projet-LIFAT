@@ -109,7 +109,12 @@ class AppController extends Controller
 			return true;
 		}
 
-		//	Quoi qu'il arrive, n'importe quel membre connecté peut avoir accès aux fontions 'index', 'view' et 'logout'
+		//	Les membres dont le compte n'est pas activé ne peuvent rien faire
+		if ($user['actif'] != true) {
+			return false;
+		}
+
+		//	Quoi qu'il arrive, n'importe quel membre connecté avec un compte actif peut avoir accès aux fontions 'index', 'view' et 'logout'
 		$action = $this->request->getParam('action');
 		if (in_array($action, ['index', 'view', 'logout'])) {
 			return true;
