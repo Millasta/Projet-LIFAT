@@ -54,11 +54,11 @@ class EquipesProjetsController extends AppController
         if ($this->request->is('post')) {
             $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
             if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('The equipes projet has been saved.'));
+                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes projet could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
         $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
@@ -80,11 +80,11 @@ class EquipesProjetsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
             if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('The equipes projet has been saved.'));
+                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The equipes projet could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
         }
         $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
         $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
@@ -103,9 +103,9 @@ class EquipesProjetsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $equipesProjet = $this->EquipesProjets->get($id);
         if ($this->EquipesProjets->delete($equipesProjet)) {
-            $this->Flash->success(__('The equipes projet has been deleted.'));
+            $this->Flash->success(__('Le projet de l\'équipe à été supprimé.'));
         } else {
-            $this->Flash->error(__('The equipes projet could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du projet de l\'équipe à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

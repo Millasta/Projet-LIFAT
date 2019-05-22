@@ -63,11 +63,11 @@ class LieuTravailsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $lieuTravail = $this->LieuTravails->patchEntity($lieuTravail, $this->request->getData());
             if ($this->LieuTravails->save($lieuTravail)) {
-                $this->Flash->success(__('The lieu travail has been saved.'));
+                $this->Flash->success(__('Le lieu de travail a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The lieu travail could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout du lieu de travail a échoué. Merci de ré-essayer.'));
         }
         $this->set(compact('lieuTravail'));
     }
@@ -84,9 +84,9 @@ class LieuTravailsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $lieuTravail = $this->LieuTravails->get($id);
         if ($this->LieuTravails->delete($lieuTravail)) {
-            $this->Flash->success(__('The lieu travail has been deleted.'));
+            $this->Flash->success(__('Le lieu de travail à été supprimé.'));
         } else {
-            $this->Flash->error(__('The lieu travail could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression du lieu de travail à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

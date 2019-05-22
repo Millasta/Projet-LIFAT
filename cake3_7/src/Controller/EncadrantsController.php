@@ -51,11 +51,11 @@ class EncadrantsController extends AppController
         if ($this->request->is('post')) {
             $encadrant = $this->Encadrants->patchEntity($encadrant, $this->request->getData());
             if ($this->Encadrants->save($encadrant)) {
-                $this->Flash->success(__('The encadrant has been saved.'));
+                $this->Flash->success(__('L\'encadrant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The encadrant could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de l\'encadrant a échoué. Merci de ré-essayer.'));
         }
         $theses = $this->Encadrants->Theses->find('list', ['limit' => 200]);
         $this->set(compact('encadrant', 'theses'));
@@ -76,11 +76,11 @@ class EncadrantsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $encadrant = $this->Encadrants->patchEntity($encadrant, $this->request->getData());
             if ($this->Encadrants->save($encadrant)) {
-                $this->Flash->success(__('The encadrant has been saved.'));
+                $this->Flash->success(__('L\'encadrant a été ajouté avec succès.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The encadrant could not be saved. Please, try again.'));
+            $this->Flash->error(__('L\'ajout de l\'encadrant a échoué. Merci de ré-essayer.'));
         }
         $theses = $this->Encadrants->Theses->find('list', ['limit' => 200]);
         $this->set(compact('encadrant', 'theses'));
@@ -98,9 +98,9 @@ class EncadrantsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $encadrant = $this->Encadrants->get($id);
         if ($this->Encadrants->delete($encadrant)) {
-            $this->Flash->success(__('The encadrant has been deleted.'));
+            $this->Flash->success(__('L\'encadrant à été supprimé.'));
         } else {
-            $this->Flash->error(__('The encadrant could not be deleted. Please, try again.'));
+            $this->Flash->error(__('La suppression de l\'encadrant à échoué.'));
         }
 
         return $this->redirect(['action' => 'index']);

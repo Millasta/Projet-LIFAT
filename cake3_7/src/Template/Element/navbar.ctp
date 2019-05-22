@@ -45,9 +45,8 @@ use \App\Model\Entity\Membre;
 			</td>
 		<?php else: ?>
 			<td></td><td></td><td></td><td></td><td></td><td></td>
-   			<td>
-				<?= $this->Html->link(__('Connexion'), ['controller' => 'membres', 'action' => 'login']) ?>
-			</td>
+   			<td><?= $this->Html->link(__('Connexion'), ['controller' => 'membres', 'action' => 'login']) ?></td>
+			<td><?= $this->Html->link(__('Inscription'), ['controller' => 'membres', 'action' => 'register']) ?></td>
 		<?php endif; ?>
 	</tr>
 </table>
