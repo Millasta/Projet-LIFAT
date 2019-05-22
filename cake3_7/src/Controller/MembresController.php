@@ -307,6 +307,38 @@ class MembresController extends AppController
 		return $resultset;
 	}
 
+    /**
+     * Retourne une liste d'effectifs trie par type en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des types/effectif
+     */
+    public function listeEffectifParType($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $result=$this->Membres->find('all')
+                ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                    return $exp->between('date_creation', $dateEntree, $dateFin);
+                })
+                ->toArray();
+
+            foreach ($result as $key => $row) {
+                $type_personnel[$key]  = $row['type_personnel'];
+            }
+            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+        } else {
+            $result=$this->Membres->find('all')
+            ->toArray();
+
+            foreach ($result as $key => $row) {
+                $type_personnel[$key]  = $row['type_personnel'];
+            }
+            array_multisort($type_personnel, SORT_STRING, SORT_ASC, $result);
+
+        }
+        return $result;
+    }
+
 	/**
 	 * Retourne la liste des effectifs selon leur sexe et nationalite en prenant en compte une fenetre de temps
 	 * @param $dateEntree : date d'entree de la fenetre de temps

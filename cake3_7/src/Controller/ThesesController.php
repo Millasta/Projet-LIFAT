@@ -159,6 +159,12 @@ class ThesesController extends AppController
         $this->set(compact('query', 'count'));
     }
 
+    /**
+     * Retourne la liste des types trie selon leur type en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return int : nombre de soutenances
+     */
     public function listeTheseParType($dateEntree = null, $dateFin = null)
     {
         $this->loadModel('Theses');

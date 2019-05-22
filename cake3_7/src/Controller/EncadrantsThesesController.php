@@ -186,6 +186,39 @@ class EncadrantsThesesController extends AppController
         }
     }
 
+    /**
+     * Retourne la liste des theses qu'un encadrant encadre en tenant compte d'un lapse de temps s'il est renseigne
+     * @param $id : id de l'encadrant
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : liste des theses
+     */
+    public function NombreThesesParEncadrant($id=null, $dateEntree = null, $dateFin = null){
+        if($dateEntree && $dateFin){
+            $query = $this->EncadrantsTheses->find('all');
+            $query->contain(['Theses']);
+            $query->where(['encadrant_id' => $id]);
+            $query->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                return $exp->between('theses.date_fin', $dateEntree, $dateFin);
+            });
+            $result=$query->count();
+
+            return $result;
+        }else{
+            $this->loadModel('EncadrantsTheses');
+            $result = $this->EncadrantsTheses->find('all', [
+                'conditions' => ['encadrant_id' => $id],
+                'contain' => ['Theses']
+            ])
+            ->count();
+
+            die(strval($result));
+
+
+            return $result;
+        }
+    }
+
 
 
 

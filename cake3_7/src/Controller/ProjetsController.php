@@ -156,4 +156,14 @@ class ProjetsController extends AppController
             ->toArray();
         return $result;
     }
+    /**
+     * Retourne les informations d'un projet selon son id
+     * @param $id : identifiant du projet
+     * @return array : informations du projet
+     */
+    public function informationProjet($id = null)
+    {
+        $result=$this->Projets->get($id);
+        return $result->first();
+    }
 }
