@@ -44,13 +44,6 @@ CREATE TABLE `dirigeants` (
   `dirigeant_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `dirigeants`
---
-
-INSERT INTO `dirigeants` (`dirigeant_id`) VALUES
-(4);
-
 -- --------------------------------------------------------
 
 --
@@ -63,13 +56,6 @@ CREATE TABLE `dirigeants_theses` (
   `taux` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `dirigeants_theses`
---
-
-INSERT INTO `dirigeants_theses` (`dirigeant_id`, `these_id`, `taux`) VALUES
-(4, 1, 100);
-
 -- --------------------------------------------------------
 
 --
@@ -79,13 +65,6 @@ INSERT INTO `dirigeants_theses` (`dirigeant_id`, `these_id`, `taux`) VALUES
 CREATE TABLE `encadrants` (
   `encadrant_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `encadrants`
---
-
-INSERT INTO `encadrants` (`encadrant_id`) VALUES
-(4);
 
 -- --------------------------------------------------------
 
@@ -99,13 +78,6 @@ CREATE TABLE `encadrants_theses` (
   `taux` int(3) DEFAULT '100'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `encadrants_theses`
---
-
-INSERT INTO `encadrants_theses` (`encadrant_id`, `these_id`, `taux`) VALUES
-(4, 1, 100);
-
 -- --------------------------------------------------------
 
 --
@@ -118,13 +90,6 @@ CREATE TABLE `equipes` (
   `responsable_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `equipes`
---
-
-INSERT INTO `equipes` (`id`, `nom_equipe`, `responsable_id`) VALUES
-(1, 'oof', 4);
-
 -- --------------------------------------------------------
 
 --
@@ -135,13 +100,6 @@ CREATE TABLE `equipes_projets` (
   `equipe_id` int(11) NOT NULL,
   `projet_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `equipes_projets`
---
-
-INSERT INTO `equipes_projets` (`equipe_id`, `projet_id`) VALUES
-(1, 1);
 
 -- --------------------------------------------------------
 
@@ -168,13 +126,6 @@ CREATE TABLE `financements` (
   `financement` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `financements`
---
-
-INSERT INTO `financements` (`id`, `international`, `nationalite_financement`, `financement_prive`, `financement`) VALUES
-(1, 0, 'Français', 1, 'L\'argent des abonnés');
-
 -- --------------------------------------------------------
 
 --
@@ -199,12 +150,6 @@ CREATE TABLE `lieu_travails` (
   `est_dans_liste` tinyint(1) DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `lieu_travails`
---
-
-INSERT INTO `lieu_travails` (`id`, `nom_lieu`, `est_dans_liste`) VALUES
-(2, 'le 93', 1);
 
 -- --------------------------------------------------------
 
@@ -246,12 +191,21 @@ CREATE TABLE `membres` (
   `date_sortie` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Déchargement des données de la table `membres`
+-- Structure de la table `fichiers`
 --
 
-INSERT INTO `membres` (`id`, `role`, `nom`, `prenom`, `email`, `passwd`, `adresse_agent_1`, `adresse_agent_2`, `residence_admin_1`, `residence_admin_2`, `type_personnel`, `intitule`, `grade`, `im_vehicule`, `pf_vehicule`, `signature_name`, `login_cas`, `carte_sncf`, `matricule`, `date_naissance`, `actif`, `lieu_travail_id`, `equipe_id`, `nationalite`, `est_francais`, `genre`, `hdr`, `permanent`, `est_porteur`, `date_creation`, `date_sortie`) VALUES
-(4, 'admin', 'Admin', 'Admin', 'admin@admin.fr', '$2y$10$bzSGIbfxvGYjAh6H2f6rAuMKaAEAdYUrhrpNq/SoOmHKPnQdX58jG', '', '', '', '', '', '', '', 'AB123DC', 7, 'admin-', '', '', NULL, NULL, 1, 2, 1, '', 1, 'F', 0, 1, 0, NULL, NULL);
+CREATE TABLE `fichiers` (
+	`id` int(11) NOT NULL,
+    `nom` varchar(100) NOT NULL,
+    `titre` varchar(100) DEFAULT NULL,
+    `description` varchar(500) DEFAULT NULL,
+    `date_upload` datetime DEFAULT CURRENT_TIMESTAMP,
+    `membre_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 -- --------------------------------------------------------
 
@@ -315,13 +269,6 @@ CREATE TABLE `projets` (
   `financement_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Déchargement des données de la table `projets`
---
-
-INSERT INTO `projets` (`id`, `titre`, `description`, `type`, `budget`, `date_debut`, `date_fin`, `financement_id`) VALUES
-(1, 'mais osef en fait', '', '', -42069, NULL, NULL, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -339,13 +286,6 @@ CREATE TABLE `theses` (
   `financement_id` int(11) DEFAULT NULL,
   `auteur_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Déchargement des données de la table `theses`
---
-
-INSERT INTO `theses` (`id`, `sujet`, `type`, `date_debut`, `date_fin`, `autre_info`, `est_hdr`, `financement_id`, `auteur_id`) VALUES
-(1, 'oh non un coboille', 'c\'est vraiment censé être en édition libre ?', NULL, NULL, '', 0, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -451,6 +391,14 @@ ALTER TABLE `membres`
   ADD UNIQUE KEY `login_cas` (`login_cas`),
   ADD KEY `lieu_travail_id` (`lieu_travail_id`),
   ADD KEY `equipe_id` (`equipe_id`);
+  
+--
+-- Index pour la table `membres`
+--
+ALTER TABLE `fichiers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nom` (`nom`),
+  ADD KEY `membre_id` (`membre_id`);
 
 --
 -- Index pour la table `missions`
@@ -527,6 +475,12 @@ ALTER TABLE `lieu_travails`
 -- AUTO_INCREMENT pour la table `membres`
 --
 ALTER TABLE `membres`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  
+--
+-- AUTO_INCREMENT pour la table `fichiers`
+--
+ALTER TABLE `fichiers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
@@ -621,6 +575,12 @@ ALTER TABLE `equipes_responsables`
 ALTER TABLE `membres`
   ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`),
   ADD CONSTRAINT `fk_membre_2` FOREIGN KEY (`equipe_id`) REFERENCES `equipes` (`id`);
+
+--
+-- Contraintes pour la table `fichiers`
+--
+ALTER TABLE `fichiers`
+  ADD CONSTRAINT `fk_fichiers_1` FOREIGN KEY (`membre_id`) REFERENCES `membres` (`id`);
 
 --
 -- Contraintes pour la table `missions`

@@ -141,8 +141,7 @@ class MembresController extends AppController
 					$query = $this->Encadrants->query();
 					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				}
-				$this->Flash->success(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
-
+				$this->Flash->success(__('Le membre a été ajouté avec succès.'));
 				return $this->redirect(['action' => 'index']);
 			}
 			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
@@ -404,6 +403,133 @@ class MembresController extends AppController
 		array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
 		return $result;
 	}
+    /**
+     * Retourne le nombre d'effectif par equipe en prenant en compte une fenetre de temps
+     * @param $dateEntree : date d'entree de la fenetre de temps
+     * @param $dateFin : date de fin de la fenetre de temps
+     * @return array : nombre de doctorant avec le nom de leur equipe
+     */
+    public function nombreEffectifParEquipe($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $equipe_id = $this->Membres->find('all')
+                ->distinct(['equipe_id'])
+                ->select("equipe_id")
+                ->toArray();
+
+            $result=array();
+            //die(strval($equipe_id[2]));
+            foreach($equipe_id as $row){
+                if($row["equipe_id"] != null){
+
+                    $nombre = $this->Membres->find("all")
+                        ->where(["equipe_id"=>$row["equipe_id"]])
+                        ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                            return $exp->between('date_creation', $dateEntree, $dateFin);
+                        })
+                        ->count();
+
+                    $this->loadModel('Equipes');
+                    $nom = $this->Equipes->find('all')
+                        ->where(["id" => $row["equipe_id"]])
+                        ->select('nom_equipe')
+                        ->first();
+                    $tmp = array($nom["nom_equipe"],$nombre);
+                    $result[]=$tmp;
+                }
+            }
+        } else {
+            $equipe_id = $this->Membres->find('all')
+                ->distinct(['equipe_id'])
+                ->select("equipe_id")
+                ->toArray();
+
+            $result=array();
+            //die(strval($equipe_id[2]));
+            foreach($equipe_id as $row){
+                if($row["equipe_id"] != null){
+
+                    $nombre = $this->Membres->find("all")
+                        ->where(["equipe_id"=>$row["equipe_id"]])
+                        ->count();
+
+                    $this->loadModel('Equipes');
+                    $nom = $this->Equipes->find('all')
+                        ->where(["id" => $row["equipe_id"]])
+                        ->select('nom_equipe')
+                        ->first();
+                    $tmp = array($nom["nom_equipe"],$nombre);
+                    $result[]=$tmp;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+ * Retourne le nombre de doctorants par equipe en prenant en compte une fenetre de temps
+ * @param $dateEntree : date d'entree de la fenetre de temps
+ * @param $dateFin : date de fin de la fenetre de temps
+ * @return array : nombre de doctorant avec le nom de leur equipe
+ */
+    public function nombreDoctorantParEquipe($dateEntree = null, $dateFin = null)
+    {
+        if ($dateEntree && $dateFin) {
+            $equipe_id = $this->Membres->find('all')
+                ->distinct(['equipe_id'])
+                ->select("equipe_id")
+                ->toArray();
+
+            $result=array();
+            //die(strval($equipe_id[2]));
+            foreach($equipe_id as $row){
+                if($row["equipe_id"] != null){
+
+                    $nombre = $this->Membres->find("all")
+                        ->where(["equipe_id"=>$row["equipe_id"]])
+                        ->where(['type_personnel' => 'DO'])
+                        ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+                            return $exp->between('date_creation', $dateEntree, $dateFin);
+                        })
+                        ->count();
+
+                    $this->loadModel('Equipes');
+                    $nom = $this->Equipes->find('all')
+                        ->where(["id" => $row["equipe_id"]])
+                        ->select('nom_equipe')
+                        ->first();
+                    $tmp = array($nom["nom_equipe"],$nombre);
+                    $result[]=$tmp;
+                }
+            }
+        } else {
+            $equipe_id = $this->Membres->find('all')
+                ->distinct(['equipe_id'])
+                ->select("equipe_id")
+                ->toArray();
+
+            $result=array();
+            //die(strval($equipe_id[2]));
+            foreach($equipe_id as $row){
+                if($row["equipe_id"] != null){
+
+                    $nombre = $this->Membres->find("all")
+                        ->where(["equipe_id"=>$row["equipe_id"]])
+                        ->where(['type_personnel' => 'DO'])
+                        ->count();
+
+                    $this->loadModel('Equipes');
+                    $nom = $this->Equipes->find('all')
+                        ->where(["id" => $row["equipe_id"]])
+                        ->select('nom_equipe')
+                        ->first();
+                    $tmp = array($nom["nom_equipe"],$nombre);
+                    $result[]=$tmp;
+                }
+            }
+        }
+        return $result;
+    }
 
 	/**
 	 * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps
