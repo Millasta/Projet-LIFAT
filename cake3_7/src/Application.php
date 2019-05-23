@@ -36,7 +36,11 @@ class Application extends BaseApplication
     {
         $this->addPlugin('Search');
 
-        $this->addPlugin('Search');
+        
+
+        
+
+        
 
         // Call parent to load bootstrap from files.
         parent::bootstrap();
