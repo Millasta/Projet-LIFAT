@@ -42,8 +42,10 @@ class ExportController extends AppController
             ->find()
             ->select(['id','nom_equipe']);
 
+        $membres = $this->Membres->find();
+
         $this->set('export', $export);
-        $this->set(compact('encadrants','equipes'));
+        $this->set(compact('encadrants','equipes', 'membres'));
     }
 
     public function results(){

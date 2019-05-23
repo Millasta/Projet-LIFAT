@@ -30,30 +30,52 @@ $optionsEquipes = array();
 foreach ($equipes as $equipe){
     $optionsEquipes += [$equipe->id => $equipe->nom_equipe];
 }
+
+$optionsMembres = array();
+foreach ($membres as $membre){
+    $optionsMembres += [$membre->id => $membre->nom.' '.$membre->prenom];
+}
 ?>
 
 <script type="text/javascript">
 //JS function used to hide or show different inputs based on what export is selected in the form.
 function toggleOptions() {
-    //The export selected needs an "Encadrant" input"
-    if ( document.getElementById('typeListe').value==='EM1' || document.getElementById('typeListe').value==='EM3' || document.getElementById('typeListe').value==='EPr3')
+    //The export selected needs an "Encadrant" input
+    if ( document.getElementById('typeListe').value==='EM1' || document.getElementById('typeListe').value==='EM3')
     {
+        document.getElementById('hiddenYear').style.display = 'none';
         document.getElementById('hiddenEncadrant').style.display = '';
         document.getElementById('hiddenEquipe').style.display = 'none';
+        document.getElementById('hiddenMembres').style.display = 'none';
     }
-    //The export selected needs an "Equipe" input"
+    //The export selected needs an "Equipe" input
     else if ( document.getElementById('typeListe').value==='ET2' )
     {
+        document.getElementById('hiddenYear').style.display = 'none';
         document.getElementById('hiddenEncadrant').style.display = 'none';
         document.getElementById('hiddenEquipe').style.display = '';
+        document.getElementById('hiddenMembres').style.display = 'none';
     }
+    //The export selected needs an "Year" input
     else if (document.getElementById('typeListe').value === 'ET5'){
         document.getElementById('hiddenYear').style.display = '';
+        document.getElementById('hiddenEncadrant').style.display = 'none';
+        document.getElementById('hiddenEquipe').style.display = 'none';
+        document.getElementById('hiddenMembres').style.display = 'none';
+    }
+    //The export selected nedds an "Membre" input
+    else if (document.getElementById('typeListe').value === 'EPr3'){
+        document.getElementById('hiddenYear').style.display = 'none';
+        document.getElementById('hiddenEncadrant').style.display = 'none';
+        document.getElementById('hiddenEquipe').style.display = 'none';
+        document.getElementById('hiddenMembres').style.display = '';
     }
     //no other inputs needed
     else{
+        document.getElementById('hiddenYear').style.display = 'none';
         document.getElementById('hiddenEncadrant').style.display = 'none';
         document.getElementById('hiddenEquipe').style.display = 'none';
+        document.getElementById('hiddenMembres').style.display = 'none';
     }
 }
 </script>
@@ -77,17 +99,17 @@ function toggleOptions() {
             echo $this->Form->select('equipe', $optionsEquipes);
         ?>
     </div>
-    <div id="hiddenYear" style="display:none;">
-    <?php
-         echo $this->Form->year('annee', [
-            'minYear' => 2000,
-            'maxYear' => date('Y')
-        ]);
-        ?>
-        </div>
+    <div id="hiddenMembres" style="display:none;">
         <?php
-        echo $this->Form->control('dateDebut',['minYear'=>'1900']);
-        echo $this->Form->control('dateFin',['minYear'=>'1900']);
+            echo $this->Form->select('membre', $optionsMembres);
+        ?>
+    </div>
+    <div id="hiddenYear" style="display:none;">
+        <?php
+            echo $this->Form->year('annee', ['minYear' => 2000,'maxYear' => date('Y')]);
+        ?>
+    </div>
+    <?php
         echo $this->Form->button('Valider');
         echo $this->Form->end();
     ?>
