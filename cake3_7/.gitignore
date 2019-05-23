@@ -11,6 +11,7 @@
 ######################
 !/vendor/JPGraph
 !/vendor/friendsofcake/search
+!/vendor/friendsofcake/search/*
 
 # OS generated files #
 ######################
