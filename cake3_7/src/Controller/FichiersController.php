@@ -56,37 +56,37 @@ class FichiersController extends AppController
 		$uploadFolder = "UploadedFiles";
         $fichier = $this->Fichiers->newEntity();
         if ($this->request->is('post')) {
-			
+
 			if(!file_exists($uploadFolder))
 					mkdir($uploadFolder);
-				
+
 			$file = $this->request->getData()['nom'];
-			
+
 			// Erreur
 			if($file['error'] > 0) {
 				$this->Flash->error('Erreur lors de la récupération du fichier !');
 				return $this->redirect(['action' => 'index']);
 			}
-			
+
 			// Limitation à 10Mo
 			if($file['size'] > 10000000) {
 				$this->Flash->error('Votre fichier est trop volumineux (>10Mo) !');
 				return $this->redirect(['action' => 'index']);
 			}
-			
+
 			// Type de fichier
 			if($file['type'] != 'application/pdf') {
 				$this->Flash->error('Vous ne pouvez envoyer que des fichiers PDF (.pdf) !');
 				return $this->redirect(['action' => 'index']);
 			}
-			
+
 			// Enregistrement parsage manuel
 			$this->loadModel('Membres');
 			$fichier->nom = $this->request->getData()['nom']['name'];
 			$fichier->titre = $this->request->getData()['titre'];
 			$fichier->description = $this->request->getData()['description'];
 			$fichier->membre = $this->Membres->get($this->Auth->user('id'));
-			
+
 			if ($this->Fichiers->save($fichier)) {
 				$savedFile = $uploadFolder.'/'.$file['name'];
 				if(move_uploaded_file($file['tmp_name'], $savedFile)) {
@@ -160,9 +160,35 @@ class FichiersController extends AppController
 		else {
 			$this->Flash->error(__('Impossible de supprimer le fichier, veuillez réessayer.'));
 		}
-		
+
         return $this->redirect(['action' => 'index']);
     }
 
+	/**
+	 * Checks the currently logged in user's rights to access a page (called when changing pages).
+	 * @param $user : the user currently logged in
+	 * @return bool : if the user is allowed (or not) to access the requested page
+	 */
+	public function isAuthorized($user)
+	{
+		if(parent::isAuthorized($user) === true)
+		{
+			return true;
+		}
+		else if($user['permanent'] === true)
+		{
+			//	Seuls les membres permanents ont des droits sur les fichiers, pour commencer
 
+			$action = $this->request->getParam('action');
+			$fichier_slug = $this->request->getParam('pass.0');
+
+			if($fichier_slug && ($action === 'edit' || $action === 'delete'))
+			{
+				//	Fichier existant : seul son owner peut l'edit / delete
+				$fichier = $this->Fichiers->findById($fichier_slug)->first();
+				return $user['id'] === $fichier['membre_id'];
+			}
+		}
+		return false;
+	}
 }

@@ -3,9 +3,17 @@
  * @var \App\View\AppView $this
  * @var \App\Model\Entity\Fichier[]|\Cake\Collection\CollectionInterface $fichiers
  */
-?>
+
+use App\Model\Entity\Membre; ?>
 <div class="fichiers index large-9 medium-8 columns content">
-    <h3><?= __('Fichiers') ?><font size="+1">  [<?= $this->Html->link(__('Envoyer un fichier'), ['action' => 'add']) ?>]</font></h3>
+    <h3><?= __('Fichiers') ?><font size="+1">
+			<?php
+			if ($user['permanent'] === true || $user['role'] === Membre::ADMIN) {
+				//	Seuls les membres permanents (& admins) peuvent ajouter des fichiers
+				echo '[' . $this->Html->link(__('Envoyer un fichier'), ['action' => 'add']) . ']';
+			}
+			?>
+		</font></h3>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
@@ -25,8 +33,14 @@
                 <td><?= $fichier->has('membre') ? $this->Html->link($fichier->membre->nom, ['controller' => 'Membres', 'action' => 'view', $fichier->membre->id]) : '' ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('Detail'), ['action' => 'view', $fichier->id]) ?>
-                    <?= $this->Html->link(__('Modifier'), ['action' => 'edit', $fichier->id]) ?>
-                    <?= $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $fichier->id], ['confirm' => __('Confirmer la suppression du fichier {0} ?', $fichier->nom)]) ?>
+					<?php
+					if (($user['id'] === $fichier->membre->id && $user['permanent'] === true) || $user['role'] === Membre::ADMIN) {
+						//	Seuls les membres permanents qui sont owner du fichier (& admins) peuvent edit / delete les fichiers
+						echo $this->Html->link(__('Modifier'), ['action' => 'edit', $fichier->id]);
+						echo ' ';
+						echo $this->Form->postLink(__('Supprimer'), ['action' => 'delete', $fichier->id], ['confirm' => __('Confirmer la suppression du fichier {0} ?', $fichier->nom)]);
+					}
+					?>
                 </td>
             </tr>
             <?php endforeach; ?>
