@@ -40,6 +40,6 @@
                 echo '</tr>';
         }
     ?>
-</table>_
+</table>
 
 <?php }?>

@@ -12,9 +12,15 @@ use Barplot;
 use PieGraph;
 use PiePlot;
 
-
+/**
+ * Class ExportController
+ * @package App\Controller
+ */
 class ExportController extends AppController
 {
+    /**
+     * Index method
+     */
     public function index()
     {
         $export = new ExportForm();
@@ -48,6 +54,10 @@ class ExportController extends AppController
         $this->set(compact('encadrants','equipes', 'membres'));
     }
 
+    /**
+     * Results method
+     *
+     */
     public function results(){
         $export = new ExportForm();
         if ($this->request->is('post')) {
@@ -67,7 +77,7 @@ class ExportController extends AppController
         if ($boolGraph == true){
             $typeGraphe = $export->getData('typeGraphe');
 
-            if($typeGraphe == 'EM5'){ //OK
+            if($typeGraphe == 'EM5'){
                 $this->grapheEffectifsParType();
             }
             else if($typeGraphe == 'EM7'){
@@ -77,11 +87,7 @@ class ExportController extends AppController
                 $this->graphEffectifsParEquipe();
             }
             else if($typeGraphe == 'EM15'){
-                //$this->grapheDoctorantGenreEtNationalite();
                 $this->graphEffectifsParNationaliteParSexe();
-            }
-            else if($typeGraphe == 'EM16') {
-                //$this->grapheFinancementsDoctorants();
             }
         }
 
@@ -89,72 +95,62 @@ class ExportController extends AppController
         //Si l'utilisateur veut un tableau
         if ($boolTableau == true){
             $typeListe = $export->getData('typeListe');
-            if($typeListe == "EM1"){ //OK
+            if($typeListe == "EM1"){
                 $encadrant = $export->getData('encadrant');
                 $this->tableaulisteThesesParEncadrant($encadrant);
             }
             else if ($typeListe == "EM2"){ //OK MAIS ATTENTION YA DES PB
                 $this->tableauListeMembresParEquipe();
             }
-            else if($typeListe == "EM3"){//OK
+            else if($typeListe == "EM3"){
                 $encadrant = $export->getData('encadrant');
                 $this->tableauListeProjetMembre($encadrant);
             }
-            else if($typeListe == "EM4"){ //OK
+            else if($typeListe == "EM4"){
                 $this->tableauListeDoctorant();
             }
-            else if($typeListe == "EM6"){ //OK
-                //Liste des effectifs par type
+            else if($typeListe == "EM6"){
                 $this->tableauEffectifsParType();
             }
-            else if($typeListe == "EM8"){ //ok
+            else if($typeListe == "EM8"){
                 $this->tableauNombreDeDoctorantsParEquipe();
             }
-            else if($typeListe == "EM10"){ // ok
-                //liste des effectifs par equipe
+            else if($typeListe == "EM10"){
                 $this->tableauEffectifsParEquipe();
             }
-            else if($typeListe == "EM17"){ // En cours de code
-                //Liste des financements des doctorants
-            }
-            else if($typeListe == "ET1"){ //OK
+            else if($typeListe == "ET1"){
                 $this->tableauListeEncadrantsAvecTaux();
             }
-            else if($typeListe == "ET2"){ //OK
+            else if($typeListe == "ET2"){
                 $equipe = $export->getData('equipe');
                 $this->tableauListeThesesParEquipe($equipe);
             }
-            else if ($typeListe == "ET3"){//OK
-                //Liste des soutenances
+            else if ($typeListe == "ET3"){
                 $this->tableauListeSoutenances();
             }
-            else if($typeListe == "ET4"){ //OK
-                //Liste des soutenances d’Habilitation à Diriger les Recherches
+            else if($typeListe == "ET4"){
                 $this->tableauListeSoutenanceHDR();
             }
-            else if ($typeListe == "ET5"){//ok
-                //Liste de soutenance par années
+            else if ($typeListe == "ET5"){
                 $annee = $export->getData('annee');
                 $this->tableauListeSoutenancesParAnnee($annee['year']);
             }
-            else if ($typeListe == "ET6"){ //OK
+            else if ($typeListe == "ET6"){
                 $this->tableauListeTheseParType();
             }
-            else if($typeListe == "ET7"){ //OK
-                //Liste des thèses en cours
+            else if($typeListe == "ET7"){
                 $this->tableauThesesEnCours();
             }
-            else if ($typeListe == "EPr1"){ //ok
+            else if ($typeListe == "EPr1"){
                 //Liste des projets par type
                $this->tableauInformationProjet();
             }
             else if ($typeListe == "EPr2"){
                 //Liste des projets par équipe
             }
-
             else if ($typeListe == "EPr3"){ // ATTETION PAS LE LISTE DE MEMBRES
-                $encadrant = $export->getData('encadrant');
-                $this->tableauListeProjetMembre($encadrant);
+                $membre = $export->getData('membre');
+                $this->tableauListeProjetMembre($membre);
             }
             else if ($typeListe == "EPr4"){//OK
                 $this->tableauBudgetsParProjet();
