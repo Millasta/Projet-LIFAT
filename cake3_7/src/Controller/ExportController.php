@@ -142,7 +142,7 @@ class ExportController extends AppController
                 //Liste des thèses en cours
                 $this->tableauThesesEnCours();
             }
-            else if ($typeListe == "EPr1"){ //A FAIRE AVEC LA TABLE FINANCEMENT
+            else if ($typeListe == "EPr1"){ //ok
                 //Liste des projets par type
                $this->tableauInformationProjet();
             }
@@ -159,7 +159,10 @@ class ExportController extends AppController
             }
 
         }
+        $this->set("boolGraphe", $boolGraph);
+        $this->set("boolTableau", $boolTableau);
     }
+
 
     public function grapheEffectifsParType(){
         $controlInstance = new MembresController();

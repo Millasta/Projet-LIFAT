@@ -3,14 +3,22 @@
     $fichierPNG= $this->get("nomGraphe");
     $tableau = $this->get("tableau");
     $entetes = $this->get("entetes");
+    $boolGraph = $this->get("boolGraphe");
+    $boolTableau = $this->get("boolTableau");
 ?>
 
-<a style="color:white;text-decoration:none;" href=<?php echo '/Projet-LIFAT/cake3_7/img/'.$fichierPNG; ?> download>
-    <button>Export Image</button>
-</a>
+<?php if($boolGraph == true){ ?>
+    <a style="color:white;text-decoration:none;" href=<?php echo '/Projet-LIFAT/cake3_7/img/'.$fichierPNG; ?> download>
+        <button>Export Image</button>
+    </a>
+<?php } ?>
 
-<?php echo $this->Html->image($fichierPNG); ?>
+<?php if($boolGraph == true){
+    echo $this->Html->image($fichierPNG);
+    }
+ ?>
 
+<?php if($boolTableau == true){ ?>
 <form method="get" action=<?php echo '/Projet-LIFAT/cake3_7/'.$fichier; ?>>
        <button type="submit">Export CSV</button>
  </form>
@@ -33,3 +41,5 @@
         }
     ?>
 </table>_
+
+<?php }?>
