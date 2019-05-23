@@ -86,6 +86,7 @@ class AppController extends Controller
 	/**
 	 * Before filter : makes some user data accessible in the views.
 	 * (example : $user['nom']).
+	 * Unfortunately, for some odd reason putting the whole Membre entity does NOT work.
 	 * @param Event $event
 	 * @return \Cake\Http\Response|null
 	 */
@@ -109,13 +110,14 @@ class AppController extends Controller
 			return true;
 		}
 
-		//	Les membres dont le compte n'est pas activé ne peuvent rien faire
-		if ($user['actif'] != true) {
+		$action = $this->request->getParam('action');
+
+		//	Les membres dont le compte n'est pas activé ne peuvent rien faire (sauf se déconnecter)
+		if ($user['actif'] != true && $action != 'logout') {
 			return false;
 		}
 
 		//	Quoi qu'il arrive, n'importe quel membre connecté avec un compte actif peut avoir accès aux fontions 'index', 'view' et 'logout'
-		$action = $this->request->getParam('action');
 		if (in_array($action, ['index', 'view', 'logout'])) {
 			return true;
 		}

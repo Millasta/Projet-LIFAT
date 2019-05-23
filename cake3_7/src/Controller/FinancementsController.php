@@ -91,4 +91,8 @@ class FinancementsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+	/*
+	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut ajouter / modifier / supprimer les financements.
+	 */
 }

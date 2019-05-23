@@ -17,7 +17,8 @@ class ExportForm extends Form
             ->addField('dateDebut', ['type' => 'date'])
             ->addField('dateFin', ['type' => 'date'])
             ->addField('encadrant', ['type' => 'string'])
-            ->addField('equipe', ['type' => 'string']);
+            ->addField('equipe', ['type' => 'string'])
+            ->addField('membre', ['type' => 'string']);
     }
 
     protected function _execute(array $data)

@@ -21,6 +21,7 @@ $optionsGenre = [
         <legend><?= $membre->id==0 ? __('Formulaire d\'inscription') : __('Edition d\'un membre');  ?></legend>
         <?php
         echo $this->Form->hidden('role', ['value' => Membre::MEMBRE]);
+		echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
         echo $this->Form->control('nom');
         echo $this->Form->control('prenom');
         echo $this->Form->control('email');
@@ -40,7 +41,6 @@ $optionsGenre = [
         echo $this->Form->control('matricule');
         echo $this->Form->control('date_naissance', ['empty' => true, 'minYear' => 1901, 'maxYear' => 2019]);
         echo $this->Form->control('lieu_travail_id', ['options' => $lieuTravails, 'empty' => false, 'label' => "lieu de travail"]);
-        echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
         echo $this->Form->control('nationalite');
         echo $this->Form->control('est_francais');
         echo $this->Form->select('genre', $optionsGenre);

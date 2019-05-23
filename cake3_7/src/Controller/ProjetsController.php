@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Model\Entity\Membre;
 
 /**
  * Projets Controller
@@ -80,7 +81,16 @@ class ProjetsController extends AppController
             $this->Flash->error(__('L\'ajout du projet a échoué. Merci de ré-essayer.'));
         }
         $financements = $this->Projets->Financements->find('list', ['limit' => 200]);
+
         $equipes = $this->Projets->Equipes->find('list', ['limit' => 200]);
+
+		//	Si l'user actuel n'est pas admin, les équipes dans lesquelles il peut bouger le projet cible sont limitées (seulement l'equipe actuelle de la cible / les équipes que le user mène / dont il fait partie)
+		if ($this->Auth->user('role') != Membre::ADMIN) {
+			$equipes->where(['responsable_id' => $this->Auth->user('id')]);
+			$equipes->orWhere(['id' => $this->Auth->user('equipe_id')]);
+			$equipes->orWhere(['id' => $projet->equipe_id]);
+		}
+
         $this->set(compact('projet', 'financements', 'equipes'));
     }
 

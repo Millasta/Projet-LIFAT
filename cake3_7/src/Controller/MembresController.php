@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\Membre;
 use Cake\Database\Expression\QueryExpression;
 use Cake\Event\Event;
 use Cake\I18n\Time;
@@ -94,7 +95,7 @@ class MembresController extends AppController
 				$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				$this->Flash->success(__('Enregistrement effectué, en attente de validation du compte.'));
 
-				return $this->redirect(['action' => 'index']);
+				return $this->redirect(['controller' => 'pages', 'action' => 'index']);
 			}
 			$this->Flash->error(__('Impossible d\'enregistrer le compte.'));
 		}
@@ -140,13 +141,22 @@ class MembresController extends AppController
 					$query = $this->Encadrants->query();
 					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				}
-				$this->Flash->success(__('Le membre a bien été édité.'));
+				$this->Flash->success(__('Le membre a été ajouté avec succès.'));
 				return $this->redirect(['action' => 'index']);
 			}
 			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
 		}
 		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
+
 		$equipes = $this->Membres->Equipes->find('list', ['limit' => 200]);
+
+		//	Si l'user actuel n'est pas admin, les équipes dans lesquelles il peut bouger le membre cible sont limitées (seulement l'equipe actuelle de la cible / les équipes que le user mène / dont il fait partie)
+		if ($this->Auth->user('role') != Membre::ADMIN) {
+			$equipes->where(['responsable_id' => $this->Auth->user('id')]);
+			$equipes->orWhere(['id' => $this->Auth->user('equipe_id')]);
+			$equipes->orWhere(['id' => $membre->equipe_id]);
+		}
+
 		$this->set(compact('membre', 'lieuTravails', 'equipes'));
 	}
 
@@ -599,17 +609,9 @@ class MembresController extends AppController
 
 			if ($action === 'edit' && $membre_slug) {
 				$membre = $this->Membres->findById($membre_slug)->first();
-				$equipe_membre = $membre['equipe_id'];
 
 				//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
-				if (is_null($equipe_membre)) {
-					//	Membre cible sans équipe
-					return $userEntity['id'] === $membre['id'];
-				} else {
-					//	Membre cible appartenant à une équipe
-					return $userEntity->estChefEquipe($membre['equipe_id']) || $userEntity['id'] === $membre_slug;
-				}
-
+				return ($userEntity['id'] === $membre['id']) || (!is_null($membre['equipe_id']) && $userEntity->estChefEquipe($membre['equipe_id']));
 
 				//	Add (edit sans slug) et Delete => admin (déjà true avec parent::isAuthorized())
 			}

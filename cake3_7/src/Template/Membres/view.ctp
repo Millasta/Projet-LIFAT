@@ -5,7 +5,7 @@
  */
 ?>
 <div class="membres view large-9 medium-8 columns content">
-    <h3><?= h($membre->nom.' '.$membre->prenom) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $membre->id]) ?>]</font size></h3>
+    <h3><?= h($membre->nom.' '.$membre->prenom) ?><font size="+1">[<?= $this->Html->link(__('Editer'), ['action' => 'edit', $membre->id]) ?>]</font size></h3><!--	TODO : edit link only if $user can edit this member	-->
     <table class="vertical-table">
         <tr>
             <th scope="row"><?= __('Rôle') ?></th>
@@ -91,10 +91,6 @@
             <td><?= h($membre->date_sortie) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Actif') ?></th>
-            <td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
-        </tr>
-        <tr>
             <th scope="row"><?= __('Est Francais') ?></th>
             <td><?= $membre->est_francais ? __('Oui') : __('Non'); ?></td>
         </tr>
@@ -110,5 +106,9 @@
             <th scope="row"><?= __('Membre Porteur ?') ?></th>
             <td><?= $membre->est_porteur ? __('Oui') : __('Non'); ?></td>
         </tr>
+		<tr>
+			<th scope="row"><?= __('Actif') ?></th>
+			<td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
+		</tr>
     </table>
 </div>
