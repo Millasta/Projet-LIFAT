@@ -1,10 +1,12 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\theses $theses
+ * @var AppView $this
+ * @var theses $theses
  */
 
-use App\Model\Entity\Membre; ?>
+use App\Model\Entity\Membre;
+use App\Model\Entity\theses;
+use App\View\AppView; ?>
 <div class="theses view columns content">
 	<h3><?= h($theses->sujet) ?> <font size="+1">
 			<?php

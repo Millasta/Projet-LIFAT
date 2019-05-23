@@ -1,10 +1,13 @@
 <?php
 
 use App\Model\Entity\Membre;
+use App\Model\Entity\Theses;
+use App\View\AppView;
+use Cake\Collection\CollectionInterface;
 
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Theses[]|\Cake\Collection\CollectionInterface $theses
+ * @var AppView $this
+ * @var Theses[]|CollectionInterface $theses
  */
 ?>
 <!-- Barre de recherche -->

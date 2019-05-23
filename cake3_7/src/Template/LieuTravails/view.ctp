@@ -1,10 +1,12 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\LieuTravail $lieuTravail
+ * @var AppView $this
+ * @var LieuTravail $lieuTravail
  */
 
-use App\Model\Entity\Membre; ?>
+use App\Model\Entity\LieuTravail;
+use App\Model\Entity\Membre;
+use App\View\AppView; ?>
 <div class="lieuTravails view large-9 medium-8 columns content">
 	<h3><?= h("Lieu de travail") ?> <font size="+1">
 			<?php

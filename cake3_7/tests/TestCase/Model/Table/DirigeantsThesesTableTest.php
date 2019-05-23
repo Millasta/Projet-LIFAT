@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\DirigeantsThesesTable;
@@ -10,65 +11,65 @@ use Cake\TestSuite\TestCase;
  */
 class DirigeantsThesesTableTest extends TestCase
 {
-    /**
-     * Test subject
-     *
-     * @var \App\Model\Table\DirigeantsThesesTable
-     */
-    public $DirigeantsTheses;
+	/**
+	 * Test subject
+	 *
+	 * @var DirigeantsThesesTable
+	 */
+	public $DirigeantsTheses;
 
-    /**
-     * Fixtures
-     *
-     * @var array
-     */
-    public $fixtures = [
-        'app.DirigeantsTheses',
-        'app.Dirigeants',
-        'app.Theses'
-    ];
+	/**
+	 * Fixtures
+	 *
+	 * @var array
+	 */
+	public $fixtures = [
+		'app.DirigeantsTheses',
+		'app.Dirigeants',
+		'app.Theses'
+	];
 
-    /**
-     * setUp method
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('DirigeantsTheses') ? [] : ['className' => DirigeantsThesesTable::class];
-        $this->DirigeantsTheses = TableRegistry::getTableLocator()->get('DirigeantsTheses', $config);
-    }
+	/**
+	 * setUp method
+	 *
+	 * @return void
+	 */
+	public function setUp()
+	{
+		parent::setUp();
+		$config = TableRegistry::getTableLocator()->exists('DirigeantsTheses') ? [] : ['className' => DirigeantsThesesTable::class];
+		$this->DirigeantsTheses = TableRegistry::getTableLocator()->get('DirigeantsTheses', $config);
+	}
 
-    /**
-     * tearDown method
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-        unset($this->DirigeantsTheses);
+	/**
+	 * tearDown method
+	 *
+	 * @return void
+	 */
+	public function tearDown()
+	{
+		unset($this->DirigeantsTheses);
 
-        parent::tearDown();
-    }
+		parent::tearDown();
+	}
 
-    /**
-     * Test initialize method
-     *
-     * @return void
-     */
-    public function testInitialize()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+	/**
+	 * Test initialize method
+	 *
+	 * @return void
+	 */
+	public function testInitialize()
+	{
+		$this->markTestIncomplete('Not implemented yet.');
+	}
 
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
+	/**
+	 * Test buildRules method
+	 *
+	 * @return void
+	 */
+	public function testBuildRules()
+	{
+		$this->markTestIncomplete('Not implemented yet.');
+	}
 }

@@ -1,10 +1,13 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\LieuTravail[]|\Cake\Collection\CollectionInterface $lieuTravails
+ * @var AppView $this
+ * @var LieuTravail[]|CollectionInterface $lieuTravails
  */
 
-use App\Model\Entity\Membre; ?>
+use App\Model\Entity\LieuTravail;
+use App\Model\Entity\Membre;
+use App\View\AppView;
+use Cake\Collection\CollectionInterface; ?>
 <!-- Barre de recherche -->
 <?php
 echo $this->element('searchbar');

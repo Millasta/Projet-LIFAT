@@ -2,19 +2,25 @@
 
 namespace App\Controller;
 
+use App\Model\Entity\Equipe;
+use App\Model\Table\EquipesTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Datasource\ResultSetInterface;
+use Cake\Http\Response;
+
 /**
  * Equipes Controller
  *
- * @property \App\Model\Table\EquipesTable $Equipes
+ * @property EquipesTable $Equipes
  *
- * @method \App\Model\Entity\Equipe[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method Equipe[]|ResultSetInterface paginate($object = null, array $settings = [])
  */
 class EquipesController extends AppController
 {
 	/**
 	 * Index method
 	 *
-	 * @return \Cake\Http\Response|void
+	 * @return Response|void
 	 */
 	public function index()
 	{
@@ -36,8 +42,8 @@ class EquipesController extends AppController
 	 * View method
 	 *
 	 * @param string|null $id Equipe id.
-	 * @return \Cake\Http\Response|void
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|void
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function view($id = null)
 	{
@@ -64,8 +70,8 @@ class EquipesController extends AppController
 	 * Edit method ; if $id is null it behaves like an add method instead.
 	 *
 	 * @param string|null $id Equipe id.
-	 * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|null Redirects on successful edit, renders view otherwise.
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function edit($id = null)
 	{
@@ -93,8 +99,8 @@ class EquipesController extends AppController
 	 * Delete method
 	 *
 	 * @param string|null $id Equipe id.
-	 * @return \Cake\Http\Response|null Redirects to index.
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|null Redirects to index.
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function delete($id = null)
 	{

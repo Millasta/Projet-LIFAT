@@ -1,31 +1,32 @@
 <?php
-use \App\Model\Entity\Membre;
+
+use App\Model\Entity\Membre;
+use App\View\AppView;
 
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Membre $membre
+ * @var AppView $this
+ * @var Membre $membre
  */
 
 $optionsMembres = [
-    Membre::ADMIN => 'Administrateur',
-	Membre::MEMBRE => 'Membre'	//	La dernière option est celle par défaut
+	Membre::ADMIN => 'Administrateur',
+	Membre::MEMBRE => 'Membre'    //	La dernière option est celle par défaut
 ];
 $optionsGenre = [
-    'H' => 'Homme',
-    'F' => 'Femme'
+	'H' => 'Homme',
+	'F' => 'Femme'
 ];
 ?>
 <div class="membres form large-9 medium-8 columns content">
 	<?php $membre->passwd = "" ?>
-    <?= $this->Form->create($membre) ?>
-    <fieldset>
-        <legend><?= $membre->id==0 ? __('Ajout d\'un membre') : __('Edition d\'un membre');  ?></legend>
-        <?php
+	<?= $this->Form->create($membre) ?>
+	<fieldset>
+		<legend><?= $membre->id == 0 ? __('Ajout d\'un membre') : __('Edition d\'un membre'); ?></legend>
+		<?php
 		//	Un admin peut changer le rôle des autres mais ne peut pas se demote lui-même
 		if ($user['role'] === Membre::ADMIN && $membre->id != $user['id']) {
 			echo $this->Form->select('role', $optionsMembres);
-		}
-		else {
+		} else {
 			echo $this->Form->hidden('role');
 		}
 		echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
@@ -57,29 +58,26 @@ $optionsGenre = [
 			echo $this->Form->control('permanent', ['label' => "Membre permanent"]);
 			echo $this->Form->control('est_porteur', ['label' => "Membre porteur"]);
 		}
-    ?>
-</fieldset>
-<?php
-//	Seul les admins peuvent rendre les comptes actifs
-if ($user['role'] === Membre::ADMIN) {
-	//	Nouveau membre = compte pas activé par défaut (autrement la valeur existante sera reprise)
-	if($membre->id==0) {
-		echo $this->Form->control('actif', ['value' => false]);
+		?>
+	</fieldset>
+	<?php
+	//	Seul les admins peuvent rendre les comptes actifs
+	if ($user['role'] === Membre::ADMIN) {
+		//	Nouveau membre = compte pas activé par défaut (autrement la valeur existante sera reprise)
+		if ($membre->id == 0) {
+			echo $this->Form->control('actif', ['value' => false]);
+		} else {
+			echo $this->Form->control('actif');
+		}
+	} else {
+		//	Nouveau membre = compte pas activé par défaut (autrement la valeur existante sera reprise)
+		if ($membre->id == 0) {
+			echo $this->Form->hidden('actif', ['value' => false]);
+		} else {
+			echo $this->Form->hidden('actif');
+		}
 	}
-	else {
-		echo $this->Form->control('actif');
-	}
-}
-else {
-	//	Nouveau membre = compte pas activé par défaut (autrement la valeur existante sera reprise)
-	if($membre->id==0) {
-		echo $this->Form->hidden('actif', ['value' => false]);
-	}
-	else {
-		echo $this->Form->hidden('actif');
-	}
-}
-?>
-<?= $this->Form->button(__('Valider')) ?>
-<?= $this->Form->end() ?>
+	?>
+	<?= $this->Form->button(__('Valider')) ?>
+	<?= $this->Form->end() ?>
 </div>

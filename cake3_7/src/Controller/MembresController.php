@@ -3,17 +3,21 @@
 namespace App\Controller;
 
 use App\Model\Entity\Membre;
+use App\Model\Table\MembresTable;
 use Cake\Database\Expression\QueryExpression;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Datasource\ResultSetInterface;
 use Cake\Event\Event;
+use Cake\Http\Response;
 use Cake\I18n\Time;
 use Cake\ORM\Query;
 
 /**
  * Membres Controller
  *
- * @property \App\Model\Table\MembresTable $Membres
+ * @property MembresTable $Membres
  *
- * @method \App\Model\Entity\Membre[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method Membre[]|ResultSetInterface paginate($object = null, array $settings = [])
  */
 class MembresController extends AppController
 {
@@ -21,7 +25,7 @@ class MembresController extends AppController
 	 * Makes the /membres/register action public.
 	 *
 	 * @param Event $event
-	 * @return \Cake\Http\Response|null
+	 * @return Response|null
 	 */
 	public function beforeFilter(Event $event)
 	{
@@ -32,7 +36,7 @@ class MembresController extends AppController
 	/**
 	 * Index method
 	 *
-	 * @return \Cake\Http\Response|void
+	 * @return Response|void
 	 */
 	public function index()
 	{
@@ -54,8 +58,8 @@ class MembresController extends AppController
 	 * View method
 	 *
 	 * @param string|null $id Membre id.
-	 * @return \Cake\Http\Response|void
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|void
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function view($id = null)
 	{
@@ -69,7 +73,7 @@ class MembresController extends AppController
 	/**
 	 * Register method
 	 *
-	 * @return \Cake\Http\Response|null Redirects on successful registration, renders view otherwise.
+	 * @return Response|null Redirects on successful registration, renders view otherwise.
 	 */
 	public function register()
 	{
@@ -108,8 +112,8 @@ class MembresController extends AppController
 	 * Edit method ; if $id is null it behaves like an add method instead.
 	 *
 	 * @param string|null $id Membre id.
-	 * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|null Redirects on successful edit, renders view otherwise.
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function edit($id = null)
 	{
@@ -164,8 +168,8 @@ class MembresController extends AppController
 	 * Delete method
 	 *
 	 * @param string|null $id Membre id.
-	 * @return \Cake\Http\Response|null Redirects to index.
-	 * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+	 * @return Response|null Redirects to index.
+	 * @throws RecordNotFoundException When record not found.
 	 */
 	public function delete($id = null)
 	{
@@ -408,133 +412,134 @@ class MembresController extends AppController
 		array_multisort($equipe_id, SORT_NUMERIC, SORT_ASC, $result);
 		return $result;
 	}
-    /**
-     * Retourne le nombre d'effectif par equipe en prenant en compte une fenetre de temps
-     * @param $dateEntree : date d'entree de la fenetre de temps
-     * @param $dateFin : date de fin de la fenetre de temps
-     * @return array : nombre de doctorant avec le nom de leur equipe
-     */
-    public function nombreEffectifParEquipe($dateEntree = null, $dateFin = null)
-    {
-        if ($dateEntree && $dateFin) {
-            $equipe_id = $this->Membres->find('all')
-                ->distinct(['equipe_id'])
-                ->select("equipe_id")
-                ->toArray();
 
-            $result=array();
-            //die(strval($equipe_id[2]));
-            foreach($equipe_id as $row){
-                if($row["equipe_id"] != null){
+	/**
+	 * Retourne le nombre d'effectif par equipe en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : nombre de doctorant avec le nom de leur equipe
+	 */
+	public function nombreEffectifParEquipe($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$equipe_id = $this->Membres->find('all')
+				->distinct(['equipe_id'])
+				->select("equipe_id")
+				->toArray();
 
-                    $nombre = $this->Membres->find("all")
-                        ->where(["equipe_id"=>$row["equipe_id"]])
-                        ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                            return $exp->between('date_creation', $dateEntree, $dateFin);
-                        })
-                        ->count();
+			$result = array();
+			//die(strval($equipe_id[2]));
+			foreach ($equipe_id as $row) {
+				if ($row["equipe_id"] != null) {
 
-                    $this->loadModel('Equipes');
-                    $nom = $this->Equipes->find('all')
-                        ->where(["id" => $row["equipe_id"]])
-                        ->select('nom_equipe')
-                        ->first();
-                    $tmp = array($nom["nom_equipe"],$nombre);
-                    $result[]=$tmp;
-                }
-            }
-        } else {
-            $equipe_id = $this->Membres->find('all')
-                ->distinct(['equipe_id'])
-                ->select("equipe_id")
-                ->toArray();
+					$nombre = $this->Membres->find("all")
+						->where(["equipe_id" => $row["equipe_id"]])
+						->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+							return $exp->between('date_creation', $dateEntree, $dateFin);
+						})
+						->count();
 
-            $result=array();
-            //die(strval($equipe_id[2]));
-            foreach($equipe_id as $row){
-                if($row["equipe_id"] != null){
+					$this->loadModel('Equipes');
+					$nom = $this->Equipes->find('all')
+						->where(["id" => $row["equipe_id"]])
+						->select('nom_equipe')
+						->first();
+					$tmp = array($nom["nom_equipe"], $nombre);
+					$result[] = $tmp;
+				}
+			}
+		} else {
+			$equipe_id = $this->Membres->find('all')
+				->distinct(['equipe_id'])
+				->select("equipe_id")
+				->toArray();
 
-                    $nombre = $this->Membres->find("all")
-                        ->where(["equipe_id"=>$row["equipe_id"]])
-                        ->count();
+			$result = array();
+			//die(strval($equipe_id[2]));
+			foreach ($equipe_id as $row) {
+				if ($row["equipe_id"] != null) {
 
-                    $this->loadModel('Equipes');
-                    $nom = $this->Equipes->find('all')
-                        ->where(["id" => $row["equipe_id"]])
-                        ->select('nom_equipe')
-                        ->first();
-                    $tmp = array($nom["nom_equipe"],$nombre);
-                    $result[]=$tmp;
-                }
-            }
-        }
-        return $result;
-    }
+					$nombre = $this->Membres->find("all")
+						->where(["equipe_id" => $row["equipe_id"]])
+						->count();
 
-    /**
- * Retourne le nombre de doctorants par equipe en prenant en compte une fenetre de temps
- * @param $dateEntree : date d'entree de la fenetre de temps
- * @param $dateFin : date de fin de la fenetre de temps
- * @return array : nombre de doctorant avec le nom de leur equipe
- */
-    public function nombreDoctorantParEquipe($dateEntree = null, $dateFin = null)
-    {
-        if ($dateEntree && $dateFin) {
-            $equipe_id = $this->Membres->find('all')
-                ->distinct(['equipe_id'])
-                ->select("equipe_id")
-                ->toArray();
+					$this->loadModel('Equipes');
+					$nom = $this->Equipes->find('all')
+						->where(["id" => $row["equipe_id"]])
+						->select('nom_equipe')
+						->first();
+					$tmp = array($nom["nom_equipe"], $nombre);
+					$result[] = $tmp;
+				}
+			}
+		}
+		return $result;
+	}
 
-            $result=array();
-            //die(strval($equipe_id[2]));
-            foreach($equipe_id as $row){
-                if($row["equipe_id"] != null){
+	/**
+	 * Retourne le nombre de doctorants par equipe en prenant en compte une fenetre de temps
+	 * @param $dateEntree : date d'entree de la fenetre de temps
+	 * @param $dateFin : date de fin de la fenetre de temps
+	 * @return array : nombre de doctorant avec le nom de leur equipe
+	 */
+	public function nombreDoctorantParEquipe($dateEntree = null, $dateFin = null)
+	{
+		if ($dateEntree && $dateFin) {
+			$equipe_id = $this->Membres->find('all')
+				->distinct(['equipe_id'])
+				->select("equipe_id")
+				->toArray();
 
-                    $nombre = $this->Membres->find("all")
-                        ->where(["equipe_id"=>$row["equipe_id"]])
-                        ->where(['type_personnel' => 'DO'])
-                        ->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
-                            return $exp->between('date_creation', $dateEntree, $dateFin);
-                        })
-                        ->count();
+			$result = array();
+			//die(strval($equipe_id[2]));
+			foreach ($equipe_id as $row) {
+				if ($row["equipe_id"] != null) {
 
-                    $this->loadModel('Equipes');
-                    $nom = $this->Equipes->find('all')
-                        ->where(["id" => $row["equipe_id"]])
-                        ->select('nom_equipe')
-                        ->first();
-                    $tmp = array($nom["nom_equipe"],$nombre);
-                    $result[]=$tmp;
-                }
-            }
-        } else {
-            $equipe_id = $this->Membres->find('all')
-                ->distinct(['equipe_id'])
-                ->select("equipe_id")
-                ->toArray();
+					$nombre = $this->Membres->find("all")
+						->where(["equipe_id" => $row["equipe_id"]])
+						->where(['type_personnel' => 'DO'])
+						->where(function (QueryExpression $exp, Query $q) use ($dateEntree, $dateFin) {
+							return $exp->between('date_creation', $dateEntree, $dateFin);
+						})
+						->count();
 
-            $result=array();
-            //die(strval($equipe_id[2]));
-            foreach($equipe_id as $row){
-                if($row["equipe_id"] != null){
+					$this->loadModel('Equipes');
+					$nom = $this->Equipes->find('all')
+						->where(["id" => $row["equipe_id"]])
+						->select('nom_equipe')
+						->first();
+					$tmp = array($nom["nom_equipe"], $nombre);
+					$result[] = $tmp;
+				}
+			}
+		} else {
+			$equipe_id = $this->Membres->find('all')
+				->distinct(['equipe_id'])
+				->select("equipe_id")
+				->toArray();
 
-                    $nombre = $this->Membres->find("all")
-                        ->where(["equipe_id"=>$row["equipe_id"]])
-                        ->where(['type_personnel' => 'DO'])
-                        ->count();
+			$result = array();
+			//die(strval($equipe_id[2]));
+			foreach ($equipe_id as $row) {
+				if ($row["equipe_id"] != null) {
 
-                    $this->loadModel('Equipes');
-                    $nom = $this->Equipes->find('all')
-                        ->where(["id" => $row["equipe_id"]])
-                        ->select('nom_equipe')
-                        ->first();
-                    $tmp = array($nom["nom_equipe"],$nombre);
-                    $result[]=$tmp;
-                }
-            }
-        }
-        return $result;
-    }
+					$nombre = $this->Membres->find("all")
+						->where(["equipe_id" => $row["equipe_id"]])
+						->where(['type_personnel' => 'DO'])
+						->count();
+
+					$this->loadModel('Equipes');
+					$nom = $this->Equipes->find('all')
+						->where(["id" => $row["equipe_id"]])
+						->select('nom_equipe')
+						->first();
+					$tmp = array($nom["nom_equipe"], $nombre);
+					$result[] = $tmp;
+				}
+			}
+		}
+		return $result;
+	}
 
 	/**
 	 * Retourne la liste des projets auquel un membre participe en prenant en compte une fenetre de temps

@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
+use App\Model\Entity\BudgetsAnnuel;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -9,69 +12,69 @@ use Cake\Validation\Validator;
 /**
  * BudgetsAnnuels Model
  *
- * @property \App\Model\Table\ProjetsTable|\Cake\ORM\Association\BelongsTo $Projets
+ * @property ProjetsTable|BelongsTo $Projets
  *
- * @method \App\Model\Entity\BudgetsAnnuel get($primaryKey, $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\BudgetsAnnuel findOrCreate($search, callable $callback = null, $options = [])
+ * @method BudgetsAnnuel get($primaryKey, $options = [])
+ * @method BudgetsAnnuel newEntity($data = null, array $options = [])
+ * @method BudgetsAnnuel[] newEntities(array $data, array $options = [])
+ * @method BudgetsAnnuel|bool save(EntityInterface $entity, $options = [])
+ * @method BudgetsAnnuel saveOrFail(EntityInterface $entity, $options = [])
+ * @method BudgetsAnnuel patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method BudgetsAnnuel[] patchEntities($entities, array $data, array $options = [])
+ * @method BudgetsAnnuel findOrCreate($search, callable $callback = null, $options = [])
  */
 class BudgetsAnnuelsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setTable('budgets_annuels');
-        $this->setDisplayField('projet_id');
-        $this->setPrimaryKey(['projet_id', 'annee']);
+		$this->setTable('budgets_annuels');
+		$this->setDisplayField('projet_id');
+		$this->setPrimaryKey(['projet_id', 'annee']);
 
-        $this->belongsTo('Projets', [
-            'foreignKey' => 'projet_id',
-            'joinType' => 'INNER'
-        ]);
-    }
+		$this->belongsTo('Projets', [
+			'foreignKey' => 'projet_id',
+			'joinType' => 'INNER'
+		]);
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('annee')
-            ->allowEmptyString('annee', 'create');
+	/**
+	 * Default validation rules.
+	 *
+	 * @param Validator $validator Validator instance.
+	 * @return Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('annee')
+			->allowEmptyString('annee', 'create');
 
-        $validator
-            ->integer('budget')
-            ->allowEmptyString('budget');
+		$validator
+			->integer('budget')
+			->allowEmptyString('budget');
 
-        return $validator;
-    }
+		return $validator;
+	}
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['projet_id'], 'Projets'));
+	/**
+	 * Returns a rules checker object that will be used for validating
+	 * application integrity.
+	 *
+	 * @param RulesChecker $rules The rules object to be modified.
+	 * @return RulesChecker
+	 */
+	public function buildRules(RulesChecker $rules)
+	{
+		$rules->add($rules->existsIn(['projet_id'], 'Projets'));
 
-        return $rules;
-    }
+		return $rules;
+	}
 }
