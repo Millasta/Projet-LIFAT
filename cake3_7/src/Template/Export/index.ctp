@@ -62,7 +62,7 @@ function toggleOptions() {
 <div>
     <?php
         echo $this->Form->create($export, ['url' => ['action' => 'results']]);
-        echo $this->Form->control('exportGraphe');
+        echo $this->Form->control('exportGraphe', ['label'=>'Export Graphique']);
         echo $this->Form->control('exportListe');
         echo $this->Form->select('typeGraphe', $optionsGraphes, array('id' => 'typeGraphe', 'onchange' => "toggleOptions()"));
         echo $this->Form->select('typeListe', $optionsListes, array('id' => 'typeListe', 'onchange' => "toggleOptions()"));
