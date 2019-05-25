@@ -42,8 +42,8 @@ return [
     'App' => [
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
-        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
-        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
+        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'fr_FR'),
+        'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'Europe/Paris'),
         'base' => false,
         'dir' => 'src',
         'webroot' => 'webroot',
@@ -255,14 +255,14 @@ return [
              * the following line and set the port accordingly
              */
             //'port' => 'non_standard_port_number',
-            'username' => 'root',
-            'password' => 'root',
-            'database' => 'projetlifsat',
+            'username' => 'lifat_app',
+            'password' => 'darktranquillity',
+            'database' => 'lifat_db',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
             //'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
+            'timezone' => '+2:00',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => false,
@@ -298,11 +298,11 @@ return [
             'persistent' => false,
             'host' => 'localhost',
             //'port' => 'non_standard_port_number',
-            'username' => 'my_app',
-            'password' => 'secret',
-            'database' => 'test_myapp',
+            'username' => 'lifat_app',
+            'password' => 'darktranquillity',
+            'database' => 'lifat_db_test',
             //'encoding' => 'utf8mb4',
-            'timezone' => 'UTC',
+            'timezone' => '+2:00',
             'cacheMetadata' => true,
             'quoteIdentifiers' => false,
             'log' => false,
