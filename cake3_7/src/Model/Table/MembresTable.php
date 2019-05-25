@@ -143,18 +143,18 @@ class MembresTable extends Table
 			->scalar('im_vehicule')
 			->maxLength('im_vehicule', 10)
 			->requirePresence('im_vehicule', 'create')
-			->allowEmptyString('im_vehicule', false);
+			->allowEmptyString('im_vehicule');
 
 		$validator
 			->integer('pf_vehicule')
 			->requirePresence('pf_vehicule', 'create')
-			->allowEmptyString('pf_vehicule', false);
+			->allowEmptyString('pf_vehicule');
 
 		$validator
 			->scalar('signature_name')
 			->maxLength('signature_name', 20)
 			->requirePresence('signature_name', 'create')
-			->allowEmptyString('signature_name', false)
+			->allowEmptyString('signature_name')
 			->add('signature_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
 		$validator
@@ -227,8 +227,6 @@ class MembresTable extends Table
 	public function buildRules(RulesChecker $rules)
 	{
 		$rules->add($rules->isUnique(['email']));
-		$rules->add($rules->isUnique(['signature_name']));
-		$rules->add($rules->isUnique(['login_cas']));
 		$rules->add($rules->existsIn(['lieu_travail_id'], 'LieuTravails'));
 		$rules->add($rules->existsIn(['equipe_id'], 'Equipes'));
 

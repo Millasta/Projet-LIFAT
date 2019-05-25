@@ -114,5 +114,12 @@ use App\View\AppView; ?>
 			<th scope="row"><?= __('Actif') ?></th>
 			<td><?= $membre->actif ? __('Oui') : __('Non'); ?></td>
 		</tr>
+		<?php
+			if ($user['role'] === Membre::ADMIN && $membre->signature_name != null) {
+				echo "<tr><th>Signature</th><td>";
+				echo $this->Html->link('Télécharger', '/Signatures/'.$membre->signature_name);
+				echo "</td></tr>"; 
+			}
+		?>
 	</table>
 </div>

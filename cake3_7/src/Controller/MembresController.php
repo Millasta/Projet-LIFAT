@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Cake\Auth\DefaultPasswordHasher;
 use App\Model\Entity\Membre;
 use App\Model\Table\MembresTable;
 use Cake\Database\Expression\QueryExpression;
@@ -124,8 +125,53 @@ class MembresController extends AppController
 				'contain' => []
 			]);
 		if ($this->request->is(['patch', 'post', 'put'])) {
+			// Champs à conserver
+			$old_signature = $membre->signature_name;
+			$old_password = $membre->passwd;
+			
 			$membre = $this->Membres->patchEntity($membre, $this->request->getData());
 			$membre->date_creation = Time::now();
+			
+			// Upload de la signature
+			$old_signature = null;
+			$file = $this->request->getData()['signature_name'];
+			if($file['name'] != null) {
+				$signatureFolder = 'Signatures';
+				
+				if (!file_exists($signatureFolder))
+					mkdir($signatureFolder);
+
+				// Erreur
+				if ($file['error'] > 0) {
+					$this->Flash->error('Erreur lors de la récupération du fichier signature.');
+					return $this->redirect(['action' => 'index']);
+				}
+
+				// Limitation à 10Mo
+				if ($file['size'] > 10000000) {
+					$this->Flash->error('Votre fichier signature est trop volumineux (>10Mo) !');
+					return $this->redirect(['action' => 'index']);
+				}
+
+				// Enregistrement
+				$extension = array_values(array_slice(explode('.', $file['name']), -1))[0];
+				// Hashage du nom de fichier
+				$hasher = new DefaultPasswordHasher();
+				$membre->signature_name = $hasher->hash($file['name']).'.'.$extension;
+				if (!move_uploaded_file($file['tmp_name'], $signatureFolder . '/' . $membre->signature_name)) {
+					$this->Flash->error('Erreur lors de l\'enregistrement du fichier signature.');
+					return $this->redirect(['action' => 'index']);
+				}
+			}
+			else { // On conserve la signature actuelle
+				$membre->signature_name = $old_signature;
+			}
+			
+			// Test de conservation du mot de passe
+			if($this->request->getData()['passwd'] == null) {
+				$membre->passwd = '';
+			}
+			
 			if ($this->Membres->save($membre)) {
 				if ($id == null) {
 					$this->Flash->success(__('Nouveau membre'));
@@ -145,10 +191,10 @@ class MembresController extends AppController
 					$query = $this->Encadrants->query();
 					$query->insert(['encadrant_id'])->values(['encadrant_id' => $membreId['id']])->execute();
 				}
-				$this->Flash->success(__('Le membre a été ajouté avec succès.'));
+				$this->Flash->success(__('Le membre a été édité avec succès.'));
 				return $this->redirect(['action' => 'index']);
 			}
-			$this->Flash->error(__('L\'ajout du membre a échoué. Merci de ré-essayer.'));
+			$this->Flash->error(__('L\'édition du membre a échoué. Merci de ré-essayer.'));
 		}
 		$lieuTravails = $this->Membres->LieuTravails->find('list', ['limit' => 200]);
 

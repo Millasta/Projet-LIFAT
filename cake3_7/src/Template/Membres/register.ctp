@@ -26,8 +26,8 @@ $optionsGenre = [
 		echo $this->Form->control('equipe_id', ['options' => $equipes, 'empty' => true]);
 		echo $this->Form->control('nom');
 		echo $this->Form->control('prenom');
-		echo $this->Form->control('email');
-		echo $this->Form->control('passwd', ['label' => "Mot de passe"]);
+		echo $this->Form->control('email', ['required' => true, 'label' => 'Email (requis)']);
+		echo $this->Form->control('passwd', ['required' => true, 'label' => "Mot de passe (requis)"]);
 		echo $this->Form->control('adresse_agent_1');
 		echo $this->Form->control('adresse_agent_2');
 		echo $this->Form->control('residence_admin_1');
@@ -37,7 +37,6 @@ $optionsGenre = [
 		echo $this->Form->control('grade');
 		echo $this->Form->control('im_vehicule');
 		echo $this->Form->control('pf_vehicule');
-		echo $this->Form->control('signature_name');
 		echo $this->Form->control('login_cas');
 		echo $this->Form->control('carte_sncf');
 		echo $this->Form->control('matricule');
