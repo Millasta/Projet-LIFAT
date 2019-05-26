@@ -1,9 +1,11 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Equipe $equipe
+ * @var AppView $this
+ * @var Equipe $equipe
  */
-?>
+
+use App\Model\Entity\Equipe;
+use App\View\AppView; ?>
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
 	<ul class="side-nav">
 		<li class="heading"><?= __('Actions') ?></li>

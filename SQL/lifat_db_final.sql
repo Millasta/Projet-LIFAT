@@ -171,9 +171,9 @@ CREATE TABLE `membres` (
   `type_personnel` enum('PU','PE','Do') DEFAULT NULL,
   `intitule` varchar(30) DEFAULT NULL,
   `grade` varchar(30) DEFAULT NULL,
-  `im_vehicule` varchar(10) NOT NULL COMMENT 'immatriculation du véhicule principal',
-  `pf_vehicule` int(11) NOT NULL COMMENT 'puissance ficale du véhicule principal',
-  `signature_name` varchar(20) NOT NULL,
+  `im_vehicule` varchar(10) DEFAULT NULL COMMENT 'immatriculation du véhicule principal',
+  `pf_vehicule` int(11) DEFAULT NULL COMMENT 'puissance ficale du véhicule principal',
+  `signature_name` varchar(255) DEFAULT NULL,
   `login_cas` varchar(60) DEFAULT NULL,
   `carte_sncf` varchar(40) DEFAULT NULL,
   `matricule` int(11) DEFAULT NULL,
@@ -386,9 +386,7 @@ ALTER TABLE `lieu_travails`
 --
 ALTER TABLE `membres`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `signature_name` (`signature_name`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `login_cas` (`login_cas`),
   ADD KEY `lieu_travail_id` (`lieu_travail_id`),
   ADD KEY `equipe_id` (`equipe_id`);
   

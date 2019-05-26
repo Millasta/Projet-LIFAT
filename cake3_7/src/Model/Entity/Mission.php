@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Model\Entity;
 
+use Cake\I18n\FrozenTime;
 use Cake\ORM\Entity;
 
 /**
@@ -8,8 +10,8 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string|null $complement_motif
- * @property \Cake\I18n\FrozenTime|null $date_depart
- * @property \Cake\I18n\FrozenTime|null $date_retour
+ * @property FrozenTime|null $date_depart
+ * @property FrozenTime|null $date_retour
  * @property bool|null $sans_frais
  * @property string|null $etat
  * @property int|null $nb_nuites
@@ -20,38 +22,38 @@ use Cake\ORM\Entity;
  * @property int|null $lieu_id
  * @property int|null $motif_id
  *
- * @property \App\Model\Entity\Projet $projet
- * @property \App\Model\Entity\Lieus $lieus
- * @property \App\Model\Entity\Motif $motif
- * @property \App\Model\Entity\Transport[] $transports
+ * @property Projet $projet
+ * @property Lieus $lieus
+ * @property Motif $motif
+ * @property Transport[] $transports
  */
 class Mission extends Entity
 {
-    /**
-     * Fields that can be mass assigned using newEntity() or patchEntity().
-     *
-     * Note that when '*' is set to true, this allows all unspecified fields to
-     * be mass assigned. For security purposes, it is advised to set '*' to false
-     * (or remove it), and explicitly make individual fields accessible as needed.
-     *
-     * @var array
-     */
-    protected $_accessible = [
-        'complement_motif' => true,
-        'date_depart' => true,
-        'date_retour' => true,
-        'sans_frais' => true,
-        'etat' => true,
-        'nb_nuites' => true,
-        'nb_repas' => true,
-        'billet_agence' => true,
-        'commentaire_transport' => true,
-        'projet_id' => true,
-        'lieu_id' => true,
-        'motif_id' => true,
-        'projet' => true,
-        'lieus' => true,
-        'motif' => true,
-        'transports' => true
-    ];
+	/**
+	 * Fields that can be mass assigned using newEntity() or patchEntity().
+	 *
+	 * Note that when '*' is set to true, this allows all unspecified fields to
+	 * be mass assigned. For security purposes, it is advised to set '*' to false
+	 * (or remove it), and explicitly make individual fields accessible as needed.
+	 *
+	 * @var array
+	 */
+	protected $_accessible = [
+		'complement_motif' => true,
+		'date_depart' => true,
+		'date_retour' => true,
+		'sans_frais' => true,
+		'etat' => true,
+		'nb_nuites' => true,
+		'nb_repas' => true,
+		'billet_agence' => true,
+		'commentaire_transport' => true,
+		'projet_id' => true,
+		'lieu_id' => true,
+		'motif_id' => true,
+		'projet' => true,
+		'lieus' => true,
+		'motif' => true,
+		'transports' => true
+	];
 }

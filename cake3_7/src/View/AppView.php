@@ -11,6 +11,7 @@
  * @since     3.0.0
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\View;
 
 use Cake\View\View;
@@ -25,17 +26,17 @@ use Cake\View\View;
 class AppView extends View
 {
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading helpers.
-     *
-     * e.g. `$this->loadHelper('Html');`
-     *
-     * @return void
-     */
-    public function initialize()
-    {
+	/**
+	 * Initialization hook method.
+	 *
+	 * Use this method to add common initialization code like loading helpers.
+	 *
+	 * e.g. `$this->loadHelper('Html');`
+	 *
+	 * @return void
+	 */
+	public function initialize()
+	{
 		$this->loadHelper('Search.Search');
-    }
+	}
 }

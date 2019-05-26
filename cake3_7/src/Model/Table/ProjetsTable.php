@@ -1,57 +1,63 @@
 <?php
+
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
+use App\Model\Entity\Projet;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
+use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Association\HasMany;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Behavior\SearchBehavior;
 
 /**
  * Projets Model
  *
- * @property \App\Model\Table\FinancementsTable|\Cake\ORM\Association\BelongsTo $Financements
- * @property \App\Model\Table\MissionsTable|\Cake\ORM\Association\HasMany $Missions
- * @property \App\Model\Table\EquipesTable|\Cake\ORM\Association\BelongsToMany $Equipes
+ * @property FinancementsTable|BelongsTo $Financements
+ * @property MissionsTable|HasMany $Missions
+ * @property EquipesTable|BelongsToMany $Equipes
  *
- * @method \App\Model\Entity\Projet get($primaryKey, $options = [])
- * @method \App\Model\Entity\Projet newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Projet[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Projet|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Projet saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Projet patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Projet[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Projet findOrCreate($search, callable $callback = null, $options = [])
- * @mixin \Search\Model\Behavior\SearchBehavior
+ * @method Projet get($primaryKey, $options = [])
+ * @method Projet newEntity($data = null, array $options = [])
+ * @method Projet[] newEntities(array $data, array $options = [])
+ * @method Projet|bool save(EntityInterface $entity, $options = [])
+ * @method Projet saveOrFail(EntityInterface $entity, $options = [])
+ * @method Projet patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Projet[] patchEntities($entities, array $data, array $options = [])
+ * @method Projet findOrCreate($search, callable $callback = null, $options = [])
+ * @mixin SearchBehavior
  */
 class ProjetsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setTable('projets');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+		$this->setTable('projets');
+		$this->setDisplayField('id');
+		$this->setPrimaryKey('id');
 
-        $this->belongsTo('Financements', [
-            'foreignKey' => 'financement_id'
-        ]);
-        $this->hasMany('Missions', [
-            'foreignKey' => 'projet_id'
-        ]);
-        $this->belongsToMany('Equipes', [
-            'foreignKey' => 'projet_id',
-            'targetForeignKey' => 'equipe_id',
-            'joinTable' => 'equipes_projets'
-        ]);
+		$this->belongsTo('Financements', [
+			'foreignKey' => 'financement_id'
+		]);
+		$this->hasMany('Missions', [
+			'foreignKey' => 'projet_id'
+		]);
+		$this->belongsToMany('Equipes', [
+			'foreignKey' => 'projet_id',
+			'targetForeignKey' => 'equipe_id',
+			'joinTable' => 'equipes_projets'
+		]);
 
-        $this->displayField('titre');
+		$this->displayField('titre');
 
 		// Add the behaviour to your table
 		$this->addBehavior('Search.Search');
@@ -68,60 +74,60 @@ class ProjetsTable extends Table
 				'comparison' => 'LIKE',
 				'field' => ['titre']
 			]);
-    }
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', 'create');
+	/**
+	 * Default validation rules.
+	 *
+	 * @param Validator $validator Validator instance.
+	 * @return Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('id')
+			->allowEmptyString('id', 'create');
 
-        $validator
-            ->scalar('titre')
-            ->maxLength('titre', 20)
-            ->allowEmptyString('titre');
+		$validator
+			->scalar('titre')
+			->maxLength('titre', 20)
+			->allowEmptyString('titre');
 
-        $validator
-            ->scalar('description')
-            ->maxLength('description', 80)
-            ->allowEmptyString('description');
+		$validator
+			->scalar('description')
+			->maxLength('description', 80)
+			->allowEmptyString('description');
 
-        $validator
-            ->scalar('type')
-            ->allowEmptyString('type');
+		$validator
+			->scalar('type')
+			->allowEmptyString('type');
 
-        $validator
-            ->integer('budget')
-            ->allowEmptyString('budget');
+		$validator
+			->integer('budget')
+			->allowEmptyString('budget');
 
-        $validator
-            ->date('date_debut')
-            ->allowEmptyDate('date_debut');
+		$validator
+			->date('date_debut')
+			->allowEmptyDate('date_debut');
 
-        $validator
-            ->date('date_fin')
-            ->allowEmptyDate('date_fin');
+		$validator
+			->date('date_fin')
+			->allowEmptyDate('date_fin');
 
-        return $validator;
-    }
+		return $validator;
+	}
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['financement_id'], 'Financements'));
+	/**
+	 * Returns a rules checker object that will be used for validating
+	 * application integrity.
+	 *
+	 * @param RulesChecker $rules The rules object to be modified.
+	 * @return RulesChecker
+	 */
+	public function buildRules(RulesChecker $rules)
+	{
+		$rules->add($rules->existsIn(['financement_id'], 'Financements'));
 
-        return $rules;
-    }
+		return $rules;
+	}
 }

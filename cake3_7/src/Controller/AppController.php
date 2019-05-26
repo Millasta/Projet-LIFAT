@@ -12,11 +12,13 @@
  * @since     0.2.9
  * @license   https://opensource.org/licenses/mit-license.php MIT License
  */
+
 namespace App\Controller;
 
 use App\Model\Entity\Membre;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Http\Response;
 
 /**
  * Application Controller
@@ -29,51 +31,51 @@ use Cake\Event\Event;
 class AppController extends Controller
 {
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
-    public function initialize()
-    {
-        parent::initialize();
+	/**
+	 * Initialization hook method.
+	 *
+	 * Use this method to add common initialization code like loading components.
+	 *
+	 * e.g. `$this->loadComponent('Security');`
+	 *
+	 * @return void
+	 */
+	public function initialize()
+	{
+		parent::initialize();
 
-        $this->loadComponent('RequestHandler', [
-            'enableBeforeRedirect' => false,
-        ]);
-        //charge le composant flash de cake php
-        $this->loadComponent('Flash');
+		$this->loadComponent('RequestHandler', [
+			'enableBeforeRedirect' => false,
+		]);
+		//charge le composant flash de cake php
+		$this->loadComponent('Flash');
 
-        //charge le composant d'authentification de cakephp
-        $this->loadComponent('Auth', [
+		//charge le composant d'authentification de cakephp
+		$this->loadComponent('Auth', [
 			'authorize' => 'Controller',
-            'authenticate' => [
-                'Form' => [
-                    'fields' => ['username' => 'email','password' => 'passwd'],
-                    'userModel' => 'Membres'
-                ]
-            ],
-            'loginAction' => [
-                'controller' => 'Membres',
-                'action' => 'login'
-            ],
-            // Si pas autorisé, on renvoie sur la page précédente
-            'unauthorizedRedirect' => $this->referer()
-        ]);
+			'authenticate' => [
+				'Form' => [
+					'fields' => ['username' => 'email', 'password' => 'passwd'],
+					'userModel' => 'Membres'
+				]
+			],
+			'loginAction' => [
+				'controller' => 'Membres',
+				'action' => 'login'
+			],
+			// Si pas autorisé, on renvoie sur la page précédente
+			'unauthorizedRedirect' => $this->referer()
+		]);
 
-        //	la page de garde est accessible publiquement (mais que cette page)
+		//	la page de garde est accessible publiquement (mais que cette page)
 		$this->Auth->allow(array('controller' => 'pages', 'action' => 'display'));
 		//	cf. fonctions "isAuthorized" pour les autres permissions
-		
-        /*
-         * Enable the following component for recommended CakePHP security settings.
-         * see https://book.cakephp.org/3.0/en/controllers/components/security.html
-         */
-        //$this->loadComponent('Security');
+
+		/*
+		 * Enable the following component for recommended CakePHP security settings.
+		 * see https://book.cakephp.org/3.0/en/controllers/components/security.html
+		 */
+		//$this->loadComponent('Security');
 
 		//	Permet d'utiliser friendsofcake/search
 		$this->loadComponent('Search.Prg', [
@@ -81,16 +83,16 @@ class AppController extends Controller
 			// the PRG component work only for specified methods.
 			'actions' => ['index']
 		]);
-    }
+	}
 
 	/**
 	 * Before filter : makes some user data accessible in the views.
 	 * (example : $user['nom']).
 	 * Unfortunately, for some odd reason putting the whole Membre entity does NOT work.
 	 * @param Event $event
-	 * @return \Cake\Http\Response|null
+	 * @return Response|null
 	 */
-    public function beforeFilter(Event $event)
+	public function beforeFilter(Event $event)
 	{
 		$session = $this->request->getSession();
 		$user = $session->read('Auth.User');

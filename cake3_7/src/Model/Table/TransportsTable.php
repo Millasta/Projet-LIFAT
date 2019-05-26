@@ -1,75 +1,77 @@
 <?php
+
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+use App\Model\Entity\Transport;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsToMany;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
  * Transports Model
  *
- * @property \App\Model\Table\MissionsTable|\Cake\ORM\Association\BelongsToMany $Missions
+ * @property MissionsTable|BelongsToMany $Missions
  *
- * @method \App\Model\Entity\Transport get($primaryKey, $options = [])
- * @method \App\Model\Entity\Transport newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Transport[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Transport|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Transport saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Transport patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Transport[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Transport findOrCreate($search, callable $callback = null, $options = [])
+ * @method Transport get($primaryKey, $options = [])
+ * @method Transport newEntity($data = null, array $options = [])
+ * @method Transport[] newEntities(array $data, array $options = [])
+ * @method Transport|bool save(EntityInterface $entity, $options = [])
+ * @method Transport saveOrFail(EntityInterface $entity, $options = [])
+ * @method Transport patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Transport[] patchEntities($entities, array $data, array $options = [])
+ * @method Transport findOrCreate($search, callable $callback = null, $options = [])
  */
 class TransportsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setTable('transports');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+		$this->setTable('transports');
+		$this->setDisplayField('id');
+		$this->setPrimaryKey('id');
 
-        $this->belongsToMany('Missions', [
-            'foreignKey' => 'transport_id',
-            'targetForeignKey' => 'mission_id',
-            'joinTable' => 'missions_transports'
-        ]);
+		$this->belongsToMany('Missions', [
+			'foreignKey' => 'transport_id',
+			'targetForeignKey' => 'mission_id',
+			'joinTable' => 'missions_transports'
+		]);
 
-        $this->displayField('type_transport');
-    }
+		$this->displayField('type_transport');
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', 'create');
+	/**
+	 * Default validation rules.
+	 *
+	 * @param Validator $validator Validator instance.
+	 * @return Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('id')
+			->allowEmptyString('id', 'create');
 
-        $validator
-            ->scalar('type_transport')
-            ->allowEmptyString('type_transport');
+		$validator
+			->scalar('type_transport')
+			->allowEmptyString('type_transport');
 
-        $validator
-            ->scalar('im_vehicule')
-            ->maxLength('im_vehicule', 10)
-            ->allowEmptyString('im_vehicule');
+		$validator
+			->scalar('im_vehicule')
+			->maxLength('im_vehicule', 10)
+			->allowEmptyString('im_vehicule');
 
-        $validator
-            ->integer('pf_vehicule')
-            ->allowEmptyString('pf_vehicule');
+		$validator
+			->integer('pf_vehicule')
+			->allowEmptyString('pf_vehicule');
 
-        return $validator;
-    }
+		return $validator;
+	}
 }

@@ -1,115 +1,120 @@
 <?php
+
 namespace App\Controller;
 
-use App\Controller\AppController;
+use App\Model\Entity\EquipesProjet;
+use App\Model\Table\EquipesProjetsTable;
+use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Datasource\ResultSetInterface;
+use Cake\Http\Response;
 
 /**
  * EquipesProjets Controller
  *
- * @property \App\Model\Table\EquipesProjetsTable $EquipesProjets
+ * @property EquipesProjetsTable $EquipesProjets
  *
- * @method \App\Model\Entity\EquipesProjet[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+ * @method EquipesProjet[]|ResultSetInterface paginate($object = null, array $settings = [])
  */
 class EquipesProjetsController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|void
-     */
-    public function index()
-    {
-        $this->paginate = [
-            'contain' => ['Equipes', 'Projets']
-        ];
-        $equipesProjets = $this->paginate($this->EquipesProjets);
+	/**
+	 * Index method
+	 *
+	 * @return Response|void
+	 */
+	public function index()
+	{
+		$this->paginate = [
+			'contain' => ['Equipes', 'Projets']
+		];
+		$equipesProjets = $this->paginate($this->EquipesProjets);
 
-        $this->set(compact('equipesProjets'));
-    }
+		$this->set(compact('equipesProjets'));
+	}
 
-    /**
-     * View method
-     *
-     * @param string|null $id Equipes Projet id.
-     * @return \Cake\Http\Response|void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $equipesProjet = $this->EquipesProjets->get($id, [
-            'contain' => ['Equipes', 'Projets']
-        ]);
+	/**
+	 * View method
+	 *
+	 * @param string|null $id Equipes Projet id.
+	 * @return Response|void
+	 * @throws RecordNotFoundException When record not found.
+	 */
+	public function view($id = null)
+	{
+		$equipesProjet = $this->EquipesProjets->get($id, [
+			'contain' => ['Equipes', 'Projets']
+		]);
 
-        $this->set('equipesProjet', $equipesProjet);
-    }
+		$this->set('equipesProjet', $equipesProjet);
+	}
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $equipesProjet = $this->EquipesProjets->newEntity();
-        if ($this->request->is('post')) {
-            $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
-            if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
+	/**
+	 * Add method
+	 *
+	 * @return Response|null Redirects on successful add, renders view otherwise.
+	 */
+	public function add()
+	{
+		$equipesProjet = $this->EquipesProjets->newEntity();
+		if ($this->request->is('post')) {
+			$equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
+			if ($this->EquipesProjets->save($equipesProjet)) {
+				$this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
-        }
-        $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
-        $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
-        $this->set(compact('equipesProjet', 'equipes', 'projets'));
-    }
+				return $this->redirect(['action' => 'index']);
+			}
+			$this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
+		}
+		$equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
+		$projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
+		$this->set(compact('equipesProjet', 'equipes', 'projets'));
+	}
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Equipes Projet id.
-     * @return \Cake\Http\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $equipesProjet = $this->EquipesProjets->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
-            if ($this->EquipesProjets->save($equipesProjet)) {
-                $this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
+	/**
+	 * Edit method
+	 *
+	 * @param string|null $id Equipes Projet id.
+	 * @return Response|null Redirects on successful edit, renders view otherwise.
+	 * @throws RecordNotFoundException When record not found.
+	 */
+	public function edit($id = null)
+	{
+		$equipesProjet = $this->EquipesProjets->get($id, [
+			'contain' => []
+		]);
+		if ($this->request->is(['patch', 'post', 'put'])) {
+			$equipesProjet = $this->EquipesProjets->patchEntity($equipesProjet, $this->request->getData());
+			if ($this->EquipesProjets->save($equipesProjet)) {
+				$this->Flash->success(__('Le projet de l\'équipe a été ajouté avec succès.'));
 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
-        }
-        $equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
-        $projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
-        $this->set(compact('equipesProjet', 'equipes', 'projets'));
-    }
+				return $this->redirect(['action' => 'index']);
+			}
+			$this->Flash->error(__('L\'ajout du projet de l\'équipe a échoué. Merci de ré-essayer.'));
+		}
+		$equipes = $this->EquipesProjets->Equipes->find('list', ['limit' => 200]);
+		$projets = $this->EquipesProjets->Projets->find('list', ['limit' => 200]);
+		$this->set(compact('equipesProjet', 'equipes', 'projets'));
+	}
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Equipes Projet id.
-     * @return \Cake\Http\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $equipesProjet = $this->EquipesProjets->get($id);
-        if ($this->EquipesProjets->delete($equipesProjet)) {
-            $this->Flash->success(__('Le projet de l\'équipe à été supprimé.'));
-        } else {
-            $this->Flash->error(__('La suppression du projet de l\'équipe à échoué.'));
-        }
+	/**
+	 * Delete method
+	 *
+	 * @param string|null $id Equipes Projet id.
+	 * @return Response|null Redirects to index.
+	 * @throws RecordNotFoundException When record not found.
+	 */
+	public function delete($id = null)
+	{
+		$this->request->allowMethod(['post', 'delete']);
+		$equipesProjet = $this->EquipesProjets->get($id);
+		if ($this->EquipesProjets->delete($equipesProjet)) {
+			$this->Flash->success(__('Le projet de l\'équipe à été supprimé.'));
+		} else {
+			$this->Flash->error(__('La suppression du projet de l\'équipe à échoué.'));
+		}
 
-        return $this->redirect(['action' => 'index']);
-    }
+		return $this->redirect(['action' => 'index']);
+	}
 
     /**
      * Retourne la liste des projets auxquels une equipe participe en prenant en compte une fenetre de temps
@@ -125,11 +130,11 @@ class EquipesProjetsController extends AppController
                 ->contain(['Projets'])
                 ->toArray();
 
-            $result=array();
-            foreach($tmp as $row){
-                $timeProjet  = strtotime($row['projet']['date_debut']);
-                $dateIn = strtotime($dateEntree);
-                $dateOut = strtotime($dateFin);
+			$result = array();
+			foreach ($tmp as $row) {
+				$timeProjet = strtotime($row['projet']['date_debut']);
+				$dateIn = strtotime($dateEntree);
+				$dateOut = strtotime($dateFin);
 
                 if($timeProjet>=$dateIn && $timeProjet<=$dateOut){
                     array_push($result,$row['projet']);
@@ -141,11 +146,11 @@ class EquipesProjetsController extends AppController
                 ->contain(['Projets'])
             ->toArray();
 
-            $result=array();
-            foreach($tmp as $row){
-                array_push($result,$row['projet']);
-            }
-        }
-        return $result;
-    }
+			$result = array();
+			foreach ($tmp as $row) {
+				array_push($result, $row['projet']);
+			}
+		}
+		return $result;
+	}
 }

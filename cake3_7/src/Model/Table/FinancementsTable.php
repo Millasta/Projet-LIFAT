@@ -1,46 +1,49 @@
 <?php
+
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
+use App\Model\Entity\Financement;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\HasMany;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Behavior\SearchBehavior;
 
 /**
  * Financements Model
  *
- * @property \App\Model\Table\ProjetsTable|\Cake\ORM\Association\HasMany $Projets
+ * @property ProjetsTable|HasMany $Projets
  *
- * @method \App\Model\Entity\Financement get($primaryKey, $options = [])
- * @method \App\Model\Entity\Financement newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Financement[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Financement|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Financement saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Financement patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Financement[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Financement findOrCreate($search, callable $callback = null, $options = [])
+ * @method Financement get($primaryKey, $options = [])
+ * @method Financement newEntity($data = null, array $options = [])
+ * @method Financement[] newEntities(array $data, array $options = [])
+ * @method Financement|bool save(EntityInterface $entity, $options = [])
+ * @method Financement saveOrFail(EntityInterface $entity, $options = [])
+ * @method Financement patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Financement[] patchEntities($entities, array $data, array $options = [])
+ * @method Financement findOrCreate($search, callable $callback = null, $options = [])
  *
- * @mixin \Search\Model\Behavior\SearchBehavior
+ * @mixin SearchBehavior
  */
 class FinancementsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setTable('financements');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
+		$this->setTable('financements');
+		$this->setDisplayField('id');
+		$this->setPrimaryKey('id');
 
-        $this->hasMany('Projets', [
-            'foreignKey' => 'financement_id'
-        ]);
+		$this->hasMany('Projets', [
+			'foreignKey' => 'financement_id'
+		]);
 
 		// Add the behaviour to your table
 		$this->addBehavior('Search.Search');
@@ -58,38 +61,38 @@ class FinancementsTable extends Table
 				'fieldMode' => 'OR',
 				'field' => ['nationalite_financement', 'financement']
 			]);
-    }
+	}
 
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', 'create');
+	/**
+	 * Default validation rules.
+	 *
+	 * @param Validator $validator Validator instance.
+	 * @return Validator
+	 */
+	public function validationDefault(Validator $validator)
+	{
+		$validator
+			->integer('id')
+			->allowEmptyString('id', 'create');
 
-        $validator
-            ->boolean('international')
-            ->allowEmptyString('international');
+		$validator
+			->boolean('international')
+			->allowEmptyString('international');
 
-        $validator
-            ->scalar('nationalite_financement')
-            ->maxLength('nationalite_financement', 60)
-            ->allowEmptyString('nationalite_financement');
+		$validator
+			->scalar('nationalite_financement')
+			->maxLength('nationalite_financement', 60)
+			->allowEmptyString('nationalite_financement');
 
-        $validator
-            ->boolean('financement_prive')
-            ->allowEmptyString('financement_prive');
+		$validator
+			->boolean('financement_prive')
+			->allowEmptyString('financement_prive');
 
-        $validator
-            ->scalar('financement')
-            ->maxLength('financement', 60)
-            ->allowEmptyString('financement');
+		$validator
+			->scalar('financement')
+			->maxLength('financement', 60)
+			->allowEmptyString('financement');
 
-        return $validator;
-    }
+		return $validator;
+	}
 }

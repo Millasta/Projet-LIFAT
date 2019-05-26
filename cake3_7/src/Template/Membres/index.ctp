@@ -1,10 +1,12 @@
 <?php
 
 use App\Model\Entity\Membre;
+use App\View\AppView;
+use Cake\Collection\CollectionInterface;
 
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Membre[]|\Cake\Collection\CollectionInterface $membres
+ * @var AppView $this
+ * @var Membre[]|CollectionInterface $membres
  */
 ?>
 <!-- Barre de recherche -->

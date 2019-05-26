@@ -2,25 +2,29 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Membre;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Search\Model\Behavior\SearchBehavior;
 
 /**
  * Membres Model
  *
- * @property \App\Model\Table\LieuTravailsTable|\Cake\ORM\Association\BelongsTo $LieuTravails
+ * @property LieuTravailsTable|BelongsTo $LieuTravails
  *
- * @method \App\Model\Entity\Membre get($primaryKey, $options = [])
- * @method \App\Model\Entity\Membre newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Membre[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Membre|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Membre saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Membre patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Membre[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Membre findOrCreate($search, callable $callback = null, $options = [])
+ * @method Membre get($primaryKey, $options = [])
+ * @method Membre newEntity($data = null, array $options = [])
+ * @method Membre[] newEntities(array $data, array $options = [])
+ * @method Membre|bool save(EntityInterface $entity, $options = [])
+ * @method Membre saveOrFail(EntityInterface $entity, $options = [])
+ * @method Membre patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Membre[] patchEntities($entities, array $data, array $options = [])
+ * @method Membre findOrCreate($search, callable $callback = null, $options = [])
  *
- * @mixin \Search\Model\Behavior\SearchBehavior
+ * @mixin SearchBehavior
  */
 class MembresTable extends Table
 {
@@ -67,8 +71,8 @@ class MembresTable extends Table
 	/**
 	 * Default validation rules.
 	 *
-	 * @param \Cake\Validation\Validator $validator Validator instance.
-	 * @return \Cake\Validation\Validator
+	 * @param Validator $validator Validator instance.
+	 * @return Validator
 	 */
 	public function validationDefault(Validator $validator)
 	{
@@ -139,18 +143,18 @@ class MembresTable extends Table
 			->scalar('im_vehicule')
 			->maxLength('im_vehicule', 10)
 			->requirePresence('im_vehicule', 'create')
-			->allowEmptyString('im_vehicule', false);
+			->allowEmptyString('im_vehicule');
 
 		$validator
 			->integer('pf_vehicule')
 			->requirePresence('pf_vehicule', 'create')
-			->allowEmptyString('pf_vehicule', false);
+			->allowEmptyString('pf_vehicule');
 
 		$validator
 			->scalar('signature_name')
 			->maxLength('signature_name', 20)
 			->requirePresence('signature_name', 'create')
-			->allowEmptyString('signature_name', false)
+			->allowEmptyString('signature_name')
 			->add('signature_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
 
 		$validator
@@ -217,14 +221,12 @@ class MembresTable extends Table
 	 * Returns a rules checker object that will be used for validating
 	 * application integrity.
 	 *
-	 * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-	 * @return \Cake\ORM\RulesChecker
+	 * @param RulesChecker $rules The rules object to be modified.
+	 * @return RulesChecker
 	 */
 	public function buildRules(RulesChecker $rules)
 	{
 		$rules->add($rules->isUnique(['email']));
-		$rules->add($rules->isUnique(['signature_name']));
-		$rules->add($rules->isUnique(['login_cas']));
 		$rules->add($rules->existsIn(['lieu_travail_id'], 'LieuTravails'));
 		$rules->add($rules->existsIn(['equipe_id'], 'Equipes'));
 

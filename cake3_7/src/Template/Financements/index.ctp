@@ -1,10 +1,13 @@
 <?php
 /**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Financement[]|\Cake\Collection\CollectionInterface $financements
+ * @var AppView $this
+ * @var Financement[]|CollectionInterface $financements
  */
 
-use App\Model\Entity\Membre; ?>
+use App\Model\Entity\Financement;
+use App\Model\Entity\Membre;
+use App\View\AppView;
+use Cake\Collection\CollectionInterface; ?>
 <!-- Barre de recherche -->
 <?php
 echo $this->element('searchbar');

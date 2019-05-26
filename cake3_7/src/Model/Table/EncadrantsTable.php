@@ -1,68 +1,72 @@
 <?php
+
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
+use App\Model\Entity\Encadrant;
+use Cake\Datasource\EntityInterface;
+use Cake\ORM\Association\BelongsTo;
+use Cake\ORM\Association\BelongsToMany;
+use Cake\ORM\Association\HasMany;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
 
 /**
  * Encadrants Model
  *
- * @property \App\Model\Table\EncadrantsTable|\Cake\ORM\Association\BelongsTo $Encadrants
- * @property \App\Model\Table\EncadrantsTable|\Cake\ORM\Association\HasMany $Encadrants
- * @property \App\Model\Table\ThesesTable|\Cake\ORM\Association\BelongsToMany $Theses
+ * @property EncadrantsTable|BelongsTo $Encadrants
+ * @property EncadrantsTable|HasMany $Encadrants
+ * @property ThesesTable|BelongsToMany $Theses
  *
- * @method \App\Model\Entity\Encadrant get($primaryKey, $options = [])
- * @method \App\Model\Entity\Encadrant newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Encadrant[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Encadrant|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Encadrant saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Encadrant patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Encadrant[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Encadrant findOrCreate($search, callable $callback = null, $options = [])
+ * @method Encadrant get($primaryKey, $options = [])
+ * @method Encadrant newEntity($data = null, array $options = [])
+ * @method Encadrant[] newEntities(array $data, array $options = [])
+ * @method Encadrant|bool save(EntityInterface $entity, $options = [])
+ * @method Encadrant saveOrFail(EntityInterface $entity, $options = [])
+ * @method Encadrant patchEntity(EntityInterface $entity, array $data, array $options = [])
+ * @method Encadrant[] patchEntities($entities, array $data, array $options = [])
+ * @method Encadrant findOrCreate($search, callable $callback = null, $options = [])
  */
 class EncadrantsTable extends Table
 {
-    /**
-     * Initialize method
-     *
-     * @param array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+	/**
+	 * Initialize method
+	 *
+	 * @param array $config The configuration for the Table.
+	 * @return void
+	 */
+	public function initialize(array $config)
+	{
+		parent::initialize($config);
 
-        $this->setTable('encadrants');
-		
+		$this->setTable('encadrants');
+
 		$this->primaryKey('encadrant_id');
 
-        $this->belongsTo('Membres', [
-            'foreignKey' => 'encadrant_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->hasMany('Membres', [
-            'foreignKey' => 'encadrant_id'
-        ]);
-        $this->belongsToMany('Theses', [
-            'foreignKey' => 'encadrant_id',
-            'targetForeignKey' => 'thesis_id',
-            'joinTable' => 'encadrants_theses'
-        ]);
-    }
+		$this->belongsTo('Membres', [
+			'foreignKey' => 'encadrant_id',
+			'joinType' => 'INNER'
+		]);
+		$this->hasMany('Membres', [
+			'foreignKey' => 'encadrant_id'
+		]);
+		$this->belongsToMany('Theses', [
+			'foreignKey' => 'encadrant_id',
+			'targetForeignKey' => 'thesis_id',
+			'joinTable' => 'encadrants_theses'
+		]);
+	}
 
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['encadrant_id'], 'Encadrants'));
+	/**
+	 * Returns a rules checker object that will be used for validating
+	 * application integrity.
+	 *
+	 * @param RulesChecker $rules The rules object to be modified.
+	 * @return RulesChecker
+	 */
+	public function buildRules(RulesChecker $rules)
+	{
+		$rules->add($rules->existsIn(['encadrant_id'], 'Encadrants'));
 
-        return $rules;
-    }
+		return $rules;
+	}
 }
