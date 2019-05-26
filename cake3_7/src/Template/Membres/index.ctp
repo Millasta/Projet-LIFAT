@@ -13,7 +13,7 @@ use Cake\Collection\CollectionInterface;
 <?php
 echo $this->element('searchbar');
 ?>
-<div class="membres index large-9 medium-8 columns content">
+<div class="membres index index columns content">
 	<h3><?= __('Membres du laboratoire') ?> <font size="+1">
 			<?php if ($user['role'] === Membre::ADMIN) {
 				//	Seul l'admin peut ajouter des membres avec l'action 'edit'
@@ -21,7 +21,7 @@ echo $this->element('searchbar');
 			}
 			?>
 		</font></h3>
-	<table cellpadding="20" cellspacing="20">
+	<table cellpadding="0" cellspacing="0">
 		<thead>
 		<tr>
 			<th scope="col"><?= $this->Paginator->sort('role') ?></th>
@@ -30,7 +30,6 @@ echo $this->element('searchbar');
 			<th scope="col"><?= $this->Paginator->sort('date_naissance') ?></th>
 			<th scope="col"><?= $this->Paginator->sort('lieu_travail_id') ?></th>
 			<th scope="col"><?= $this->Paginator->sort('equipe_id') ?></th>
-			<th scope="col"><?= $this->Paginator->sort('nationalite') ?></th>
 			<th scope="col"><?= $this->Paginator->sort('hdr') ?></th>
 			<th scope="col"><?= $this->Paginator->sort('permanent') ?></th>
 			<th scope="col"><?= $this->Paginator->sort('est_porteur') ?></th>
@@ -47,7 +46,6 @@ echo $this->element('searchbar');
 				<td><?= h($membre->date_naissance) ?></td>
 				<td><?= $membre->has('lieu_travail') ? $this->Html->link($membre->lieu_travail->nom_lieu, ['controller' => 'LieuTravails', 'action' => 'view', $membre->lieu_travail->id]) : '' ?></td>
 				<td><?= $membre->has('equipe') ? $this->Html->link($membre->equipe->nom_equipe, ['controller' => 'Equipes', 'action' => 'view', $membre->equipe->id]) : '' ?></td>
-				<td><?= h($membre->nationalite) ?></td>
 				<td><?= $membre->hdr ? h("Oui") : h("Non"); ?></td>
 				<td><?= $membre->permanent ? h("Oui") : h("Non"); ?></td>
 				<td><?= $membre->est_porteur ? h("Oui") : h("Non"); ?></td>
