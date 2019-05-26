@@ -20,6 +20,7 @@ class ExportController extends AppController
 {
     /**
      * Index method
+     *
      */
     public function index()
     {
@@ -56,7 +57,7 @@ class ExportController extends AppController
 
     /**
      * Results method
-     *
+     * Permet de choisir le graphique et/ou tableau à afficher selon le formulaire
      */
     public function results(){
         $export = new ExportForm();
@@ -142,13 +143,12 @@ class ExportController extends AppController
                 $this->tableauThesesEnCours();
             }
             else if ($typeListe == "EPr1"){
-                //Liste des projets par type
                $this->tableauInformationProjet();
             }
             else if ($typeListe == "EPr2"){
-                //Liste des projets par équipe
+                $this->tableauListeProjetParEquipe();
             }
-            else if ($typeListe == "EPr3"){ // ATTETION PAS LE LISTE DE MEMBRES
+            else if ($typeListe == "EPr3"){
                 $membre = $export->getData('membre');
                 $this->tableauListeProjetMembre($membre);
             }
@@ -162,6 +162,9 @@ class ExportController extends AppController
     }
 
 
+    /**
+     * Creer le graphique des effectifs par type
+     */
     public function grapheEffectifsParType(){
         $controlInstance = new MembresController();
         $donnees = $controlInstance->effectifParType();
@@ -203,6 +206,10 @@ class ExportController extends AppController
         $this->set("nomGraphe", "effectifsParType.png");
     }
 
+
+    /**
+     * Creer le tableau des membres par equipe
+     */
     public function tableauListeMembresParEquipe(){
         $controlInstance = new MembresController();
         $donnees = $controlInstance->listeMembreParEquipe();
@@ -302,6 +309,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des doctorants
+     */
     public function tableauListeDoctorant(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->listeDoctorant();
@@ -398,6 +408,10 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des theses pour un encadrant
+     * @param $id de l'encadrant
+     */
     public function tableaulisteThesesParEncadrant($id){
         //IL FAUT L'ID DE L'ENCADRANT
         $controlInstance = new EncadrantsThesesController();
@@ -444,6 +458,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Creer la liste des encadrants avec taux d'encadrement
+     */
     public function tableauListeEncadrantsAvecTaux(){
         $controlInstance = new EncadrantsThesesController();
         $tableau = $controlInstance->listeEncadrantsAvecTaux();
@@ -542,6 +559,10 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Creer la liste des projets pour un membre
+     * @param $idMembre
+     */
     public function tableauListeProjetMembre($idMembre){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->listeProjetMembre($idMembre);
@@ -588,6 +609,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des theses par type
+     */
     public function tableauListeTheseParType(){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeTheseParType();
@@ -631,6 +655,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la tableau des Soutenances d’Habilitation à Diriger les Recherches
+     */
     public function tableauListeSoutenanceHDR(){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeSoutenancesHDR();
@@ -674,6 +701,10 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des soutenances pour une année donnée
+     * @param $annee
+     */
     public function tableauListeSoutenancesParAnnee($annee){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeSoutenancesParAnnee($annee);
@@ -720,6 +751,9 @@ class ExportController extends AppController
 
     }
 
+    /**
+     * Créer la liste des soutenances
+     */
     public function tableauListeSoutenances(){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeSoutenances();
@@ -766,6 +800,9 @@ class ExportController extends AppController
 
     }
 
+    /**
+     * Créer la liste des Effectifs par nationalité et par sexe
+     */
     public function tableauEffectifsParNationaliteParSexe(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->effectifParNationaliteSexe();
@@ -803,6 +840,9 @@ class ExportController extends AppController
     }
 
 
+    /**
+     * Créer le tableau des effectifs par type
+     */
     public function tableauEffectifsParType(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->effectifParType();
@@ -846,6 +886,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des theses en courss
+     */
     public function tableauThesesEnCours(){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeThesesEnCours();
@@ -889,6 +932,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer la liste des budgets par projet
+     */
     public function tableauBudgetsParProjet(){
         $controlInstance = new ProjetsController();
         $tableau = $controlInstance->listeBudgetsAnnuels();
@@ -924,9 +970,13 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
-    public function tableauBudgetsProjet(){
+    /**
+     * Créer la liste des budgets pour un projet
+     * @param $idProjet
+     */
+    public function tableauBudgetsProjet($idProjet){
         $controlInstance = new ProjetsController();
-        $tableau = $controlInstance->listeBudgetsAnnuelsProjet(2);
+        $tableau = $controlInstance->listeBudgetsAnnuelsProjet($idProjet);
         debug($tableau);
         $entetes = ["projet_id","annee","budget"];
         $fichier = "listeBudgetsProjet.csv";
@@ -960,6 +1010,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer le graphique des effectifs par nationalité et par sexe
+     */
     public function graphEffectifsParNationaliteParSexe(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->effectifParNationaliteSexe();
@@ -1006,6 +1059,9 @@ class ExportController extends AppController
 
     }
 
+    /**
+     * Créer le graphique des effectifs par equipe
+     */
     public function graphEffectifsParEquipe(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->nombreEffectifParEquipe();
@@ -1050,6 +1106,10 @@ class ExportController extends AppController
 
     }
 
+    /**
+     * Créer le tableau des theses pour une equipe
+     * @param $idEquipe
+     */
     public function tableauListeThesesParEquipe($idEquipe){
         $controlInstance = new ThesesController();
         $tableau = $controlInstance->listeThesesParEquipe($idEquipe);
@@ -1093,6 +1153,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer le tableau des informations les projets
+     */
     public function tableauInformationProjet(){
         $controlInstance = new ProjetsController();
         $tableau = $controlInstance->informationProjet();
@@ -1147,6 +1210,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer le tableau du nombre de doctorants par equipe
+     */
     public function tableauNombreDeDoctorantsParEquipe(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->nombreDoctorantParEquipe();
@@ -1182,6 +1248,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer le tableau des effectifs par equipe
+     */
     public function tableauEffectifsParEquipe(){
         $controlInstance = new MembresController();
         $tableau = $controlInstance->nombreEffectifParEquipe();
@@ -1217,6 +1286,9 @@ class ExportController extends AppController
         $this->set("nomFichier", $fichier);
     }
 
+    /**
+     * Créer le graphique du nombre de doctorants par equipe
+     */
     public function graphNombreDeDoctorantsParEquipe(){
         $controlInstance = new MembresController();
         $donnees = $controlInstance->nombreDoctorantParEquipe();
@@ -1256,6 +1328,51 @@ class ExportController extends AppController
         $graphe->stroke("img/NombreDeDoctorantsParEquipe.png");
 
         $this->set("nomGraphe", "NombreDeDoctorantsParEquipe.png");
+    }
+
+    public function tableauListeProjetParEquipe(){
+        $controlInstance = new EquipesProjetsController();
+        $tableau = $controlInstance->listeProjetEquipe();
+        $entetes = ["id","titre","description","type","budget","date_debut","date_fin","financement_id"];
+        $fichier = "listeProjetParEquipe.csv";
+        if (file_exists($fichier)){
+            //si il existe
+            unlink($fichier);
+            $fp = fopen($fichier,'w');
+        }else{
+            $fp = fopen($fichier, 'w');
+        }
+        fputcsv($fp, $entetes, ";");
+
+        $listeProjetEquipe = array();
+        foreach($tableau as $key => $row){
+            $listeProjetEquipe[$key] =  array(
+                $tableau[$key]->id,
+                $tableau[$key]->titre,
+                $tableau[$key]->description,
+                $tableau[$key]->type,
+                $tableau[$key]->budget,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->financement_id
+            );
+            fputcsv($fp, array(
+                $tableau[$key]->id,
+                $tableau[$key]->titre,
+                $tableau[$key]->description,
+                $tableau[$key]->type,
+                $tableau[$key]->budget,
+                $tableau[$key]->date_debut,
+                $tableau[$key]->date_fin,
+                $tableau[$key]->financement_id
+            ), ";");
+
+        }
+        fclose($fp);
+
+        $this->set("entetes", $entetes);
+        $this->set("tableau", $listeProjetEquipe);
+        $this->set("nomFichier", $fichier);
     }
     
 	/**

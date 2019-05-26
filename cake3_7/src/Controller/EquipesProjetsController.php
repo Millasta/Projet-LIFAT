@@ -118,11 +118,10 @@ class EquipesProjetsController extends AppController
      * @param $dateFin : date de fin de la fenetre de temps
      * @return array : liste des projets
      */
-    public function listeProjetEquipe($id = null, $dateEntree = null, $dateFin = null){
+    public function listeProjetEquipe($dateEntree = null, $dateFin = null){
         if($dateEntree && $dateFin){
             $this->loadModel('EquipesProjets');
             $tmp = $this->EquipesProjets->find('all')
-                ->where(["equipe_id"=>$id])
                 ->contain(['Projets'])
                 ->toArray();
 
@@ -139,7 +138,6 @@ class EquipesProjetsController extends AppController
         }else {
             $this->loadModel('EquipesProjets');
             $tmp = $this->EquipesProjets->find('all')
-                ->where(["equipe_id"=>$id])
                 ->contain(['Projets'])
             ->toArray();
 
