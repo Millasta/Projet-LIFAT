@@ -116,7 +116,6 @@ class AppController extends Controller
 		$action = $this->request->getParam('action');
 
 		//	Les membres dont le compte n'est pas activé ne peuvent rien faire par défaut (sauf se déconnecter)
-		//	TODO : dans tous les autres controllers : if $user['actif'] === true...
 		if ($user['actif'] != true && $action != 'logout') {
 			return false;
 		}
