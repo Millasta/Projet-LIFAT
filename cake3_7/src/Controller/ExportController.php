@@ -1382,7 +1382,7 @@ class ExportController extends AppController
 	 */
 	public function isAuthorized($user)
 	{
-		//	Tout le monde a droit de faire des exports
+		//	Tous les comptes actifs droit de faire des exports
 		return $user['actif'] === true;
 	}
 }
