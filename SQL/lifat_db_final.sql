@@ -519,7 +519,7 @@ ALTER TABLE `transports`
 -- Contraintes pour la table `budgets_annuels`
 --
 ALTER TABLE `budgets_annuels`
-  ADD CONSTRAINT `fk_budgets_annuels_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`);
+  ADD CONSTRAINT `fk_budgets_annuels_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `dirigeants`
@@ -531,8 +531,8 @@ ALTER TABLE `dirigeants`
 -- Contraintes pour la table `dirigeants_theses`
 --
 ALTER TABLE `dirigeants_theses`
-  ADD CONSTRAINT `dirigeant_key` FOREIGN KEY (`dirigeant_id`) REFERENCES `dirigeants` (`dirigeant_id`),
-  ADD CONSTRAINT `these_key` FOREIGN KEY (`these_id`) REFERENCES `theses` (`id`);
+  ADD CONSTRAINT `dirigeant_key` FOREIGN KEY (`dirigeant_id`) REFERENCES `dirigeants` (`dirigeant_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `these_key` FOREIGN KEY (`these_id`) REFERENCES `theses` (`id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `encadrants`
@@ -551,7 +551,7 @@ ALTER TABLE `encadrants_theses`
 -- Contraintes pour la table `equipes`
 --
 ALTER TABLE `equipes`
-  ADD CONSTRAINT `fk_equipes_1` FOREIGN KEY (`responsable_id`) REFERENCES `membres` (`id`);
+  ADD CONSTRAINT `fk_equipes_1` FOREIGN KEY (`responsable_id`) REFERENCES `membres` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `equipes_projets`
@@ -571,42 +571,42 @@ ALTER TABLE `equipes_responsables`
 -- Contraintes pour la table `membres`
 --
 ALTER TABLE `membres`
-  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`),
-  ADD CONSTRAINT `fk_membre_2` FOREIGN KEY (`equipe_id`) REFERENCES `equipes` (`id`);
+  ADD CONSTRAINT `fk_membre_1` FOREIGN KEY (`lieu_travail_id`) REFERENCES `lieu_travails` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_membre_2` FOREIGN KEY (`equipe_id`) REFERENCES `equipes` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `fichiers`
 --
 ALTER TABLE `fichiers`
-  ADD CONSTRAINT `fk_fichiers_1` FOREIGN KEY (`membre_id`) REFERENCES `membres` (`id`);
+  ADD CONSTRAINT `fk_fichiers_1` FOREIGN KEY (`membre_id`) REFERENCES `membres` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `missions`
 --
 ALTER TABLE `missions`
-  ADD CONSTRAINT `missions_ibfk_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`),
-  ADD CONSTRAINT `missions_ibfk_2` FOREIGN KEY (`lieu_id`) REFERENCES `lieus` (`id`),
-  ADD CONSTRAINT `missions_ibfk_3` FOREIGN KEY (`motif_id`) REFERENCES `motifs` (`id`);
+  ADD CONSTRAINT `missions_ibfk_1` FOREIGN KEY (`projet_id`) REFERENCES `projets` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `missions_ibfk_2` FOREIGN KEY (`lieu_id`) REFERENCES `lieus` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `missions_ibfk_3` FOREIGN KEY (`motif_id`) REFERENCES `motifs` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `missions_transports`
 --
 ALTER TABLE `missions_transports`
-  ADD CONSTRAINT `missions_transports_ibfk_1` FOREIGN KEY (`mission_id`) REFERENCES `missions` (`id`),
-  ADD CONSTRAINT `missions_transports_ibfk_2` FOREIGN KEY (`transport_id`) REFERENCES `transports` (`id`);
+  ADD CONSTRAINT `missions_transports_ibfk_1` FOREIGN KEY (`mission_id`) REFERENCES `missions` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `missions_transports_ibfk_2` FOREIGN KEY (`transport_id`) REFERENCES `transports` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `projets`
 --
 ALTER TABLE `projets`
-  ADD CONSTRAINT `projets_ibfk_1` FOREIGN KEY (`financement_id`) REFERENCES `financements` (`id`);
+  ADD CONSTRAINT `projets_ibfk_1` FOREIGN KEY (`financement_id`) REFERENCES `financements` (`id`) ON DELETE SET NULL;
 
 --
 -- Contraintes pour la table `theses`
 --
 ALTER TABLE `theses`
-  ADD CONSTRAINT `fk_theses_1` FOREIGN KEY (`auteur_id`) REFERENCES `membres` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_theses_2` FOREIGN KEY (`financement_id`) REFERENCES `financements` (`id`);
+  ADD CONSTRAINT `fk_theses_1` FOREIGN KEY (`auteur_id`) REFERENCES `membres` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `fk_theses_2` FOREIGN KEY (`financement_id`) REFERENCES `financements` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
