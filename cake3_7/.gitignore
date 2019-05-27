@@ -6,6 +6,7 @@
 /tmp/*
 /vendor/*
 /webroot/UploadedFiles/*
+/webroot/debug_kit/*
 
 # But not these files...
 ######################
