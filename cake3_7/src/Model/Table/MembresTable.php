@@ -153,10 +153,8 @@ class MembresTable extends Table
 		$validator
 			->scalar('signature_name')
 			->maxLength('signature_name', 20)
-			->requirePresence('signature_name', 'create')
-			->allowEmptyString('signature_name')
-			->add('signature_name', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
-
+			->allowEmptyString('signature_name');
+			
 		$validator
 			->scalar('login_cas')
 			->maxLength('login_cas', 60)
