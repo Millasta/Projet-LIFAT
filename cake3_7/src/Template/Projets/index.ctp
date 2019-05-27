@@ -13,6 +13,7 @@ use Cake\Collection\CollectionInterface; ?>
 echo $this->element('searchbar');
 ?>
 <div class="projets index large-9 medium-8 columns content">
+	<p><?= $this->Html->link('Liste des budgets annuels des projets', ['controller' => 'budgetsAnnuels', 'action' => 'index']) ?></p>
 	<h3><?= __('Projets du laboratoire') ?> <font size="+1">
 			<?php
 			if ($user['permanent'] === true || $user['role'] === Membre::ADMIN) {

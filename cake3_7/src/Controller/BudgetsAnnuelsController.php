@@ -33,22 +33,6 @@ class BudgetsAnnuelsController extends AppController
 	}
 
 	/**
-	 * View method
-	 *
-	 * @param string|null $id Budgets Annuel id.
-	 * @return Response|void
-	 * @throws RecordNotFoundException When record not found.
-	 */
-	public function view($id = null)
-	{
-		$budgetsAnnuel = $this->BudgetsAnnuels->get($id, [
-			'contain' => ['Projets']
-		]);
-
-		$this->set('budgetsAnnuel', $budgetsAnnuel);
-	}
-
-	/**
 	 * Add method
 	 *
 	 * @return Response|null Redirects on successful add, renders view otherwise.
@@ -78,9 +62,19 @@ class BudgetsAnnuelsController extends AppController
 	 */
 	public function edit($id = null)
 	{
-		$budgetsAnnuel = $this->BudgetsAnnuels->get($id, [
-			'contain' => []
-		]);
+		if($id != null) {
+			$projet_id = explode('.', $id)[0];
+			$annee = explode('.', $id)[1];
+			$budgetsAnnuel = $this->BudgetsAnnuels->get([$projet_id, $annee], [
+				'contain' => ['Projets']
+			]);
+		}
+		else {
+			$budgetsAnnuel = $this->BudgetsAnnuels->get($id, [
+				'contain' => []
+			]);
+		}
+		
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			$budgetsAnnuel = $this->BudgetsAnnuels->patchEntity($budgetsAnnuel, $this->request->getData());
 			if ($this->BudgetsAnnuels->save($budgetsAnnuel)) {
@@ -91,6 +85,8 @@ class BudgetsAnnuelsController extends AppController
 			$this->Flash->error(__('L\'ajout du budget a échoué. Merci de ré-essayer.'));
 		}
 		$projets = $this->BudgetsAnnuels->Projets->find('list', ['limit' => 200]);
+		$this->loadModel('Projets');
+		$budgetsAnnuel->titre_projet = $this->Projets->get($budgetsAnnuel->projet_id)['titre'];
 		$this->set(compact('budgetsAnnuel', 'projets'));
 	}
 
