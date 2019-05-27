@@ -28,7 +28,7 @@ class FichiersController extends AppController
 			'contain' => ['Membres']
 		];
 		$fichiers = $this->paginate($this->Fichiers);
-		$uploadFolder = "/UploadedFiles/";
+		$uploadFolder = "UploadedFiles/";
 
 		$this->set(compact('fichiers'));
 		$this->set('uploadfolder', $uploadFolder);
@@ -57,7 +57,7 @@ class FichiersController extends AppController
 	 */
 	public function add()
 	{
-		$uploadFolder = "/UploadedFiles/";
+		$uploadFolder = "UploadedFiles/";
 		$fichier = $this->Fichiers->newEntity();
 		if ($this->request->is('post')) {
 
