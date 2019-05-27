@@ -133,6 +133,6 @@ class EquipesController extends AppController
 	}
 
 	/*
-	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut modifier / supprimer les lieux de travail.
+	 * Autorisations (isAuthorized()) : rien de plus, donc seul l'admin peut modifier / supprimer les équipes.
 	 */
 }
