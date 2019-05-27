@@ -95,7 +95,6 @@ class ShareFileController extends AppController
 			if ($user['permanent'] === true) {
 				return true;
 			}
-			//	TODO : en réalité, seul le propriétaire du fichier peut le modifier / supprimer / ...
 		}
 		return false;
 	}
