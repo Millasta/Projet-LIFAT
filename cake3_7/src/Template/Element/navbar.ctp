@@ -7,7 +7,7 @@ use App\Model\Entity\Membre;
 <table id="menu">
 	<tr>
 		<?php if (!empty($user)): ?>				<!--	Si user non connecté : il ne peut faire que Connexion et Inscription	-->
-			<?php if ($user['actif'] != true): ?>	<!--	Si user non activé : il ne peut faire que Mon Profil et Déconnexion	-->
+			<?php if ($user['actif'] === true): ?>	<!--	Si user non activé : il ne peut faire que Mon Profil et Déconnexion	-->
 				<td>
 					<?= $this->Html->link(__('Membres'), ['controller' => 'membres', 'action' => 'index']) ?>
 				</td>
