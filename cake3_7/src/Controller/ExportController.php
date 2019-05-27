@@ -39,7 +39,7 @@ class ExportController extends AppController
             ->find()
             ->select(['id','nom', 'prenom'])
             ->join([
-                'table' => 'Encadrants',
+                'table' => 'encadrants',
                 'alias' => 'e',
                 'conditions' => 'e.encadrant_id = id',
             ]);
