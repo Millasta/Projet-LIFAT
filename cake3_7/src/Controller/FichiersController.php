@@ -57,7 +57,7 @@ class FichiersController extends AppController
 	 */
 	public function add()
 	{
-		$uploadFolder = "UploadedFiles";
+		$uploadFolder = "/UploadedFiles/";
 		$fichier = $this->Fichiers->newEntity();
 		if ($this->request->is('post')) {
 
