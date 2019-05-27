@@ -35,7 +35,7 @@ use Cake\Collection\CollectionInterface; ?>
 				<td><?= h($fichier->date_upload) ?></td>
 				<td><?= $fichier->has('membre') ? $this->Html->link($fichier->membre->nom, ['controller' => 'Membres', 'action' => 'view', $fichier->membre->id]) : '' ?></td>
 				<td class="actions">
-					<?= $this->Html->link(__('Detail'), ['action' => 'view', $fichier->id]) ?>
+					<?= $this->Html->link(__('Détails'), ['action' => 'view', $fichier->id]) ?>
 					<?php
 					if (($user['id'] === $fichier->membre->id && $user['permanent'] === true) || $user['role'] === Membre::ADMIN) {
 						//	Seuls les membres permanents qui sont owner du fichier (& admins) peuvent edit / delete les fichiers
