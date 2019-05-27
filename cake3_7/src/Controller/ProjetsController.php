@@ -161,12 +161,15 @@ class ProjetsController extends AppController
 	/**
 	 * Checks the currently logged in user's rights to access a page (called when changing pages).
 	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
+	 * @return bool : whether the user is allowed (or not) to access the requested page
 	 */
 	public function isAuthorized($user)
 	{
 		if (parent::isAuthorized($user) === true) {
 			return true;
+		} else if ($user['actif'] != true) {
+			//	Les comptes non activés n'ont aucun droit
+			return false;
 		} else {
 			//	Tous les membres permanents ont tous les droits sur les projets
 			if ($user['permanent'] === true) {

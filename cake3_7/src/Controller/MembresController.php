@@ -647,7 +647,7 @@ class MembresController extends AppController
 	/**
 	 * Checks the currently logged in user's rights to access a page (called when changing pages).
 	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
+	 * @return bool : whether the user is allowed (or not) to access the requested page
 	 */
 	public function isAuthorized($user)
 	{
@@ -661,8 +661,8 @@ class MembresController extends AppController
 			if ($action === 'edit' && $membre_slug) {
 				$membre = $this->Membres->findById($membre_slug)->first();
 
-				//	Edit membre existant (=> action pour chef d'équipe de la cible, ou soi-même)
-				return ($userEntity['id'] === $membre['id']) || (!is_null($membre['equipe_id']) && $userEntity->estChefEquipe($membre['equipe_id']));
+				//	Edit membre existant (=> action pour chef d'équipe -actif- de la cible, ou soi-même)
+				return ($userEntity['id'] === $membre['id']) || (!is_null($membre['equipe_id']) && $user['actif'] === true && $userEntity->estChefEquipe($membre['equipe_id']));
 
 				//	Add (edit sans slug) et Delete => admin (déjà true avec parent::isAuthorized())
 			}

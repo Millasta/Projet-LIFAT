@@ -69,7 +69,8 @@ class AppController extends Controller
 
 		//	la page de garde est accessible publiquement (mais que cette page)
 		$this->Auth->allow(array('controller' => 'pages', 'action' => 'display'));
-		//	cf. fonctions "isAuthorized" pour les autres permissions
+		//	cf. fonctions "beforeFilter" pour les autres actions publiques
+		//	cf. fonctions "isAuthorized" pour les permissions des membres connectés
 
 		/*
 		 * Enable the following component for recommended CakePHP security settings.
@@ -103,7 +104,7 @@ class AppController extends Controller
 	/**
 	 * Checks the currently logged in user's rights to access a page (called when changing pages).
 	 * @param $user : the user currently logged in
-	 * @return bool : if the user is allowed (or not) to access the requested page
+	 * @return bool : whether the user is allowed (or not) to access the requested page
 	 */
 	public function isAuthorized($user)
 	{
@@ -114,7 +115,8 @@ class AppController extends Controller
 
 		$action = $this->request->getParam('action');
 
-		//	Les membres dont le compte n'est pas activé ne peuvent rien faire (sauf se déconnecter)
+		//	Les membres dont le compte n'est pas activé ne peuvent rien faire par défaut (sauf se déconnecter)
+		//	TODO : dans tous les autres controllers : if $user['actif'] === true...
 		if ($user['actif'] != true && $action != 'logout') {
 			return false;
 		}
