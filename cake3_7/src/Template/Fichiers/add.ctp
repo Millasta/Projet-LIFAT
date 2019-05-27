@@ -11,7 +11,7 @@ use App\View\AppView; ?>
 	<fieldset>
 		<legend><?= __('Ajouter un fichier PDF (<10Mo)') ?></legend>
 		<?php
-		echo $this->Form->control('nom', ['type' => 'file']);
+		echo $this->Form->control('nom', ['type' => 'file', 'accept' => 'application/pdf']);
 		echo $this->Form->control('titre');
 		echo $this->Form->control('description');
 		echo $this->Form->control('membre_id', ['type' => 'hidden', 'value' => $user['id']]);

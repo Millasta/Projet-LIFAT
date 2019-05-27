@@ -133,10 +133,9 @@ class MembresController extends AppController
 			$membre->date_creation = Time::now();
 			
 			// Upload de la signature
-			$old_signature = null;
 			$file = $this->request->getData()['signature_name'];
 			if($file['name'] != null) {
-				$signatureFolder = 'Signatures';
+				$signatureFolder = './Signatures';
 				
 				if (!file_exists($signatureFolder))
 					mkdir($signatureFolder);
@@ -157,10 +156,21 @@ class MembresController extends AppController
 				$extension = array_values(array_slice(explode('.', $file['name']), -1))[0];
 				// Hashage du nom de fichier
 				$hasher = new DefaultPasswordHasher();
-				$membre->signature_name = $hasher->hash($file['name']).'.'.$extension;
+				$hash = $hasher->hash($file['name']).'.'.$extension;
+				$hash1 = str_replace('\\', '', $hash);
+				$hash2 = str_replace('/', '', $hash1);
+				$membre->signature_name = $hash2;
 				if (!move_uploaded_file($file['tmp_name'], $signatureFolder . '/' . $membre->signature_name)) {
 					$this->Flash->error('Erreur lors de l\'enregistrement du fichier signature.');
+					$this->Flash->error($signatureFolder . '/' . $membre->signature_name);
+					// Suppression de l'ancienne signature si non nulle
 					return $this->redirect(['action' => 'index']);
+				}
+				else {
+					// On supprime l'ancienne signature
+					if($old_signature != null) {
+						unlink($signatureFolder . '/' . $old_signature);
+					}
 				}
 			}
 			else { // On conserve la signature actuelle

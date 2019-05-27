@@ -592,8 +592,8 @@ ALTER TABLE `missions`
 -- Contraintes pour la table `missions_transports`
 --
 ALTER TABLE `missions_transports`
-  ADD CONSTRAINT `missions_transports_ibfk_1` FOREIGN KEY (`mission_id`) REFERENCES `missions` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `missions_transports_ibfk_2` FOREIGN KEY (`transport_id`) REFERENCES `transports` (`id`) ON DELETE SET NULL;
+  ADD CONSTRAINT `missions_transports_ibfk_1` FOREIGN KEY (`mission_id`) REFERENCES `missions` (`id`) ,
+  ADD CONSTRAINT `missions_transports_ibfk_2` FOREIGN KEY (`transport_id`) REFERENCES `transports` (`id`) ;
 
 --
 -- Contraintes pour la table `projets`
