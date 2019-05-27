@@ -61,7 +61,7 @@ $optionsGenre = [
 		?>
 	</fieldset>
 	<?php
-	//	Seul les admins peuvent rendre les comptes actifs
+	//	Seuls les admins peuvent rendre les comptes actifs
 	if ($user['role'] === Membre::ADMIN) {
 		//	Nouveau membre = compte pas activé par défaut (autrement la valeur existante sera reprise)
 		if ($membre->id == 0) {
