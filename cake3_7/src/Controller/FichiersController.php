@@ -28,7 +28,7 @@ class FichiersController extends AppController
 			'contain' => ['Membres']
 		];
 		$fichiers = $this->paginate($this->Fichiers);
-		$uploadFolder = "UploadedFiles/";
+		$uploadFolder = "/UploadedFiles/";
 
 		$this->set(compact('fichiers'));
 		$this->set('uploadfolder', $uploadFolder);
@@ -57,7 +57,7 @@ class FichiersController extends AppController
 	 */
 	public function add()
 	{
-		$uploadFolder = "UploadedFiles/";
+		$uploadFolder = "/UploadedFiles/";
 		$fichier = $this->Fichiers->newEntity();
 		if ($this->request->is('post')) {
 
@@ -99,6 +99,7 @@ class FichiersController extends AppController
 				}
 				$this->Flash->error(__('Le fichier n\'a pa pu être sauvegardé.'));
 				$this->redirect(['action' => 'index']);
+				//	TODO : virer l'enregistrement de la BDD
 			} else {
 				$this->Flash->error('Erreur lors de l\'enregistrement du fichier dans la base.');
 				return $this->redirect(['action' => 'index']);
