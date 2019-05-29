@@ -92,7 +92,7 @@ class FichiersController extends AppController
 			$fichier->membre = $this->Membres->get($this->Auth->user('id'));
 
 			if ($this->Fichiers->save($fichier)) {
-				$savedFile = $uploadFolder . '/' . $file['name'];
+				$savedFile = $uploadFolder . $file['name'];
 				if (move_uploaded_file($file['tmp_name'], $savedFile)) {
 					$this->Flash->Success($file['name'] . ' enregistré avec succès !');
 					return $this->redirect(['action' => 'index']);

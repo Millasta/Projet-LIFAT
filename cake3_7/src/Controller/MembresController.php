@@ -160,7 +160,7 @@ class MembresController extends AppController
 				$hash1 = str_replace('\\', '', $hash);
 				$hash2 = str_replace('/', '', $hash1);
 				$membre->signature_name = $hash2;
-				if (!move_uploaded_file($file['tmp_name'], $signatureFolder . '/' . $membre->signature_name)) {
+				if (!move_uploaded_file($file['tmp_name'], $signatureFolder . $membre->signature_name)) {
 					$this->Flash->error('Erreur lors de l\'enregistrement du fichier signature.');
 					$this->Flash->error($signatureFolder . '/' . $membre->signature_name);
 					// Suppression de l'ancienne signature si non nulle
