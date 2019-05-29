@@ -18,6 +18,11 @@ use Cake\Http\Response;
 class FichiersController extends AppController
 {
 	/**
+	 * If you change this, make sure to move existing files to the new folder.
+	 */
+	const uploadFolder = "/UploadedFiles/";
+
+	/**
 	 * Index method
 	 *
 	 * @return Response|void
@@ -28,10 +33,9 @@ class FichiersController extends AppController
 			'contain' => ['Membres']
 		];
 		$fichiers = $this->paginate($this->Fichiers);
-		$uploadFolder = "/UploadedFiles/";
 
 		$this->set(compact('fichiers'));
-		$this->set('uploadfolder', $uploadFolder);
+		$this->set('uploadfolder', self::uploadFolder);
 	}
 
 	/**
@@ -57,12 +61,11 @@ class FichiersController extends AppController
 	 */
 	public function add()
 	{
-		$uploadFolder = "./UploadedFiles";
 		$fichier = $this->Fichiers->newEntity();
 		if ($this->request->is('post')) {
 
-			if (!file_exists($uploadFolder))
-				mkdir($uploadFolder);
+			if (!file_exists(self::uploadFolder))
+				mkdir(self::uploadFolder);
 
 			$file = $this->request->getData()['nom'];
 
@@ -92,7 +95,7 @@ class FichiersController extends AppController
 			$fichier->membre = $this->Membres->get($this->Auth->user('id'));
 
 			if ($this->Fichiers->save($fichier)) {
-				$savedFile = $uploadFolder . $file['name'];
+				$savedFile = self::uploadFolder . $file['name'];
 				if (move_uploaded_file($file['tmp_name'], $savedFile)) {
 					$this->Flash->Success($file['name'] . ' enregistré avec succès !');
 					return $this->redirect(['action' => 'index']);
@@ -123,9 +126,8 @@ class FichiersController extends AppController
 		]);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			// File renaming
-			$uploadFolder = "./UploadedFiles/";
-			$oldname = $uploadFolder . $fichier->nom;
-			$newname = $uploadFolder . $this->request->getData()['nom'];
+			$oldname = self::uploadFolder . $fichier->nom;
+			$newname = self::uploadFolder . $this->request->getData()['nom'];
 			$fichier = $this->Fichiers->patchEntity($fichier, $this->request->getData());
 			if (rename($oldname, $newname)) {
 				if ($this->Fichiers->save($fichier)) {
@@ -152,8 +154,7 @@ class FichiersController extends AppController
 	{
 		$this->request->allowMethod(['post', 'delete']);
 		$fichier = $this->Fichiers->get($id);
-		$uploadFolder = "./UploadedFiles/";
-		$name = $uploadFolder . $fichier->nom;
+		$name = self::uploadFolder . $fichier->nom;
 		if (unlink($name)) {
 			if ($this->Fichiers->delete($fichier)) {
 				$this->Flash->success(__('Le fichier a bien été supprimé.'));
