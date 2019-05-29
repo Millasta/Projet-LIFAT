@@ -135,9 +135,18 @@ define('DEFAULT_THEME_CLASS', 'UniversalTheme');
 define('SUPERSAMPLING', true);
 define('SUPERSAMPLING_SCALE', 1);
 
-//	Patch for Debian PHP
-define('ANTIALIASING', false);
+//------------------------------------------------------------------------
+//		PATCH FOR DEBIAN PHP
+//
+//	These lines will make the app throw an exception if you are using
+//	another OS ; in this case, COMMENT these 5 lines.
+//
+//	Note that this patch will make the app throw warnings instead, but
+//	they won't be seen in release but it won't really change the
+//	resulting images
+//------------------------------------------------------------------------
 
+define('ANTIALIASING', false);
 if(!ANTIALIASING){
 	function imageantialias($image, $enabled) {
 		return true;
