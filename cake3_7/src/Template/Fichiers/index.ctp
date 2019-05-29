@@ -30,7 +30,7 @@ use Cake\Collection\CollectionInterface; ?>
 		<tbody>
 		<?php foreach ($fichiers as $fichier): ?>
 			<tr>
-				<td><?= $this->Html->link($fichier->nom, $uploadfolder . $fichier->nom) ?></td>
+				<td><?= $this->Html->link($fichier->nom, $uploadfolder . '/' . $fichier->nom) ?></td>
 				<td><?= h($fichier->titre) ?></td>
 				<td><?= h($fichier->date_upload) ?></td>
 				<td><?= $fichier->has('membre') ? $this->Html->link($fichier->membre->nom, ['controller' => 'Membres', 'action' => 'view', $fichier->membre->id]) : '' ?></td>
