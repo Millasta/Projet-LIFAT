@@ -20,7 +20,7 @@ class FichiersController extends AppController
 	/**
 	 * If you change this, make sure to move existing files to the new folder.
 	 */
-	const uploadFolder = "/UploadedFiles/";
+	const uploadFolder = "./UploadedFiles";
 
 	/**
 	 * Index method
@@ -35,7 +35,8 @@ class FichiersController extends AppController
 		$fichiers = $this->paginate($this->Fichiers);
 
 		$this->set(compact('fichiers'));
-		$this->set('uploadfolder', self::uploadFolder);
+		$this->set('uploadfolder', substr(self::uploadFolder, 1));
+		//	Alors oui il n'aime pas le point au début
 	}
 
 	/**
@@ -95,14 +96,13 @@ class FichiersController extends AppController
 			$fichier->membre = $this->Membres->get($this->Auth->user('id'));
 
 			if ($this->Fichiers->save($fichier)) {
-				$savedFile = self::uploadFolder . $file['name'];
+				$savedFile = self::uploadFolder . '/' .  $file['name'];
 				if (move_uploaded_file($file['tmp_name'], $savedFile)) {
 					$this->Flash->Success($file['name'] . ' enregistré avec succès !');
 					return $this->redirect(['action' => 'index']);
 				}
 				$this->Flash->error(__('Le fichier n\'a pa pu être sauvegardé.'));
 				$this->redirect(['action' => 'index']);
-				//	TODO : virer l'enregistrement de la BDD
 			} else {
 				$this->Flash->error('Erreur lors de l\'enregistrement du fichier dans la base.');
 				return $this->redirect(['action' => 'index']);
@@ -126,8 +126,8 @@ class FichiersController extends AppController
 		]);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			// File renaming
-			$oldname = self::uploadFolder . $fichier->nom;
-			$newname = self::uploadFolder . $this->request->getData()['nom'];
+			$oldname = self::uploadFolder . '/' . $fichier->nom;
+			$newname = self::uploadFolder . '/' . $this->request->getData()['nom'];
 			$fichier = $this->Fichiers->patchEntity($fichier, $this->request->getData());
 			if (rename($oldname, $newname)) {
 				if ($this->Fichiers->save($fichier)) {
@@ -154,7 +154,7 @@ class FichiersController extends AppController
 	{
 		$this->request->allowMethod(['post', 'delete']);
 		$fichier = $this->Fichiers->get($id);
-		$name = self::uploadFolder . $fichier->nom;
+		$name = self::uploadFolder . '/' . $fichier->nom;
 		if (unlink($name)) {
 			if ($this->Fichiers->delete($fichier)) {
 				$this->Flash->success(__('Le fichier a bien été supprimé.'));
