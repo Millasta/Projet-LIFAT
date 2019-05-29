@@ -126,8 +126,8 @@ class FichiersController extends AppController
 		]);
 		if ($this->request->is(['patch', 'post', 'put'])) {
 			// File renaming
-			$oldname = self::uploadFolder . $fichier->nom;
-			$newname = self::uploadFolder . $this->request->getData()['nom'];
+			$oldname = self::uploadFolder . '/' . $fichier->nom;
+			$newname = self::uploadFolder . '/' . $this->request->getData()['nom'];
 			$fichier = $this->Fichiers->patchEntity($fichier, $this->request->getData());
 			if (rename($oldname, $newname)) {
 				if ($this->Fichiers->save($fichier)) {
@@ -154,7 +154,7 @@ class FichiersController extends AppController
 	{
 		$this->request->allowMethod(['post', 'delete']);
 		$fichier = $this->Fichiers->get($id);
-		$name = self::uploadFolder . $fichier->nom;
+		$name = self::uploadFolder . '/' . $fichier->nom;
 		if (unlink($name)) {
 			if ($this->Fichiers->delete($fichier)) {
 				$this->Flash->success(__('Le fichier a bien été supprimé.'));
