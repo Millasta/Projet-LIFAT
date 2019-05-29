@@ -35,7 +35,8 @@ class FichiersController extends AppController
 		$fichiers = $this->paginate($this->Fichiers);
 
 		$this->set(compact('fichiers'));
-		$this->set('uploadfolder', self::uploadFolder);
+		$this->set('uploadfolder', substr(self::uploadFolder, 1));
+		//	Alors oui il n'aime pas le point au début
 	}
 
 	/**
